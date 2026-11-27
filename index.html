@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome 30's // Eli 28.11</title>
+    <title>LEVEL 30 // Edición Especial 28.11</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -685,15 +685,53 @@
                         <span id="dreamsCounter" class="font-mono text-xs text-roseGold">0 cumplidos</span>
                     </div>
 
-                    <form onsubmit="addDreamItem(event)" class="flex flex-col sm:flex-row gap-2.5">
-                        <input type="text" id="dreamInput" required placeholder="Ej. Viajar juntos a nuestro lugar soñado, aprender algo nuevo..."
-                            class="flex-1 rounded-xl bg-obsidian border border-zinc-700/80 focus:border-neonPink text-white px-4 py-2.5 text-sm outline-none transition">
-                        <button type="submit" class="px-5 py-2.5 rounded-xl btn-pink-glow text-white font-mono text-xs font-bold tracking-wide cursor-pointer shrink-0">
-                            + Agregar Sueño
-                        </button>
-                    </form>
+                    <!-- Pastel encendido con dinámica para soplar y revelar la lista de deseos -->
+                    <div id="cakeBlowStation" class="p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-obsidian via-charcoal to-obsidian border border-pink-500/30 flex flex-col sm:flex-row items-center justify-between gap-5">
+                        <div class="flex items-center gap-4">
+                            <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center shrink-0">
+                                <svg id="birthdayCakeSvg" class="w-12 h-12 sm:w-14 sm:h-14 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                                    <!-- Vela y flama -->
+                                    <rect x="30" y="18" width="4" height="10" rx="1" />
+                                    <path id="cakeFlamePath" d="M32 8 C29 12, 29 15, 32 17 C35 15, 35 12, 32 8 Z" fill="#fb7185" />
+                                    <!-- Cobertura ondulada -->
+                                    <path d="M16 34 C16 29, 48 29, 48 34 C48 37, 45 38, 43 36 C41 39, 37 39, 35 36 C33 39, 31 39, 29 36 C27 39, 23 39, 21 36 C19 38, 16 37, 16 34 Z" />
+                                    <!-- Cuerpo del pastel -->
+                                    <path d="M16 34 L15 48 C15 50, 49 50, 49 48 L48 34" />
+                                    <!-- Plato base -->
+                                    <path d="M10 51 L54 51" />
+                                </svg>
+                            </div>
+                            <div class="text-center sm:text-left space-y-1">
+                                <div id="cakeStatusBadge" class="font-mono text-[10px] text-neonPink uppercase tracking-widest">
+                                    🕯️ VELA ENCENDIDA // PIDE UN DESEO
+                                </div>
+                                <h4 id="cakeTitleText" class="font-display text-base sm:text-lg font-bold text-white">
+                                    ¡Tu pastel de 30 está listo para soplar!
+                                </h4>
+                                <p id="cakeDescText" class="text-xs sm:text-sm text-zinc-300 font-light">
+                                    Sopla la velita para apagarla y revelar tus deseos de esta nueva etapa.
+                                </p>
+                            </div>
+                        </div>
 
-                    <div id="dreamsList" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
+                        <button type="button" id="blowCandleBtn" onclick="blowBirthdayCake()"
+                            class="btn-pink-glow text-white font-mono text-xs font-bold px-5 py-3 rounded-xl shrink-0 cursor-pointer">
+                            💨 Soplar velita
+                        </button>
+                    </div>
+
+                    <!-- Lista de deseos (se revela al soplar el pastel) -->
+                    <div id="dreamsRevealContainer" class="hidden space-y-4 pt-1">
+                        <form onsubmit="addDreamItem(event)" class="flex flex-col sm:flex-row gap-2.5">
+                            <input type="text" id="dreamInput" required placeholder="Ej. Viajar juntos a nuestro lugar soñado, aprender algo nuevo..."
+                                class="flex-1 rounded-xl bg-obsidian border border-zinc-700/80 focus:border-neonPink text-white px-4 py-2.5 text-sm outline-none transition">
+                            <button type="submit" class="px-5 py-2.5 rounded-xl btn-pink-glow text-white font-mono text-xs font-bold tracking-wide cursor-pointer shrink-0">
+                                + Agregar Sueño
+                            </button>
+                        </form>
+
+                        <div id="dreamsList" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
+                    </div>
                 </div>
             </section>
 
@@ -717,6 +755,7 @@
                     </div>
                 </div>
 
+                <!-- Modo Lectura -->
                 <div id="letterViewMode" class="space-y-4">
                     <div class="relative p-5 sm:p-8 rounded-2xl bg-obsidian/70 border border-pink-500/15">
                         <span class="absolute top-3 right-5 font-serif text-5xl text-neonPink/20 select-none">”</span>
@@ -728,11 +767,12 @@
                     </div>
                 </div>
 
+                <!-- Modo Edición -->
                 <div id="letterEditMode" class="hidden space-y-4">
                     <label for="letterTextarea" class="block font-mono text-xs text-zinc-400">
                         Escribe o personaliza tu felicitación:
                     </label>
-                    <textarea id="letterTextarea" rows="10"
+                    <textarea id="letterTextarea" rows="12"
                         class="w-full rounded-2xl bg-obsidian border border-pink-500/40 focus:border-neonPink focus:ring-2 focus:ring-neonPink/30 text-zinc-100 p-4 sm:p-5 text-sm sm:text-base leading-relaxed outline-none transition resize-y"
                         placeholder="Escribe aquí tu mensaje especial..."></textarea>
                     <div class="flex justify-end gap-3">
@@ -891,9 +931,9 @@
            CONFIGURACIÓN E INICIALIZACIÓN DE DATOS
            ========================================================================== */
         const STORAGE_KEYS = {
-            LETTER: 'bday30_love_letter_amor_v1',
-            PLANS: 'bday30_itinerary_plans_amor_v1',
-            DREAMS: 'bday30_wishlist_dreams_amor_v1',
+            LETTER: 'bday30_love_letter_amor_v2',
+            PLANS: 'bday30_itinerary_plans_amor_v2',
+            DREAMS: 'bday30_wishlist_dreams_amor_v2',
             TROPICAL_PHOTOS: 'bday30_travesia_photos_amor_v1'
         };
 
@@ -928,10 +968,12 @@
         };
 
         const DEFAULT_DREAMS = [
-            { id: 'dream-1', text: 'Seguir coleccionando viajes, escapadas y tardes en el parque juntos ✈️🌿', done: false },
-            { id: 'dream-2', text: 'Disfrutar cada antojito y comida rica sin culpa modo Pooh 😋🍯', done: true },
-            { id: 'dream-3', text: 'Verte cumplir cada meta personal que te ilusiona en tus 30s 🚀✨', done: false },
-            { id: 'dream-4', text: 'Seguir construyendo nuestra historia de la mano de Dios ❤️🙏', done: false }
+            { id: 'dream-1', text: 'Festejar 30\'s (Papá/Mamá) 🎉🥂', done: false },
+            { id: 'dream-2', text: 'Mejorar la vida laboral 💼🚀', done: false },
+            { id: 'dream-3', text: 'Estable en la parte de la salud 💪🌿', done: false },
+            { id: 'dream-4', text: 'Poder ahorrar, para emprender negocio 💰🌱', done: false },
+            { id: 'dream-5', text: 'Viajar a nuevos lugares ✈️🗺️', done: false },
+            { id: 'dream-6', text: 'Seguir construyendo nuestra historia de la mano de Dios ❤️🙏', done: false }
         ];
 
         const DEFAULT_LETTER = `Feliz cumpleaños número 30, mi amor.
@@ -942,26 +984,31 @@ Gracias por ser esa mujer tan tierna, coqueta, aventurera y apasionada que lleg�
 
 Sé que pasar a los 30 a veces puede generar nervios o incertidumbre, pero quiero que hoy sueltes cualquier angustia. No tienes que apresurar nada; disfruta cada día como vaya llegando, con la certeza de que eres una mujer increíble, hermosa y llena de luz.
 
-Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo permite, de todos los capítulos que todavía nos faltan por escribir juntos. ¡Te quiero muchísimo, amor!`;
+Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo permite, de todos los capítulos que todavía nos faltan por escribir juntos. ¡Te quiero muchísimo, amor!
+
+Amor quiero que sepas que estoy feliz de verte crecer, de querer mejorar en aspectos que tenías miedo y estás derrotando poco a poco. Aún falta por ser mejores muchos más y poder emprender eso que tanto queremos. Agradezco a la vida por habernos dejado cruzar caminos y que nos permita seguir compartiendo.
+
+Con cariño y amor.
+Alex`;
 
         const DEFAULT_PLANS = [
             {
                 id: 'plan-1',
-                time: '09:30',
-                title: 'Desayuno de Cumpleaños // Boot Sequence',
-                note: 'Arrancamos tus 30 con algo rico y tu bebida favorita.'
+                time: '08:00',
+                title: 'Agradecimiento a Dios porque hace 30 años, vino al mundo una niña tremenda, llamada Elizabeth 🙏✨',
+                note: 'Un momento especial para dar gracias por tu vida y tu historia.'
             },
             {
                 id: 'plan-2',
-                time: '15:00',
-                title: 'Tarde Especial & Sorpresa',
-                note: 'Un paseo bonito y momentos para disfrutar sin prisa 😉'
+                time: '09:00',
+                title: 'Desayuno Familiar (Familia Eli) 🥐☕',
+                note: 'Compartiendo la mesa y el cariño de los tuyos.'
             },
             {
                 id: 'plan-3',
-                time: '20:30',
-                title: 'Cena de Gala // Level 30 Celebration',
-                note: 'Brindis por tus 30 años, amor, y por todo lo que viene.'
+                time: '12:00',
+                title: 'Tarde Especial y Sorpresa 🎁💖',
+                note: 'Para disfrutar juntos cada instante de tu día.'
             }
         ];
 
@@ -998,6 +1045,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
 
         let isSimulating = false;
         let isPortalUnlocked = false;
+        let isCakeBlown = false;
         let tropicalSlidesLoaded = false;
         let countdownInterval = null;
         let celebrationTriggered = false;
@@ -1609,6 +1657,57 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
             saveDreams(dreams);
         }
 
+        // Dinámica del pastel encendido: al soplar se apaga la vela y se revela la lista de deseos
+        function blowBirthdayCake() {
+            isCakeBlown = true;
+            const flamePath = document.getElementById('cakeFlamePath');
+            const statusBadge = document.getElementById('cakeStatusBadge');
+            const titleText = document.getElementById('cakeTitleText');
+            const descText = document.getElementById('cakeDescText');
+            const blowBtn = document.getElementById('blowCandleBtn');
+            const revealContainer = document.getElementById('dreamsRevealContainer');
+
+            if (flamePath) flamePath.classList.add('hidden');
+            if (statusBadge) statusBadge.textContent = '✨ ¡DESEO PEDIDO! // LISTA DESBLOQUEADA';
+            if (titleText) titleText.textContent = '¡Que se cumplan todos tus sueños en tus 30!';
+            if (descText) descText.textContent = 'Aquí tienes tu Wishlist: puedes marcar los que ya van avanzando, agregar nuevos o quitar los que desees.';
+            if (blowBtn) {
+                blowBtn.textContent = '🕯️ Encender vela';
+                blowBtn.setAttribute('onclick', 'relightBirthdayCake()');
+            }
+            if (revealContainer) {
+                revealContainer.classList.remove('hidden');
+                revealContainer.style.display = '';
+            }
+
+            renderDreams();
+            launchPinkConfetti();
+            showToast('🎂 ¡Feliz soplido! Aquí están tus deseos de los 30s');
+        }
+
+        function relightBirthdayCake() {
+            isCakeBlown = false;
+            const flamePath = document.getElementById('cakeFlamePath');
+            const statusBadge = document.getElementById('cakeStatusBadge');
+            const titleText = document.getElementById('cakeTitleText');
+            const descText = document.getElementById('cakeDescText');
+            const blowBtn = document.getElementById('blowCandleBtn');
+            const revealContainer = document.getElementById('dreamsRevealContainer');
+
+            if (flamePath) flamePath.classList.remove('hidden');
+            if (statusBadge) statusBadge.textContent = '🕯️ VELA ENCENDIDA // PIDE UN DESEO';
+            if (titleText) titleText.textContent = '¡Tu pastel de 30 está listo para soplar!';
+            if (descText) descText.textContent = 'Sopla la velita para apagarla y revelar tus deseos de esta nueva etapa.';
+            if (blowBtn) {
+                blowBtn.textContent = '💨 Soplar velita';
+                blowBtn.setAttribute('onclick', 'blowBirthdayCake()');
+            }
+            if (revealContainer) {
+                revealContainer.classList.add('hidden');
+                revealContainer.style.display = 'none';
+            }
+        }
+
         /* ==========================================================================
            CONTADOR REGRESIVO AL 28 DE NOVIEMBRE DE 2026 (00:00:00 HORA LOCAL)
            ========================================================================== */
@@ -1655,9 +1754,13 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
            EDITOR Y VISOR DE CARTA DE FELICITACIÓN
            ========================================================================== */
         function loadLetter() {
+            const displayEl = document.getElementById('letterDisplay');
+            const textareaEl = document.getElementById('letterTextarea');
+            if (!displayEl || !textareaEl) return;
+
             const savedLetter = localStorage.getItem(STORAGE_KEYS.LETTER) || DEFAULT_LETTER;
-            document.getElementById('letterDisplay').textContent = savedLetter;
-            document.getElementById('letterTextarea').value = savedLetter;
+            displayEl.textContent = savedLetter;
+            textareaEl.value = savedLetter;
         }
 
         function toggleLetterMode() {
@@ -1665,6 +1768,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
             const editMode = document.getElementById('letterEditMode');
             const editBtn = document.getElementById('toggleEditLetterBtn');
             const saveBtn = document.getElementById('saveLetterBtn');
+            if (!viewMode || !editMode || !editBtn || !saveBtn) return;
 
             const isEditing = !editMode.classList.contains('hidden');
             if (!isEditing) {
@@ -1672,28 +1776,37 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
                 editMode.classList.remove('hidden');
                 editBtn.classList.add('hidden');
                 saveBtn.classList.remove('hidden');
-                document.getElementById('letterTextarea').focus();
+                const textareaEl = document.getElementById('letterTextarea');
+                if (textareaEl) textareaEl.focus();
             } else {
                 cancelLetterEdit();
             }
         }
 
         function cancelLetterEdit() {
-            document.getElementById('letterViewMode').classList.remove('hidden');
-            document.getElementById('letterEditMode').classList.add('hidden');
-            document.getElementById('toggleEditLetterBtn').classList.remove('hidden');
-            document.getElementById('saveLetterBtn').classList.add('hidden');
+            const viewMode = document.getElementById('letterViewMode');
+            const editMode = document.getElementById('letterEditMode');
+            const editBtn = document.getElementById('toggleEditLetterBtn');
+            const saveBtn = document.getElementById('saveLetterBtn');
+            if (viewMode) viewMode.classList.remove('hidden');
+            if (editMode) editMode.classList.add('hidden');
+            if (editBtn) editBtn.classList.remove('hidden');
+            if (saveBtn) saveBtn.classList.add('hidden');
             loadLetter();
         }
 
         function saveLetter() {
-            const newText = document.getElementById('letterTextarea').value.trim();
+            const textareaEl = document.getElementById('letterTextarea');
+            const displayEl = document.getElementById('letterDisplay');
+            if (!textareaEl || !displayEl) return;
+
+            const newText = textareaEl.value.trim();
             if (!newText) {
                 showToast('La carta no puede quedar vacía');
                 return;
             }
             localStorage.setItem(STORAGE_KEYS.LETTER, newText);
-            document.getElementById('letterDisplay').textContent = newText;
+            displayEl.textContent = newText;
             cancelLetterEdit();
             showToast('Carta guardada con éxito ❤️');
         }
