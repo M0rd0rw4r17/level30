@@ -198,34 +198,35 @@
     <!-- Barra Superior Minimalista y Responsiva -->
     <header class="relative z-20 border-b border-pink-500/15 bg-obsidian/80 backdrop-blur-md sticky top-0">
         <div class="max-w-5xl mx-auto px-3 sm:px-6 py-3 flex items-center justify-between gap-2">
-            <div class="flex items-center gap-2 shrink-0">
+            <!-- Atajo secreto: 5 toques rápidos aquí activan/desactivan la vista previa del 28 de noviembre -->
+            <button id="secretBrandTrigger" onclick="handleSecretBrandTap()" class="flex items-center gap-2 shrink-0 cursor-pointer select-none">
                 <span class="relative flex h-2.5 w-2.5 pulse-dot">
                     <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-neonPink"></span>
                 </span>
                 <span class="font-mono text-xs sm:text-sm tracking-wider text-zinc-300">
                     CORE.ESSENCE<span class="text-softRose font-bold">_v3.0</span>
                 </span>
-            </div>
+            </button>
 
             <div class="flex items-center gap-1.5 sm:gap-2.5">
-                <a href="#tropical-memories" class="hidden md:inline-flex px-2.5 py-1.5 rounded-full text-xs font-mono text-zinc-400 hover:text-roseGold transition">
+                <a href="#tropical-memories" id="navLinkTravesia" class="hidden px-2.5 py-1.5 rounded-full text-xs font-mono text-zinc-400 hover:text-roseGold transition">
                     #Travesía
                 </a>
-                <a href="#suenos" class="hidden md:inline-flex px-2.5 py-1.5 rounded-full text-xs font-mono text-zinc-400 hover:text-roseGold transition">
+                <a href="#suenos" id="navLinkSuenos" class="hidden px-2.5 py-1.5 rounded-full text-xs font-mono text-zinc-400 hover:text-roseGold transition">
                     #Sueñosv3.0
                 </a>
-                <button id="headerMusicBtn" onclick="toggleMusicPlayback()" title="Reproducir o pausar piano de fondo"
+                <button id="headerMusicBtn" onclick="toggleMusicPlayback()" title="Reproducir o pausar música de fondo"
                     class="px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-mono bg-zinc-900/90 text-roseGold border border-pink-500/30 hover:border-neonPink transition flex items-center gap-1.5 cursor-pointer">
                     <span id="headerMusicIcon">🎵</span>
                     <span class="hidden sm:inline" id="headerMusicLabel">Música</span>
                 </button>
-                <button onclick="copySummaryToClipboard()" title="Copiar texto de carta e itinerario"
-                    class="px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-mono bg-zinc-900/90 text-zinc-300 border border-zinc-800 hover:border-softRose/50 hover:text-roseGold transition cursor-pointer">
+                <button id="headerBackupBtn" onclick="copySummaryToClipboard()" title="Copiar texto de carta e itinerario"
+                    class="hidden px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-mono bg-zinc-900/90 text-zinc-300 border border-zinc-800 hover:border-softRose/50 hover:text-roseGold transition cursor-pointer">
                     📋 <span class="hidden sm:inline">Respaldar</span>
                 </button>
                 <button onclick="launchPinkConfetti()"
                     class="px-3 sm:px-3.5 py-1.5 rounded-full text-xs font-mono font-medium bg-pink-500/15 text-roseGold border border-pink-500/35 hover:bg-pink-500/25 hover:border-neonPink transition flex items-center gap-1 cursor-pointer">
-                    <span>✨</span> <span class="hidden xs:inline">Celebrar</span>
+                    <span>✨</span> <span class="hidden sm:inline">Celebrar</span>
                 </button>
             </div>
         </div>
@@ -237,7 +238,7 @@
         <!-- 1. HERO SECTION CON DETALLES LINE-ART Y DEDICATORIA -->
         <section class="relative text-center space-y-6 pt-2 pb-2">
             <!-- Detalle flotante izquierda: Stitch minimalista -->
-            <button onclick="selectCharacter('stitch', true)" title="Stitch: Ohana & Aventura"
+            <button onclick="handleHeroEmblemClick('stitch')" title="Stitch: Ohana & Aventura"
                 class="hidden lg:flex flex-col items-center gap-1 absolute left-2 top-4 opacity-70 hover:opacity-100 transition animate-float-1 cursor-pointer group">
                 <svg class="w-14 h-14 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 26 C11 16, 6 22, 9 32 C11 37, 17 37, 21 34" />
@@ -255,7 +256,7 @@
             </button>
 
             <!-- Detalle flotante derecha: Marie con moño rosa -->
-            <button onclick="selectCharacter('marie', true)" title="Marie: Coqueta & Esencia"
+            <button onclick="handleHeroEmblemClick('marie')" title="Marie: Coqueta & Esencia"
                 class="hidden lg:flex flex-col items-center gap-1 absolute right-2 top-4 opacity-70 hover:opacity-100 transition animate-float-2 cursor-pointer group">
                 <svg class="w-14 h-14 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 28 L19 16 L28 23" />
@@ -280,16 +281,13 @@
                 <span class="text-neonPink">◆</span>
             </div>
 
-            <!-- Título Principal Editable + Dedicatoria -->
+            <!-- Título Principal + Dedicatoria -->
             <div class="space-y-4 max-w-3xl mx-auto px-1">
-                <div class="group relative inline-block max-w-full">
-                    <h1 id="heroTitle" contenteditable="true" spellcheck="false" title="Haz clic para editar el nombre o título"
-                        class="font-display text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white glow-text outline-none focus:ring-2 focus:ring-neonPink/50 rounded-2xl px-3 py-1 transition cursor-text break-words">
+                <div class="relative inline-block max-w-full">
+                    <h1 id="heroTitle"
+                        class="font-display text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white glow-text rounded-2xl px-3 py-1 break-words">
                         Welcome to 30´s
                     </h1>
-                    <p class="text-[11px] font-mono text-zinc-500 mt-1 opacity-80 group-hover:opacity-100 transition">
-                        [ Haz clic sobre el título superior para personalizarlo ]
-                    </p>
                 </div>
 
                 <!-- Tus dos párrafos personalizados de portada -->
@@ -316,10 +314,9 @@
                     </span>
                 </div>
 
-                <button id="simulateBtn" onclick="toggleSimulation()"
-                    class="self-start sm:self-auto px-3.5 py-2 rounded-xl font-mono text-xs bg-zinc-900/90 text-zinc-300 border border-zinc-700/80 hover:border-neonPink hover:text-roseGold transition cursor-pointer">
-                    ⚡ Simular 28 de Noviembre
-                </button>
+                <span id="portalStatePill" class="self-start sm:self-auto px-3 py-1.5 rounded-xl font-mono text-[11px] bg-pink-500/10 text-roseGold border border-pink-500/30">
+                    🔒 PORTAL SELLADO HASTA EL 28.11
+                </span>
             </div>
 
             <!-- Bloques del Contador -->
@@ -342,7 +339,7 @@
                 </div>
             </div>
 
-            <!-- Banner Especial de Celebración -->
+            <!-- Banner Especial de Celebración (visible al llegar el 28 de noviembre) -->
             <div id="celebrationBanner" class="hidden mt-6 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-neonPink/20 via-pink-500/15 to-roseGold/20 border border-neonPink/50 text-center space-y-3">
                 <div class="inline-block px-3 py-1 rounded-full bg-neonPink text-white font-mono text-xs font-bold tracking-wider">
                     STATUS: 200 OK // ¡HOY COMIENZA TU NIVEL 30, AMOR!
@@ -361,448 +358,488 @@
             </div>
         </section>
 
-        <!-- 3. MEMORIES DE UNA TRAVESÍA TROPICAL (CARRUSEL CON TUS 28 FOTOS DE GITHUB) -->
-        <section id="tropical-memories" class="glass-card rounded-3xl p-5 sm:p-8 md:p-10 relative overflow-hidden space-y-6">
-            <!-- Hoja de Monstera / Palmera en line-art rosa neón -->
-            <svg class="hidden sm:block absolute -top-6 -right-6 w-44 h-44 opacity-20 pointer-events-none svg-neon-glow" viewBox="0 0 120 120" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 102 C35 72, 62 45, 102 18" />
-                <path d="M45 72 C32 62, 24 46, 32 32 C42 36, 52 46, 58 58" />
-                <path d="M62 56 C52 42, 48 24, 58 14 C68 20, 74 34, 75 46" />
-                <path d="M77 42 C72 28, 74 14, 84 8 C92 16, 94 28, 90 38" />
-                <path d="M48 75 C62 86, 80 90, 92 80 C86 70, 74 62, 62 62" />
-                <path d="M65 59 C80 68, 96 68, 106 58 C98 49, 86 44, 75 47" />
-            </svg>
-
-            <!-- Encabezado -->
-            <div class="relative z-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-800/80 pb-5">
-                <div>
-                    <div class="inline-flex items-center gap-2 font-mono text-xs text-neonPink uppercase tracking-wider">
-                        <span>🌴</span>
-                        <span>// TRAVESÍA_TROPICAL // MEMORIES.GALLERY</span>
-                    </div>
-                    <h2 class="font-display text-2xl sm:text-3xl font-bold text-white mt-1">
-                        Memories de una travesía tropical
-                    </h2>
-                    <p class="text-zinc-400 text-xs sm:text-sm mt-1">
-                        Aloha vibes, aventuras, risas y pedacitos de nuestra historia rumbo a tus 30.
-                    </p>
-                </div>
-
-                <div class="flex flex-wrap items-center gap-2">
-                    <input type="file" id="tropicalPhotoInput" accept="image/*" multiple class="hidden" onchange="handleTropicalFileSelect(event)">
-                    <button onclick="document.getElementById('tropicalPhotoInput').click()"
-                        class="btn-pink-glow text-white font-mono text-xs font-bold px-3.5 py-2.5 rounded-xl inline-flex items-center gap-1.5 cursor-pointer">
-                        <span>📸</span>
-                        <span>Subir Fotos</span>
-                    </button>
-                    <button id="carouselPlayPauseBtn" onclick="toggleCarouselAutoplay()"
-                        class="px-3.5 py-2.5 rounded-xl font-mono text-xs bg-obsidian/90 text-roseGold border border-pink-500/30 hover:border-neonPink transition cursor-pointer">
-                        ⏸ Pausar
-                    </button>
-                </div>
+        <!-- CÁPSULA SELLADA (VISIBLE MIENTRAS EL CONTADOR SIGUE CORRIENDO) -->
+        <section id="lockedVaultNotice" class="glass-card rounded-3xl p-6 sm:p-10 text-center space-y-6 border border-pink-500/30">
+            <div class="w-16 h-16 mx-auto rounded-2xl bg-pink-500/15 border border-neonPink/40 flex items-center justify-center text-3xl shadow-lg">
+                🔐
             </div>
 
-            <!-- Visor Principal con Drag & Drop y Swipe Táctil -->
-            <div id="tropicalDropZone" class="relative rounded-2xl bg-obsidian/90 border border-pink-500/25 overflow-hidden group transition-all">
-                <!-- Barra de progreso Auto-play -->
-                <div class="w-full h-1 bg-zinc-900 overflow-hidden">
-                    <div id="carouselProgressBar" class="h-full bg-gradient-to-r from-neonPink via-softRose to-roseGold transition-all duration-100 ease-linear" style="width: 0%;"></div>
-                </div>
-
-                <!-- Contenedor Adaptable (Fondo difuminado + foto completa sin recortes) -->
-                <div id="carouselTouchArea" class="relative h-[340px] sm:h-[440px] md:h-[500px] w-full flex items-center justify-center bg-obsidian overflow-hidden select-none">
-                    <!-- Fondo difuminado ambiental -->
-                    <img id="carouselBackdropImage" src="" alt="" aria-hidden="true"
-                        class="absolute inset-0 w-full h-full object-cover blur-2xl opacity-30 scale-110 pointer-events-none">
-
-                    <!-- Fotografía Principal -->
-                    <img id="carouselActiveImage" src="" alt="Recuerdo de nuestra travesía" onclick="openLightbox()"
-                        class="relative z-10 max-w-full max-h-full object-contain cursor-zoom-in transition-opacity duration-500 select-none">
-
-                    <!-- Indicador de carga para fotos .HEIC de iPhone -->
-                    <div id="carouselLoadingBadge" class="hidden absolute inset-0 z-20 bg-obsidian/75 backdrop-blur-sm flex flex-col items-center justify-center gap-2 pointer-events-none">
-                        <span class="w-8 h-8 rounded-full border-2 border-neonPink border-t-transparent animate-spin"></span>
-                        <span class="font-mono text-xs text-roseGold">Revelando recuerdo...</span>
-                    </div>
-
-                    <!-- Barra superior del visor -->
-                    <div class="absolute top-3 left-3 right-3 z-20 flex items-center justify-between gap-2 pointer-events-none">
-                        <span id="carouselSlideBadge" class="px-3 py-1 rounded-full bg-obsidian/85 backdrop-blur-md border border-pink-500/30 font-mono text-[10px] sm:text-[11px] text-roseGold">
-                            01 / 28 • TRAVESÍA TROPICAL
-                        </span>
-
-                        <div class="flex items-center gap-2 pointer-events-auto">
-                            <button onclick="openLightbox()" title="Ver en pantalla completa"
-                                class="w-9 h-9 rounded-full bg-obsidian/85 backdrop-blur-md border border-zinc-700/80 text-zinc-200 hover:border-neonPink hover:text-roseGold flex items-center justify-center text-xs transition cursor-pointer">
-                                🔍
-                            </button>
-                            <button onclick="deleteCurrentTropicalPhoto()" title="Quitar esta foto del carrusel"
-                                class="w-9 h-9 rounded-full bg-obsidian/85 backdrop-blur-md border border-zinc-700/80 text-zinc-300 hover:border-neonPink hover:text-neonPink flex items-center justify-center text-xs transition cursor-pointer">
-                                🗑️
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Flechas Anterior / Siguiente -->
-                    <button onclick="prevTropicalSlide()" aria-label="Foto anterior"
-                        class="absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-obsidian/85 backdrop-blur-md border border-pink-500/40 text-white text-xl hover:bg-neonPink hover:border-neonPink flex items-center justify-center transition cursor-pointer">
-                        ‹
-                    </button>
-                    <button onclick="nextTropicalSlide()" aria-label="Siguiente foto"
-                        class="absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-obsidian/85 backdrop-blur-md border border-pink-500/40 text-white text-xl hover:bg-neonPink hover:border-neonPink flex items-center justify-center transition cursor-pointer">
-                        ›
-                    </button>
-
-                    <!-- Pie de foto editable -->
-                    <div class="absolute bottom-0 inset-x-0 z-20 bg-gradient-to-t from-obsidian via-obsidian/90 to-transparent pt-10 pb-3.5 px-3.5 sm:px-6">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <div class="flex-1 min-w-0">
-                                <p id="carouselCaptionText" contenteditable="true" spellcheck="false" onblur="saveTropicalCaption()"
-                                    title="Haz clic para editar el recuerdo de esta foto"
-                                    class="font-display text-sm sm:text-base font-medium text-white outline-none focus:ring-1 focus:ring-neonPink rounded-lg px-2 py-0.5 cursor-text">
-                                    Memories de una travesía tropical 🌴🌺
-                                </p>
-                                <span class="font-mono text-[10px] text-zinc-400 px-2 block">
-                                    [ Toca el texto para editar o desliza con el dedo para cambiar de foto ]
-                                </span>
-                            </div>
-                            <div id="carouselDots" class="flex flex-wrap items-center gap-1 px-2 max-w-full sm:max-w-[210px] justify-start sm:justify-end"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Overlay Drag & Drop -->
-                <div id="dropOverlay" class="hidden absolute inset-0 z-30 bg-obsidian/90 backdrop-blur-md border-2 border-dashed border-neonPink flex flex-col items-center justify-center gap-2 text-center p-6 pointer-events-none">
-                    <span class="text-4xl">🌺</span>
-                    <p class="font-display text-lg font-bold text-white">Suelta tus fotos aquí</p>
-                    <p class="font-mono text-xs text-roseGold">Se agregarán automáticamente a la galería</p>
-                </div>
+            <div class="space-y-2 max-w-xl mx-auto">
+                <span class="font-mono text-xs text-neonPink uppercase tracking-widest">// ACCESS_LOCKED // 28.11.2026</span>
+                <h2 class="font-display text-2xl sm:text-3xl font-bold text-white">
+                    Sorpresas esperando tu medianoche
+                </h2>
+                <p class="text-zinc-300 text-sm sm:text-base font-light leading-relaxed">
+                    En cuanto el contador llegue a cero, este portal se abrirá automáticamente para revelarte todo lo que preparé para tus 30 años, Amor.
+                </p>
             </div>
 
-            <!-- Tira de Miniaturas + Restaurar -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
-                <div id="tropicalThumbnails" class="flex items-center gap-2 overflow-x-auto pb-1.5 w-full sm:w-auto">
-                    <!-- Miniaturas generadas con JS -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl mx-auto text-left pt-2">
+                <div class="p-4 rounded-2xl bg-obsidian/75 border border-zinc-800/90 flex items-center gap-3">
+                    <span class="text-xl">🌴</span>
+                    <div>
+                        <div class="font-mono text-[10px] text-roseGold">BLOQUEADO • 01</div>
+                        <div class="font-display text-sm font-semibold text-white">Memories de una travesía tropical</div>
+                    </div>
                 </div>
-
-                <div class="flex items-center justify-between sm:justify-end gap-3 shrink-0 text-[11px] font-mono text-zinc-500">
-                    <span>Desliza las miniaturas</span>
-                    <button onclick="restoreDefaultTropicalSlides()" class="text-roseGold hover:underline cursor-pointer">
-                        ↺ Restaurar 28 fotos
-                    </button>
+                <div class="p-4 rounded-2xl bg-obsidian/75 border border-zinc-800/90 flex items-center gap-3">
+                    <span class="text-xl">✨</span>
+                    <div>
+                        <div class="font-mono text-[10px] text-roseGold">BLOQUEADO • 02</div>
+                        <div class="font-display text-sm font-semibold text-white">Tus 30s, 6 Guardianes & Wishlist</div>
+                    </div>
+                </div>
+                <div class="p-4 rounded-2xl bg-obsidian/75 border border-zinc-800/90 flex items-center gap-3">
+                    <span class="text-xl">💌</span>
+                    <div>
+                        <div class="font-mono text-[10px] text-roseGold">BLOQUEADO • 03</div>
+                        <div class="font-display text-sm font-semibold text-white">Una carta para tus 30 años</div>
+                    </div>
+                </div>
+                <div class="p-4 rounded-2xl bg-obsidian/75 border border-zinc-800/90 flex items-center gap-3">
+                    <span class="text-xl">🗓️</span>
+                    <div>
+                        <div class="font-mono text-[10px] text-roseGold">BLOQUEADO • 04</div>
+                        <div class="font-display text-sm font-semibold text-white">Itinerary // Plan de Festejo</div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- 4. TUS 30s & SUEÑOS POR CUMPLIR (6 GUARDIANES DE ESENCIA + WISHLIST v3.0) -->
-        <section id="suenos" class="glass-card rounded-3xl p-5 sm:p-8 md:p-10 space-y-7">
-            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-800/80 pb-5">
-                <div>
-                    <span class="font-mono text-xs text-neonPink uppercase tracking-wider">// CORE_VALUES & DREAMS_v3.0</span>
-                    <h2 class="font-display text-2xl sm:text-3xl font-bold text-white mt-1">Tus 30s & Sueños por Cumplir</h2>
-                    <p class="text-zinc-400 text-xs sm:text-sm mt-1">
-                        Crecer no es dejar de ser tú: cada emblema va relacionado a tus personajes y gustos favoritos. Toca cada uno para descubrir lo que simboliza en esta nueva etapa.
-                    </p>
+        <!-- CONTENEDOR DE SECCIONES SELLADAS (SE REVELA AL CUMPLIRSE EL 28 DE NOVIEMBRE) -->
+        <div id="lockedContentWrapper" class="hidden space-y-10 sm:space-y-14">
+
+            <!-- 3. MEMORIES DE UNA TRAVESÍA TROPICAL (CARRUSEL CON TUS 28 FOTOS DE GITHUB) -->
+            <section id="tropical-memories" class="glass-card rounded-3xl p-5 sm:p-8 md:p-10 relative overflow-hidden space-y-6">
+                <!-- Hoja de Monstera / Palmera en line-art rosa neón -->
+                <svg class="hidden sm:block absolute -top-6 -right-6 w-44 h-44 opacity-20 pointer-events-none svg-neon-glow" viewBox="0 0 120 120" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 102 C35 72, 62 45, 102 18" />
+                    <path d="M45 72 C32 62, 24 46, 32 32 C42 36, 52 46, 58 58" />
+                    <path d="M62 56 C52 42, 48 24, 58 14 C68 20, 74 34, 75 46" />
+                    <path d="M77 42 C72 28, 74 14, 84 8 C92 16, 94 28, 90 38" />
+                    <path d="M48 75 C62 86, 80 90, 92 80 C86 70, 74 62, 62 62" />
+                    <path d="M65 59 C80 68, 96 68, 106 58 C98 49, 86 44, 75 47" />
+                </svg>
+
+                <!-- Encabezado -->
+                <div class="relative z-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-800/80 pb-5">
+                    <div>
+                        <div class="inline-flex items-center gap-2 font-mono text-xs text-neonPink uppercase tracking-wider">
+                            <span>🌴</span>
+                            <span>// TRAVESÍA_TROPICAL // MEMORIES.GALLERY</span>
+                        </div>
+                        <h2 class="font-display text-2xl sm:text-3xl font-bold text-white mt-1">
+                            Memories de una travesía tropical
+                        </h2>
+                        <p class="text-zinc-400 text-xs sm:text-sm mt-1">
+                            Aloha vibes, aventuras, risas y pedacitos de nuestra historia rumbo a tus 30.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                        <input type="file" id="tropicalPhotoInput" accept="image/*" multiple class="hidden" onchange="handleTropicalFileSelect(event)">
+                        <button onclick="document.getElementById('tropicalPhotoInput').click()"
+                            class="btn-pink-glow text-white font-mono text-xs font-bold px-3.5 py-2.5 rounded-xl inline-flex items-center gap-1.5 cursor-pointer">
+                            <span>📸</span>
+                            <span>Subir Fotos</span>
+                        </button>
+                        <button id="carouselPlayPauseBtn" onclick="toggleCarouselAutoplay()"
+                            class="px-3.5 py-2.5 rounded-xl font-mono text-xs bg-obsidian/90 text-roseGold border border-pink-500/30 hover:border-neonPink transition cursor-pointer">
+                            ⏸ Pausar
+                        </button>
+                    </div>
                 </div>
-                <span class="font-mono text-xs px-3 py-1.5 rounded-full bg-pink-500/10 border border-pink-500/25 text-roseGold self-start sm:self-auto shrink-0">
-                    6 Guardianes de Esencia
-                </span>
-            </div>
 
-            <!-- Grid de los 6 Personajes en Siluetas SVG Neón -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-
-                <!-- 1. STITCH -->
-                <button id="card-stitch" onclick="selectCharacter('stitch', false)"
-                    class="character-card active-char p-3.5 sm:p-4 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-2.5 cursor-pointer">
-                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center">
-                        <svg class="w-11 h-11 sm:w-12 sm:h-12 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 26 C11 16, 6 22, 9 32 C11 37, 17 37, 21 34" />
-                            <path d="M13 24 C11 26, 12 30, 16 31" stroke-dasharray="2 2"/>
-                            <path d="M43 26 C53 16, 58 22, 55 32 C53 37, 47 37, 43 34" />
-                            <path d="M51 24 C53 26, 52 30, 48 31" stroke-dasharray="2 2"/>
-                            <path d="M21 30 C21 22, 43 22, 43 30 C44 40, 39 46, 32 46 C25 46, 20 40, 21 30 Z" />
-                            <path d="M30 22 L32 18 L34 22" />
-                            <ellipse cx="26.5" cy="33" rx="2.5" ry="3.2" />
-                            <ellipse cx="37.5" cy="33" rx="2.5" ry="3.2" />
-                            <path d="M30 37.5 Q32 36 34 37.5 Q32 39.5 30 37.5 Z" />
-                            <path d="M27 41.5 Q32 44 37 41.5" />
-                        </svg>
+                <!-- Visor Principal con Drag & Drop y Swipe Táctil -->
+                <div id="tropicalDropZone" class="relative rounded-2xl bg-obsidian/90 border border-pink-500/25 overflow-hidden group transition-all">
+                    <!-- Barra de progreso Auto-play -->
+                    <div class="w-full h-1 bg-zinc-900 overflow-hidden">
+                        <div id="carouselProgressBar" class="h-full bg-gradient-to-r from-neonPink via-softRose to-roseGold transition-all duration-100 ease-linear" style="width: 0%;"></div>
                     </div>
+
+                    <!-- Contenedor Adaptable -->
+                    <div id="carouselTouchArea" class="relative h-[340px] sm:h-[440px] md:h-[500px] w-full flex items-center justify-center bg-obsidian overflow-hidden select-none">
+                        <img id="carouselBackdropImage" src="" alt="" aria-hidden="true"
+                            class="absolute inset-0 w-full h-full object-cover blur-2xl opacity-30 scale-110 pointer-events-none">
+
+                        <img id="carouselActiveImage" src="" alt="Recuerdo de nuestra travesía" onclick="openLightbox()"
+                            class="relative z-10 max-w-full max-h-full object-contain cursor-zoom-in transition-opacity duration-500 select-none">
+
+                        <!-- Indicador de carga para fotos .HEIC -->
+                        <div id="carouselLoadingBadge" class="hidden absolute inset-0 z-20 bg-obsidian/75 backdrop-blur-sm flex flex-col items-center justify-center gap-2 pointer-events-none">
+                            <span class="w-8 h-8 rounded-full border-2 border-neonPink border-t-transparent animate-spin"></span>
+                            <span class="font-mono text-xs text-roseGold">Revelando recuerdo...</span>
+                        </div>
+
+                        <!-- Barra superior del visor -->
+                        <div class="absolute top-3 left-3 right-3 z-20 flex items-center justify-between gap-2 pointer-events-none">
+                            <span id="carouselSlideBadge" class="px-3 py-1 rounded-full bg-obsidian/85 backdrop-blur-md border border-pink-500/30 font-mono text-[10px] sm:text-[11px] text-roseGold">
+                                01 / 28 • TRAVESÍA TROPICAL
+                            </span>
+
+                            <div class="flex items-center gap-2 pointer-events-auto">
+                                <button onclick="openLightbox()" title="Ver en pantalla completa"
+                                    class="w-9 h-9 rounded-full bg-obsidian/85 backdrop-blur-md border border-zinc-700/80 text-zinc-200 hover:border-neonPink hover:text-roseGold flex items-center justify-center text-xs transition cursor-pointer">
+                                    🔍
+                                </button>
+                                <button onclick="deleteCurrentTropicalPhoto()" title="Quitar esta foto del carrusel"
+                                    class="w-9 h-9 rounded-full bg-obsidian/85 backdrop-blur-md border border-zinc-700/80 text-zinc-300 hover:border-neonPink hover:text-neonPink flex items-center justify-center text-xs transition cursor-pointer">
+                                    🗑️
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Flechas Anterior / Siguiente -->
+                        <button onclick="prevTropicalSlide()" aria-label="Foto anterior"
+                            class="absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-obsidian/85 backdrop-blur-md border border-pink-500/40 text-white text-xl hover:bg-neonPink hover:border-neonPink flex items-center justify-center transition cursor-pointer">
+                            ‹
+                        </button>
+                        <button onclick="nextTropicalSlide()" aria-label="Siguiente foto"
+                            class="absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-obsidian/85 backdrop-blur-md border border-pink-500/40 text-white text-xl hover:bg-neonPink hover:border-neonPink flex items-center justify-center transition cursor-pointer">
+                            ›
+                        </button>
+
+                        <!-- Pie de foto editable -->
+                        <div class="absolute bottom-0 inset-x-0 z-20 bg-gradient-to-t from-obsidian via-obsidian/90 to-transparent pt-10 pb-3.5 px-3.5 sm:px-6">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <div class="flex-1 min-w-0">
+                                    <p id="carouselCaptionText" contenteditable="true" spellcheck="false" onblur="saveTropicalCaption()"
+                                        title="Haz clic para editar el recuerdo de esta foto"
+                                        class="font-display text-sm sm:text-base font-medium text-white outline-none focus:ring-1 focus:ring-neonPink rounded-lg px-2 py-0.5 cursor-text">
+                                        Memories de una travesía tropical 🌴🌺
+                                    </p>
+                                    <span class="font-mono text-[10px] text-zinc-400 px-2 block">
+                                        [ Toca el texto para editar o desliza con el dedo para cambiar de foto ]
+                                    </span>
+                                </div>
+                                <div id="carouselDots" class="flex flex-wrap items-center gap-1 px-2 max-w-full sm:max-w-[210px] justify-start sm:justify-end"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Overlay Drag & Drop -->
+                    <div id="dropOverlay" class="hidden absolute inset-0 z-30 bg-obsidian/90 backdrop-blur-md border-2 border-dashed border-neonPink flex flex-col items-center justify-center gap-2 text-center p-6 pointer-events-none">
+                        <span class="text-4xl">🌺</span>
+                        <p class="font-display text-lg font-bold text-white">Suelta tus fotos aquí</p>
+                        <p class="font-mono text-xs text-roseGold">Se agregarán automáticamente a la galería</p>
+                    </div>
+                </div>
+
+                <!-- Tira de Miniaturas + Restaurar -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+                    <div id="tropicalThumbnails" class="flex items-center gap-2 overflow-x-auto pb-1.5 w-full sm:w-auto"></div>
+
+                    <div class="flex items-center justify-between sm:justify-end gap-3 shrink-0 text-[11px] font-mono text-zinc-500">
+                        <span>Desliza las miniaturas</span>
+                        <button onclick="restoreDefaultTropicalSlides()" class="text-roseGold hover:underline cursor-pointer">
+                            ↺ Restaurar 28 fotos
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. TUS 30s & SUEÑOS POR CUMPLIR (6 GUARDIANES DE ESENCIA + WISHLIST v3.0) -->
+            <section id="suenos" class="glass-card rounded-3xl p-5 sm:p-8 md:p-10 space-y-7">
+                <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-800/80 pb-5">
                     <div>
-                        <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">01 // STITCH</div>
-                        <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Ohana & Aventura</h3>
+                        <span class="font-mono text-xs text-neonPink uppercase tracking-wider">// CORE_VALUES & DREAMS_v3.0</span>
+                        <h2 class="font-display text-2xl sm:text-3xl font-bold text-white mt-1">Tus 30s & Sueños por Cumplir</h2>
+                        <p class="text-zinc-400 text-xs sm:text-sm mt-1">
+                            Crecer no es dejar de ser tú: cada emblema va relacionado a tus personajes y gustos favoritos. Toca cada uno para descubrir lo que simboliza en esta nueva etapa.
+                        </p>
                     </div>
-                </button>
-
-                <!-- 2. MARIE -->
-                <button id="card-marie" onclick="selectCharacter('marie', false)"
-                    class="character-card p-3.5 sm:p-4 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-2.5 cursor-pointer">
-                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center">
-                        <svg class="w-11 h-11 sm:w-12 sm:h-12 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 28 L19 16 L28 23" />
-                            <path d="M43 28 L45 16 L36 23" />
-                            <path d="M32 21 L25 16 C23 19, 23 22, 26 23 L32 21 Z" fill="rgba(244,63,94,0.25)" />
-                            <path d="M32 21 L39 16 C41 19, 41 22, 38 23 L32 21 Z" fill="rgba(244,63,94,0.25)" />
-                            <circle cx="32" cy="21" r="1.5" />
-                            <path d="M20 29 C19 39, 24 45, 32 45 C40 45, 45 39, 44 29" />
-                            <path d="M25 34 Q27 32 29 34" />
-                            <path d="M35 34 Q37 32 39 34" />
-                            <path d="M31 38 L33 38 L32 39.5 Z" />
-                            <path d="M15 36 L21 37 M15 40 L21 39.5" />
-                            <path d="M49 36 L43 37 M49 40 L43 39.5" />
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">02 // MARIE</div>
-                        <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Coqueta & Esencia</h3>
-                    </div>
-                </button>
-
-                <!-- 3. WINNIE POOH -->
-                <button id="card-pooh" onclick="selectCharacter('pooh', false)"
-                    class="character-card p-3.5 sm:p-4 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-2.5 cursor-pointer">
-                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center">
-                        <svg class="w-11 h-11 sm:w-12 sm:h-12 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="21" cy="21" r="4.5" />
-                            <circle cx="43" cy="21" r="4.5" />
-                            <path d="M23 23 C19 27, 19 36, 24 40 C28 43, 36 43, 40 40 C45 36, 45 27, 41 23" />
-                            <circle cx="27.5" cy="30" r="1.3" fill="#fb7185" />
-                            <circle cx="36.5" cy="30" r="1.3" fill="#fb7185" />
-                            <path d="M30.5 33.5 Q32 32.5 33.5 33.5 Q32 35 30.5 33.5 Z" />
-                            <path d="M28 37 Q32 39.5 36 37" />
-                            <path d="M26 44 L38 44 L39 51 C39 53, 25 53, 25 51 Z" />
-                            <path d="M26 46 Q29 48 32 46 Q35 48 38 46" />
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">03 // POOH</div>
-                        <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Dulzura & Antojitos</h3>
-                    </div>
-                </button>
-
-                <!-- 4. COCODRILO -->
-                <button id="card-croc" onclick="selectCharacter('croc', false)"
-                    class="character-card p-3.5 sm:p-4 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-2.5 cursor-pointer">
-                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center">
-                        <svg class="w-11 h-11 sm:w-12 sm:h-12 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M32 12 L33.5 15.5 L37 16 L34.3 18.4 L35 22 L32 20.1 L29 22 L29.7 18.4 L27 16 L30.5 15.5 Z" />
-                            <path d="M23 29 C23 24, 29 24, 29 28" />
-                            <path d="M35 28 C35 24, 41 24, 41 29" />
-                            <circle cx="26" cy="28" r="1.3" fill="#fb7185" />
-                            <circle cx="38" cy="28" r="1.3" fill="#fb7185" />
-                            <path d="M16 34 C16 29, 48 29, 48 34 C48 41, 41 44, 32 44 C23 44, 16 41, 16 34 Z" />
-                            <circle cx="27" cy="33.5" r="0.9" />
-                            <circle cx="37" cy="33.5" r="0.9" />
-                            <path d="M21 38 Q32 42.5 43 38" />
-                            <path d="M25 39.5 L26 41 L27 39.8 M37 39.8 L38 41 L39 39.5" />
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">04 // COCODRILO</div>
-                        <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Valentía & Fuerza</h3>
-                    </div>
-                </button>
-
-                <!-- 5. LUCIFER (EL GATO DE LA CENICIENTA) -->
-                <button id="card-lucifer" onclick="selectCharacter('lucifer', false)"
-                    class="character-card p-3.5 sm:p-4 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-2.5 cursor-pointer">
-                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center">
-                        <svg class="w-11 h-11 sm:w-12 sm:h-12 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <!-- Orejas puntiagudas y pelaje despeinado -->
-                            <path d="M18 27 L15 15 L26 21" />
-                            <path d="M46 27 L49 15 L38 21" />
-                            <path d="M28 21 L32 18 L36 21" />
-                            <!-- Rostro regordete y mejillas esponjosas -->
-                            <path d="M18 27 C14 35, 16 44, 24 46 C29 48, 35 48, 40 46 C48 44, 50 35, 46 27" />
-                            <!-- Mirada icónica de desprecio (párpados entrecerrados) -->
-                            <path d="M21 31 L29 33" />
-                            <path d="M43 31 L35 33" />
-                            <path d="M22 33 C23 36, 27 36, 28 33.5" />
-                            <path d="M42 33 C41 36, 37 36, 36 33.5" />
-                            <circle cx="25.5" cy="34" r="1.1" fill="#fb7185" />
-                            <circle cx="38.5" cy="34" r="1.1" fill="#fb7185" />
-                            <!-- Nariz y mueca dramática -->
-                            <path d="M30 37 L34 37 L32 39 Z" />
-                            <path d="M26 42 Q32 39.5 38 42" />
-                            <path d="M12 37 L18 38 M52 37 L46 38" />
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">05 // LUCIFER</div>
-                        <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Mirada & Carácter</h3>
-                    </div>
-                </button>
-
-                <!-- 6. TAMBOR (DE BAMBI) -->
-                <button id="card-tambor" onclick="selectCharacter('tambor', false)"
-                    class="character-card p-3.5 sm:p-4 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-2.5 cursor-pointer">
-                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center">
-                        <svg class="w-11 h-11 sm:w-12 sm:h-12 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <!-- Orejitas largas de conejito -->
-                            <path d="M26 24 C22 12, 26 9, 29 14 C30 17, 30 21, 29 24" />
-                            <path d="M38 24 C42 12, 38 9, 35 14 C34 17, 34 21, 35 24" />
-                            <!-- Cabecita tierna y cachetes esponjosos -->
-                            <path d="M22 28 C18 33, 18 41, 24 44 C28 46, 36 46, 40 44 C46 41, 46 33, 42 28 C40 24, 24 24, 22 28 Z" />
-                            <!-- Ojos alegres -->
-                            <circle cx="27" cy="33" r="1.5" fill="#fb7185" />
-                            <circle cx="37" cy="33" r="1.5" fill="#fb7185" />
-                            <!-- Nariz y dientito tierno -->
-                            <path d="M30.5 36.5 Q32 35.5 33.5 36.5 Q32 38 30.5 36.5 Z" />
-                            <path d="M27.5 40 Q32 42.5 36.5 40" />
-                            <rect x="30.8" y="40.8" width="2.4" height="2.4" rx="0.5" />
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">06 // TAMBOR</div>
-                        <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Alegría & Chispa</h3>
-                    </div>
-                </button>
-            </div>
-
-            <!-- Cápsula Dinámica de Reflexión del Personaje Seleccionado -->
-            <div id="characterQuoteBox" class="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-obsidian via-charcoal to-obsidian border border-pink-500/30 transition-all">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
-                    <span id="charBadge" class="font-mono text-xs text-neonPink font-semibold tracking-wider">
-                        ◆ STITCH // OHANA & AVENTURA
+                    <span class="font-mono text-xs px-3 py-1.5 rounded-full bg-pink-500/10 border border-pink-500/25 text-roseGold self-start sm:self-auto shrink-0">
+                        6 Guardianes de Esencia
                     </span>
-                    <span class="font-mono text-[11px] text-zinc-500">FILOSOFÍA NIVEL 30 • AMOR</span>
-                </div>
-                <p id="charQuoteText" class="text-zinc-200 text-sm sm:text-base leading-relaxed font-light"></p>
-            </div>
-
-            <!-- Wishlist / Sueños por Cumplir v3.0 -->
-            <div class="pt-4 border-t border-zinc-800/80 space-y-4">
-                <div class="flex flex-wrap items-center justify-between gap-2">
-                    <div>
-                        <h3 class="font-display text-lg sm:text-xl font-bold text-white flex items-center gap-2">
-                            <span class="text-neonPink">✦</span> Wishlist // Sueños por Cumplir en los 30s
-                        </h3>
-                        <p class="text-zinc-400 text-xs sm:text-sm">Metas, viajes y pequeños gustos que vamos a hacer realidad juntos.</p>
-                    </div>
-                    <span id="dreamsCounter" class="font-mono text-xs text-roseGold">0 cumplidos</span>
                 </div>
 
-                <form onsubmit="addDreamItem(event)" class="flex flex-col sm:flex-row gap-2.5">
-                    <input type="text" id="dreamInput" required placeholder="Ej. Viajar juntos a nuestro lugar soñado, aprender algo nuevo..."
-                        class="flex-1 rounded-xl bg-obsidian border border-zinc-700/80 focus:border-neonPink text-white px-4 py-2.5 text-sm outline-none transition">
-                    <button type="submit" class="px-5 py-2.5 rounded-xl btn-pink-glow text-white font-mono text-xs font-bold tracking-wide cursor-pointer shrink-0">
-                        + Agregar Sueño
+                <!-- Grid de los 6 Personajes en Siluetas SVG Neón -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                    <!-- 1. STITCH -->
+                    <button id="card-stitch" onclick="selectCharacter('stitch', false)"
+                        class="character-card active-char p-3.5 sm:p-4 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-2.5 cursor-pointer">
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center">
+                            <svg class="w-11 h-11 sm:w-12 sm:h-12 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 26 C11 16, 6 22, 9 32 C11 37, 17 37, 21 34" />
+                                <path d="M13 24 C11 26, 12 30, 16 31" stroke-dasharray="2 2"/>
+                                <path d="M43 26 C53 16, 58 22, 55 32 C53 37, 47 37, 43 34" />
+                                <path d="M51 24 C53 26, 52 30, 48 31" stroke-dasharray="2 2"/>
+                                <path d="M21 30 C21 22, 43 22, 43 30 C44 40, 39 46, 32 46 C25 46, 20 40, 21 30 Z" />
+                                <path d="M30 22 L32 18 L34 22" />
+                                <ellipse cx="26.5" cy="33" rx="2.5" ry="3.2" />
+                                <ellipse cx="37.5" cy="33" rx="2.5" ry="3.2" />
+                                <path d="M30 37.5 Q32 36 34 37.5 Q32 39.5 30 37.5 Z" />
+                                <path d="M27 41.5 Q32 44 37 41.5" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">01 // STITCH</div>
+                            <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Ohana & Aventura</h3>
+                        </div>
                     </button>
+
+                    <!-- 2. MARIE -->
+                    <button id="card-marie" onclick="selectCharacter('marie', false)"
+                        class="character-card p-3.5 sm:p-4 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-2.5 cursor-pointer">
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center">
+                            <svg class="w-11 h-11 sm:w-12 sm:h-12 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 28 L19 16 L28 23" />
+                                <path d="M43 28 L45 16 L36 23" />
+                                <path d="M32 21 L25 16 C23 19, 23 22, 26 23 L32 21 Z" fill="rgba(244,63,94,0.25)" />
+                                <path d="M32 21 L39 16 C41 19, 41 22, 38 23 L32 21 Z" fill="rgba(244,63,94,0.25)" />
+                                <circle cx="32" cy="21" r="1.5" />
+                                <path d="M20 29 C19 39, 24 45, 32 45 C40 45, 45 39, 44 29" />
+                                <path d="M25 34 Q27 32 29 34" />
+                                <path d="M35 34 Q37 32 39 34" />
+                                <path d="M31 38 L33 38 L32 39.5 Z" />
+                                <path d="M15 36 L21 37 M15 40 L21 39.5" />
+                                <path d="M49 36 L43 37 M49 40 L43 39.5" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">02 // MARIE</div>
+                            <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Coqueta & Esencia</h3>
+                        </div>
+                    </button>
+
+                    <!-- 3. WINNIE POOH -->
+                    <button id="card-pooh" onclick="selectCharacter('pooh', false)"
+                        class="character-card p-3.5 sm:p-4 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-2.5 cursor-pointer">
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center">
+                            <svg class="w-11 h-11 sm:w-12 sm:h-12 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="21" cy="21" r="4.5" />
+                                <circle cx="43" cy="21" r="4.5" />
+                                <path d="M23 23 C19 27, 19 36, 24 40 C28 43, 36 43, 40 40 C45 36, 45 27, 41 23" />
+                                <circle cx="27.5" cy="30" r="1.3" fill="#fb7185" />
+                                <circle cx="36.5" cy="30" r="1.3" fill="#fb7185" />
+                                <path d="M30.5 33.5 Q32 32.5 33.5 33.5 Q32 35 30.5 33.5 Z" />
+                                <path d="M28 37 Q32 39.5 36 37" />
+                                <path d="M26 44 L38 44 L39 51 C39 53, 25 53, 25 51 Z" />
+                                <path d="M26 46 Q29 48 32 46 Q35 48 38 46" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">03 // POOH</div>
+                            <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Dulzura & Antojitos</h3>
+                        </div>
+                    </button>
+
+                    <!-- 4. COCODRILO -->
+                    <button id="card-croc" onclick="selectCharacter('croc', false)"
+                        class="character-card p-3.5 sm:p-4 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-2.5 cursor-pointer">
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center">
+                            <svg class="w-11 h-11 sm:w-12 sm:h-12 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M32 12 L33.5 15.5 L37 16 L34.3 18.4 L35 22 L32 20.1 L29 22 L29.7 18.4 L27 16 L30.5 15.5 Z" />
+                                <path d="M23 29 C23 24, 29 24, 29 28" />
+                                <path d="M35 28 C35 24, 41 24, 41 29" />
+                                <circle cx="26" cy="28" r="1.3" fill="#fb7185" />
+                                <circle cx="38" cy="28" r="1.3" fill="#fb7185" />
+                                <path d="M16 34 C16 29, 48 29, 48 34 C48 41, 41 44, 32 44 C23 44, 16 41, 16 34 Z" />
+                                <circle cx="27" cy="33.5" r="0.9" />
+                                <circle cx="37" cy="33.5" r="0.9" />
+                                <path d="M21 38 Q32 42.5 43 38" />
+                                <path d="M25 39.5 L26 41 L27 39.8 M37 39.8 L38 41 L39 39.5" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">04 // COCODRILO</div>
+                            <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Valentía & Fuerza</h3>
+                        </div>
+                    </button>
+
+                    <!-- 5. LUCIFER -->
+                    <button id="card-lucifer" onclick="selectCharacter('lucifer', false)"
+                        class="character-card p-3.5 sm:p-4 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-2.5 cursor-pointer">
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center">
+                            <svg class="w-11 h-11 sm:w-12 sm:h-12 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 27 L15 15 L26 21" />
+                                <path d="M46 27 L49 15 L38 21" />
+                                <path d="M28 21 L32 18 L36 21" />
+                                <path d="M18 27 C14 35, 16 44, 24 46 C29 48, 35 48, 40 46 C48 44, 50 35, 46 27" />
+                                <path d="M21 31 L29 33" />
+                                <path d="M43 31 L35 33" />
+                                <path d="M22 33 C23 36, 27 36, 28 33.5" />
+                                <path d="M42 33 C41 36, 37 36, 36 33.5" />
+                                <circle cx="25.5" cy="34" r="1.1" fill="#fb7185" />
+                                <circle cx="38.5" cy="34" r="1.1" fill="#fb7185" />
+                                <path d="M30 37 L34 37 L32 39 Z" />
+                                <path d="M26 42 Q32 39.5 38 42" />
+                                <path d="M12 37 L18 38 M52 37 L46 38" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">05 // LUCIFER</div>
+                            <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Mirada & Carácter</h3>
+                        </div>
+                    </button>
+
+                    <!-- 6. TAMBOR -->
+                    <button id="card-tambor" onclick="selectCharacter('tambor', false)"
+                        class="character-card p-3.5 sm:p-4 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-2.5 cursor-pointer">
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center">
+                            <svg class="w-11 h-11 sm:w-12 sm:h-12 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M26 24 C22 12, 26 9, 29 14 C30 17, 30 21, 29 24" />
+                                <path d="M38 24 C42 12, 38 9, 35 14 C34 17, 34 21, 35 24" />
+                                <path d="M22 28 C18 33, 18 41, 24 44 C28 46, 36 46, 40 44 C46 41, 46 33, 42 28 C40 24, 24 24, 22 28 Z" />
+                                <circle cx="27" cy="33" r="1.5" fill="#fb7185" />
+                                <circle cx="37" cy="33" r="1.5" fill="#fb7185" />
+                                <path d="M30.5 36.5 Q32 35.5 33.5 36.5 Q32 38 30.5 36.5 Z" />
+                                <path d="M27.5 40 Q32 42.5 36.5 40" />
+                                <rect x="30.8" y="40.8" width="2.4" height="2.4" rx="0.5" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">06 // TAMBOR</div>
+                            <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Alegría & Chispa</h3>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Cápsula Dinámica de Reflexión -->
+                <div id="characterQuoteBox" class="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-obsidian via-charcoal to-obsidian border border-pink-500/30 transition-all">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                        <span id="charBadge" class="font-mono text-xs text-neonPink font-semibold tracking-wider">
+                            ◆ STITCH // OHANA & AVENTURA
+                        </span>
+                        <span class="font-mono text-[11px] text-zinc-500">FILOSOFÍA NIVEL 30 • AMOR</span>
+                    </div>
+                    <p id="charQuoteText" class="text-zinc-200 text-sm sm:text-base leading-relaxed font-light"></p>
+                </div>
+
+                <!-- Wishlist / Sueños por Cumplir v3.0 -->
+                <div class="pt-4 border-t border-zinc-800/80 space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                            <h3 class="font-display text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+                                <span class="text-neonPink">✦</span> Wishlist // Sueños por Cumplir en los 30s
+                            </h3>
+                            <p class="text-zinc-400 text-xs sm:text-sm">Metas, viajes y pequeños gustos que vamos a hacer realidad juntos.</p>
+                        </div>
+                        <span id="dreamsCounter" class="font-mono text-xs text-roseGold">0 cumplidos</span>
+                    </div>
+
+                    <form onsubmit="addDreamItem(event)" class="flex flex-col sm:flex-row gap-2.5">
+                        <input type="text" id="dreamInput" required placeholder="Ej. Viajar juntos a nuestro lugar soñado, aprender algo nuevo..."
+                            class="flex-1 rounded-xl bg-obsidian border border-zinc-700/80 focus:border-neonPink text-white px-4 py-2.5 text-sm outline-none transition">
+                        <button type="submit" class="px-5 py-2.5 rounded-xl btn-pink-glow text-white font-mono text-xs font-bold tracking-wide cursor-pointer shrink-0">
+                            + Agregar Sueño
+                        </button>
+                    </form>
+
+                    <div id="dreamsList" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
+                </div>
+            </section>
+
+            <!-- 5. CARTA DE FELICITACIÓN INTERACTIVA -->
+            <section class="glass-card glass-card-hover rounded-3xl p-5 sm:p-8 md:p-10 space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800/80 pb-5">
+                    <div>
+                        <span class="font-mono text-xs text-neonPink uppercase tracking-wider">// DECRYPTED_MESSAGE.TXT</span>
+                        <h2 class="font-display text-2xl sm:text-3xl font-bold text-white mt-1">Una carta para tus 30 años, Amor</h2>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <button id="toggleEditLetterBtn" onclick="toggleLetterMode()"
+                            class="px-4 py-2 rounded-xl font-mono text-xs bg-pink-500/15 text-roseGold border border-pink-500/30 hover:bg-pink-500/25 transition cursor-pointer">
+                            ✏️ Editar mensaje
+                        </button>
+                        <button id="saveLetterBtn" onclick="saveLetter()"
+                            class="hidden px-4 py-2 rounded-xl font-mono text-xs btn-pink-glow text-white font-medium cursor-pointer">
+                            💾 Guardar carta
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Modo Lectura -->
+                <div id="letterViewMode" class="space-y-4">
+                    <div class="relative p-5 sm:p-8 rounded-2xl bg-obsidian/70 border border-pink-500/15">
+                        <span class="absolute top-3 right-5 font-serif text-5xl text-neonPink/20 select-none">”</span>
+                        <div id="letterDisplay" class="text-zinc-200 text-sm sm:text-base md:text-lg leading-relaxed whitespace-pre-line font-light"></div>
+                    </div>
+                    <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-zinc-500 px-1">
+                        <span>Guardado automáticamente en este navegador</span>
+                        <button onclick="resetDefaultLetter()" class="hover:text-roseGold underline transition cursor-pointer">Restaurar carta original</button>
+                    </div>
+                </div>
+
+                <!-- Modo Edición -->
+                <div id="letterEditMode" class="hidden space-y-4">
+                    <label for="letterTextarea" class="block font-mono text-xs text-zinc-400">
+                        Escribe o personaliza tu felicitación:
+                    </label>
+                    <textarea id="letterTextarea" rows="10"
+                        class="w-full rounded-2xl bg-obsidian border border-pink-500/40 focus:border-neonPink focus:ring-2 focus:ring-neonPink/30 text-zinc-100 p-4 sm:p-5 text-sm sm:text-base leading-relaxed outline-none transition resize-y"
+                        placeholder="Escribe aquí tu mensaje especial..."></textarea>
+                    <div class="flex justify-end gap-3">
+                        <button onclick="cancelLetterEdit()" class="px-4 py-2 rounded-xl font-mono text-xs text-zinc-400 hover:text-white transition cursor-pointer">
+                            Cancelar
+                        </button>
+                        <button onclick="saveLetter()" class="px-5 py-2 rounded-xl font-mono text-xs btn-pink-glow text-white font-medium cursor-pointer">
+                            💾 Guardar cambios
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. ITINERARY // PLAN DE FESTEJO -->
+            <section class="glass-card rounded-3xl p-5 sm:p-8 md:p-10 space-y-7">
+                <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-800/80 pb-5">
+                    <div>
+                        <span class="font-mono text-xs text-neonPink uppercase tracking-wider">// ROADMAP_28_NOV</span>
+                        <h2 class="font-display text-2xl sm:text-3xl font-bold text-white mt-1">Itinerary // Plan de Festejo</h2>
+                        <p class="text-zinc-400 text-xs sm:text-sm mt-1">Actividades programadas para celebrar tus 30 como te mereces.</p>
+                    </div>
+                    <span id="planCounterBadge" class="font-mono text-xs px-3 py-1.5 rounded-full bg-zinc-900 border border-zinc-800 text-roseGold self-start sm:self-auto">
+                        0 actividades listas
+                    </span>
+                </div>
+
+                <form id="addPlanForm" onsubmit="addPlanItem(event)" class="grid grid-cols-1 sm:grid-cols-12 gap-3 bg-obsidian/70 p-4 rounded-2xl border border-pink-500/15">
+                    <div class="sm:col-span-3">
+                        <label class="block font-mono text-[11px] text-zinc-400 mb-1">Hora</label>
+                        <input type="time" id="planTime" required value="20:00"
+                            class="w-full rounded-xl bg-charcoal border border-zinc-700/80 focus:border-neonPink text-white px-3 py-2.5 text-sm font-mono outline-none transition">
+                    </div>
+                    <div class="sm:col-span-4">
+                        <label class="block font-mono text-[11px] text-zinc-400 mb-1">Actividad / Lugar</label>
+                        <input type="text" id="planTitle" required placeholder="Ej. Cena especial / Sorpresa"
+                            class="w-full rounded-xl bg-charcoal border border-zinc-700/80 focus:border-neonPink text-white px-3.5 py-2.5 text-sm outline-none transition">
+                    </div>
+                    <div class="sm:col-span-3">
+                        <label class="block font-mono text-[11px] text-zinc-400 mb-1">Nota o detalle (opcional)</label>
+                        <input type="text" id="planNote" placeholder="Dress code, pista..."
+                            class="w-full rounded-xl bg-charcoal border border-zinc-700/80 focus:border-neonPink text-white px-3.5 py-2.5 text-sm outline-none transition">
+                    </div>
+                    <div class="sm:col-span-2 flex items-end">
+                        <button type="submit" class="w-full py-2.5 px-4 rounded-xl btn-pink-glow text-white font-mono text-xs font-bold tracking-wide cursor-pointer">
+                            + Agregar
+                        </button>
+                    </div>
                 </form>
 
-                <div id="dreamsList" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
-            </div>
-        </section>
+                <div id="planList" class="space-y-3 relative"></div>
+            </section>
 
-        <!-- 5. CARTA DE FELICITACIÓN INTERACTIVA -->
-        <section class="glass-card glass-card-hover rounded-3xl p-5 sm:p-8 md:p-10 space-y-6">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800/80 pb-5">
-                <div>
-                    <span class="font-mono text-xs text-neonPink uppercase tracking-wider">// DECRYPTED_MESSAGE.TXT</span>
-                    <h2 class="font-display text-2xl sm:text-3xl font-bold text-white mt-1">Una carta para tus 30 años, Amor</h2>
-                </div>
+            <!-- 7. ACCIÓN FINAL DE CELEBRACIÓN -->
+            <section class="text-center py-6 space-y-4">
+                <button onclick="launchMegaCelebration()"
+                    class="btn-pink-glow px-7 sm:px-8 py-3.5 sm:py-4 rounded-full font-display text-sm sm:text-lg font-bold text-white tracking-wide inline-flex items-center gap-2.5 cursor-pointer">
+                    <span>🚀</span>
+                    <span>Lanzar Sorpresa // Celebrar Nivel 30</span>
+                </button>
+                <p class="font-mono text-[11px] sm:text-xs text-zinc-500">
+                    Hecho con código, mucho cariño y tu esencia favorita • Para ti, Amor • 28.11.2026
+                </p>
+            </section>
 
-                <div class="flex items-center gap-2">
-                    <button id="toggleEditLetterBtn" onclick="toggleLetterMode()"
-                        class="px-4 py-2 rounded-xl font-mono text-xs bg-pink-500/15 text-roseGold border border-pink-500/30 hover:bg-pink-500/25 transition cursor-pointer">
-                        ✏️ Editar mensaje
-                    </button>
-                    <button id="saveLetterBtn" onclick="saveLetter()"
-                        class="hidden px-4 py-2 rounded-xl font-mono text-xs btn-pink-glow text-white font-medium cursor-pointer">
-                        💾 Guardar carta
-                    </button>
-                </div>
-            </div>
-
-            <!-- Modo Lectura -->
-            <div id="letterViewMode" class="space-y-4">
-                <div class="relative p-5 sm:p-8 rounded-2xl bg-obsidian/70 border border-pink-500/15">
-                    <span class="absolute top-3 right-5 font-serif text-5xl text-neonPink/20 select-none">”</span>
-                    <div id="letterDisplay" class="text-zinc-200 text-sm sm:text-base md:text-lg leading-relaxed whitespace-pre-line font-light"></div>
-                </div>
-                <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-zinc-500 px-1">
-                    <span>Guardado automáticamente en este navegador</span>
-                    <button onclick="resetDefaultLetter()" class="hover:text-roseGold underline transition cursor-pointer">Restaurar carta original</button>
-                </div>
-            </div>
-
-            <!-- Modo Edición -->
-            <div id="letterEditMode" class="hidden space-y-4">
-                <label for="letterTextarea" class="block font-mono text-xs text-zinc-400">
-                    Escribe o personaliza tu felicitación:
-                </label>
-                <textarea id="letterTextarea" rows="10"
-                    class="w-full rounded-2xl bg-obsidian border border-pink-500/40 focus:border-neonPink focus:ring-2 focus:ring-neonPink/30 text-zinc-100 p-4 sm:p-5 text-sm sm:text-base leading-relaxed outline-none transition resize-y"
-                    placeholder="Escribe aquí tu mensaje especial..."></textarea>
-                <div class="flex justify-end gap-3">
-                    <button onclick="cancelLetterEdit()" class="px-4 py-2 rounded-xl font-mono text-xs text-zinc-400 hover:text-white transition cursor-pointer">
-                        Cancelar
-                    </button>
-                    <button onclick="saveLetter()" class="px-5 py-2 rounded-xl font-mono text-xs btn-pink-glow text-white font-medium cursor-pointer">
-                        💾 Guardar cambios
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- 6. ITINERARY // PLAN DE FESTEJO -->
-        <section class="glass-card rounded-3xl p-5 sm:p-8 md:p-10 space-y-7">
-            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-800/80 pb-5">
-                <div>
-                    <span class="font-mono text-xs text-neonPink uppercase tracking-wider">// ROADMAP_28_NOV</span>
-                    <h2 class="font-display text-2xl sm:text-3xl font-bold text-white mt-1">Itinerary // Plan de Festejo</h2>
-                    <p class="text-zinc-400 text-xs sm:text-sm mt-1">Actividades programadas para celebrar tus 30 como te mereces.</p>
-                </div>
-                <span id="planCounterBadge" class="font-mono text-xs px-3 py-1.5 rounded-full bg-zinc-900 border border-zinc-800 text-roseGold self-start sm:self-auto">
-                    0 actividades listas
-                </span>
-            </div>
-
-            <form id="addPlanForm" onsubmit="addPlanItem(event)" class="grid grid-cols-1 sm:grid-cols-12 gap-3 bg-obsidian/70 p-4 rounded-2xl border border-pink-500/15">
-                <div class="sm:col-span-3">
-                    <label class="block font-mono text-[11px] text-zinc-400 mb-1">Hora</label>
-                    <input type="time" id="planTime" required value="20:00"
-                        class="w-full rounded-xl bg-charcoal border border-zinc-700/80 focus:border-neonPink text-white px-3 py-2.5 text-sm font-mono outline-none transition">
-                </div>
-                <div class="sm:col-span-4">
-                    <label class="block font-mono text-[11px] text-zinc-400 mb-1">Actividad / Lugar</label>
-                    <input type="text" id="planTitle" required placeholder="Ej. Cena especial / Sorpresa"
-                        class="w-full rounded-xl bg-charcoal border border-zinc-700/80 focus:border-neonPink text-white px-3.5 py-2.5 text-sm outline-none transition">
-                </div>
-                <div class="sm:col-span-3">
-                    <label class="block font-mono text-[11px] text-zinc-400 mb-1">Nota o detalle (opcional)</label>
-                    <input type="text" id="planNote" placeholder="Dress code, pista..."
-                        class="w-full rounded-xl bg-charcoal border border-zinc-700/80 focus:border-neonPink text-white px-3.5 py-2.5 text-sm outline-none transition">
-                </div>
-                <div class="sm:col-span-2 flex items-end">
-                    <button type="submit" class="w-full py-2.5 px-4 rounded-xl btn-pink-glow text-white font-mono text-xs font-bold tracking-wide cursor-pointer">
-                        + Agregar
-                    </button>
-                </div>
-            </form>
-
-            <div id="planList" class="space-y-3 relative"></div>
-        </section>
-
-        <!-- 7. ACCIÓN FINAL DE CELEBRACIÓN -->
-        <section class="text-center py-6 space-y-4">
-            <button onclick="launchMegaCelebration()"
-                class="btn-pink-glow px-7 sm:px-8 py-3.5 sm:py-4 rounded-full font-display text-sm sm:text-lg font-bold text-white tracking-wide inline-flex items-center gap-2.5 cursor-pointer">
-                <span>🚀</span>
-                <span>Lanzar Sorpresa // Celebrar Nivel 30</span>
-            </button>
-            <p class="font-mono text-[11px] sm:text-xs text-zinc-500">
-                Hecho con código, mucho cariño y tu esencia favorita • Para ti, Amor • 28.11.2026
-            </p>
-        </section>
+        </div>
 
     </main>
 
     <!-- Elemento de Audio HTML5 para tus 2 pistas en cola -->
-    <audio id="bgAudioPlayer" preload="auto"></audio>
+    <audio id="bgAudioPlayer" preload="auto" autoplay playsinline></audio>
 
-    <!-- Reproductor de Música Flotante (Cola continua de tus 2 audios) -->
+    <!-- Reproductor de Música Flotante (Cola continua + inicio automático) -->
     <div id="musicPlayerWidget" class="fixed bottom-4 left-4 z-40 max-w-[calc(100vw-2rem)]">
         <!-- Vista Compacta -->
         <div id="musicCompactBar" class="glass-card border border-pink-500/40 rounded-full px-3 py-2 flex items-center gap-2 shadow-2xl">
@@ -819,7 +856,7 @@
                 </div>
                 <div class="leading-tight">
                     <div id="compactTrackTitle" class="font-mono text-[11px] text-white font-medium truncate max-w-[125px] sm:max-w-[170px]">
-                        Pista 01 • Instrumental
+                        Where Hearts Remain
                     </div>
                     <div id="compactTrackSub" class="font-mono text-[9px] text-roseGold/80">
                         Cola automática (1 de 2)
@@ -896,7 +933,6 @@
            CONFIGURACIÓN E INICIALIZACIÓN DE DATOS (LOCALSTORAGE)
            ========================================================================== */
         const STORAGE_KEYS = {
-            TITLE: 'bday30_hero_title_v5',
             LETTER: 'bday30_love_letter_v5',
             PLANS: 'bday30_itinerary_plans_v3',
             DREAMS: 'bday30_wishlist_dreams_v2',
@@ -1002,8 +1038,11 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
         ];
 
         let isSimulating = false;
+        let isPortalUnlocked = false;
         let countdownInterval = null;
         let celebrationTriggered = false;
+        let secretTapCount = 0;
+        let secretTapTimer = null;
 
         function showToast(msg) {
             const toast = document.getElementById('toast');
@@ -1024,6 +1063,31 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
             const div = document.createElement('div');
             div.textContent = str;
             return div.innerHTML;
+        }
+
+        /* ==========================================================================
+           ATAJO SECRETO DE PRUEBA (5 TOQUES RÁPIDOS SOBRE CORE.ESSENCE_v3.0)
+           ========================================================================== */
+        function handleSecretBrandTap() {
+            secretTapCount++;
+            clearTimeout(secretTapTimer);
+            secretTapTimer = setTimeout(() => { secretTapCount = 0; }, 1600);
+
+            if (secretTapCount >= 5) {
+                secretTapCount = 0;
+                isSimulating = !isSimulating;
+                celebrationTriggered = false;
+                updateCountdown();
+                showToast(isSimulating ? '🔓 Vista previa del 28 de Noviembre activada' : '🔒 Candado real restaurado');
+            }
+        }
+
+        function handleHeroEmblemClick(key) {
+            if (!isPortalUnlocked) {
+                showToast('🔒 Se revelará el 28 de Noviembre a las 00:00');
+                return;
+            }
+            selectCharacter(key, true);
         }
 
         /* ==========================================================================
@@ -1064,7 +1128,6 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
 
             heicPendingTasks[src] = (async () => {
                 try {
-                    // 1. Si existen versiones convertidas a .jpg/.JPG/.jpeg en GitHub, usarlas al instante
                     const baseName = src.replace(/\.heic$/i, '');
                     for (const ext of ['JPG', 'jpg', 'jpeg', 'JPEG']) {
                         const jpgCandidate = `${baseName}.${ext}`;
@@ -1075,14 +1138,12 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
                         }
                     }
 
-                    // 2. Si el navegador soporta .HEIC de forma nativa (Safari en Mac / iPhone / iPad)
                     if (await canBrowserRenderUrl(src)) {
                         heicBlobCache[src] = src;
                         updateThumbnailIfReady(src, src);
                         return src;
                     }
 
-                    // 3. Descargar y convertir .HEIC a JPEG en el navegador (Chrome / Edge / Android)
                     const response = await fetch(src);
                     if (!response.ok) throw new Error('Archivo no encontrado');
                     const rawBlob = await response.blob();
@@ -1097,9 +1158,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
                                 type: 'image/jpeg',
                                 quality: 0.82
                             });
-                        } catch (e) {
-                            console.warn('HeicTo no pudo convertir, probando alternativa:', e);
-                        }
+                        } catch (e) {}
                     }
 
                     if (!finalBlob && typeof heic2any === 'function') {
@@ -1249,7 +1308,6 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
                 bgEl.src = resolvedSrc;
             }
 
-            // Precarga silenciosa de la siguiente foto si es .HEIC
             const nextSlide = tropicalSlides[(currentSlideIndex + 1) % tropicalSlides.length];
             if (nextSlide && isHeicFile(nextSlide.src) && !heicBlobCache[nextSlide.src]) {
                 resolveSlideImageSrc(nextSlide.src);
@@ -1284,7 +1342,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
             const stepMs = 100;
             if (carouselTimer) clearInterval(carouselTimer);
             carouselTimer = setInterval(() => {
-                if (!isCarouselPlaying || tropicalSlides.length <= 1) return;
+                if (!isPortalUnlocked || !isCarouselPlaying || tropicalSlides.length <= 1) return;
                 if (document.activeElement === document.getElementById('carouselCaptionText')) return;
 
                 carouselProgress += (stepMs / SLIDE_DURATION_MS) * 100;
@@ -1379,9 +1437,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
                         caption: `Travesía Tropical • ${baseName || 'Recuerdo especial'} 🌺`
                     });
                     addedCount++;
-                } catch (err) {
-                    console.error('Error al procesar imagen:', err);
-                }
+                } catch (err) {}
             }
 
             if (addedCount > 0) {
@@ -1428,7 +1484,6 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
                 }
             });
 
-            // Soporte de deslizamiento táctil (swipe) para celular y tableta
             const touchArea = document.getElementById('carouselTouchArea');
             if (touchArea) {
                 let touchStartX = 0;
@@ -1550,53 +1605,46 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
         }
 
         /* ==========================================================================
-           TÍTULO EDITABLE EN HERO (CAMBIO AUTOMÁTICO EL 28 DE NOVIEMBRE)
+           CONTADOR REGRESIVO Y CANDADO AUTOMÁTICO AL 28 DE NOVIEMBRE DE 2026
            ========================================================================== */
         const PRE_BIRTHDAY_TITLE = 'Welcome to 30´s';
         const BIRTHDAY_TITLE = 'Feliz Cumpleaños Amor';
-        let lastBirthdayState = null;
+        const TARGET_DATE = new Date(2026, 10, 28, 0, 0, 0).getTime();
 
-        const heroTitleEl = document.getElementById('heroTitle');
-        const savedTitle = localStorage.getItem(STORAGE_KEYS.TITLE);
-        if (savedTitle && heroTitleEl) {
-            heroTitleEl.textContent = savedTitle;
-        }
+        function applyPortalLockState(unlocked) {
+            isPortalUnlocked = unlocked;
+            const heroTitleEl = document.getElementById('heroTitle');
+            const vaultNotice = document.getElementById('lockedVaultNotice');
+            const lockedContent = document.getElementById('lockedContentWrapper');
+            const bannerEl = document.getElementById('celebrationBanner');
+            const pillEl = document.getElementById('portalStatePill');
+            const statusLabel = document.getElementById('countdownStatusLabel');
+            const navTravesia = document.getElementById('navLinkTravesia');
+            const navSuenos = document.getElementById('navLinkSuenos');
+            const backupBtn = document.getElementById('headerBackupBtn');
 
-        function syncHeroTitleForDate(isBirthdayNow) {
-            if (!heroTitleEl || lastBirthdayState === isBirthdayNow) return;
-            lastBirthdayState = isBirthdayNow;
+            if (heroTitleEl) {
+                heroTitleEl.textContent = unlocked ? BIRTHDAY_TITLE : PRE_BIRTHDAY_TITLE;
+            }
+            if (vaultNotice) vaultNotice.classList.toggle('hidden', unlocked);
+            if (lockedContent) lockedContent.classList.toggle('hidden', !unlocked);
+            if (bannerEl) bannerEl.classList.toggle('hidden', !unlocked);
 
-            if (isBirthdayNow) {
-                heroTitleEl.textContent = BIRTHDAY_TITLE;
-            } else {
-                const customPreTitle = localStorage.getItem(STORAGE_KEYS.TITLE);
-                heroTitleEl.textContent = customPreTitle || PRE_BIRTHDAY_TITLE;
+            if (navTravesia) navTravesia.className = unlocked ? 'hidden md:inline-flex px-2.5 py-1.5 rounded-full text-xs font-mono text-zinc-400 hover:text-roseGold transition' : 'hidden';
+            if (navSuenos) navSuenos.className = unlocked ? 'hidden md:inline-flex px-2.5 py-1.5 rounded-full text-xs font-mono text-zinc-400 hover:text-roseGold transition' : 'hidden';
+            if (backupBtn) backupBtn.classList.toggle('hidden', !unlocked);
+
+            if (pillEl) {
+                pillEl.textContent = unlocked
+                    ? '🔓 PORTAL DESBLOQUEADO // NIVEL 30'
+                    : '🔒 PORTAL SELLADO HASTA EL 28.11';
+            }
+            if (statusLabel) {
+                statusLabel.innerHTML = unlocked
+                    ? 'STATUS: <span class="text-neonPink font-bold">28 NOV 2026 // DESBLOQUEADO</span>'
+                    : 'TARGET_RELEASE: <span class="text-roseGold">28 NOV 2026 // 00:00:00</span>';
             }
         }
-
-        if (heroTitleEl) {
-            heroTitleEl.addEventListener('blur', () => {
-                const isBirthdayNow = isSimulating || (TARGET_DATE - Date.now() <= 0);
-                const fallbackTitle = isBirthdayNow ? BIRTHDAY_TITLE : PRE_BIRTHDAY_TITLE;
-                const cleanText = heroTitleEl.textContent.trim() || fallbackTitle;
-                heroTitleEl.textContent = cleanText;
-                if (!isBirthdayNow) {
-                    localStorage.setItem(STORAGE_KEYS.TITLE, cleanText);
-                }
-                showToast('Título actualizado y guardado');
-            });
-            heroTitleEl.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    heroTitleEl.blur();
-                }
-            });
-        }
-
-        /* ==========================================================================
-           CONTADOR REGRESIVO AL 28 DE NOVIEMBRE DE 2026 (00:00:00 HORA LOCAL)
-           ========================================================================== */
-        const TARGET_DATE = new Date(2026, 10, 28, 0, 0, 0).getTime();
 
         function updateCountdown() {
             const now = Date.now();
@@ -1606,15 +1654,13 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
             const hoursEl = document.getElementById('hours');
             const minutesEl = document.getElementById('minutes');
             const secondsEl = document.getElementById('seconds');
-            const bannerEl = document.getElementById('celebrationBanner');
 
             if (distance <= 0) {
-                syncHeroTitleForDate(true);
+                applyPortalLockState(true);
                 daysEl.textContent = '00';
                 hoursEl.textContent = '00';
                 minutesEl.textContent = '00';
                 secondsEl.textContent = '00';
-                bannerEl.classList.remove('hidden');
 
                 if (!celebrationTriggered) {
                     celebrationTriggered = true;
@@ -1623,8 +1669,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
                 return;
             }
 
-            syncHeroTitleForDate(false);
-            bannerEl.classList.add('hidden');
+            applyPortalLockState(false);
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -1634,24 +1679,6 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
             hoursEl.textContent = padZero(hours);
             minutesEl.textContent = padZero(minutes);
             secondsEl.textContent = padZero(seconds);
-        }
-
-        function toggleSimulation() {
-            isSimulating = !isSimulating;
-            const btn = document.getElementById('simulateBtn');
-            const statusLabel = document.getElementById('countdownStatusLabel');
-
-            if (isSimulating) {
-                celebrationTriggered = false;
-                btn.textContent = '↩ Volver a hora real';
-                btn.classList.add('border-neonPink', 'text-roseGold');
-                statusLabel.innerHTML = 'MODE: <span class="text-neonPink font-bold">SIMULACIÓN 28 NOV 2026</span>';
-            } else {
-                btn.textContent = '⚡ Simular 28 de Noviembre';
-                btn.classList.remove('border-neonPink', 'text-roseGold');
-                statusLabel.innerHTML = 'TARGET_RELEASE: <span class="text-roseGold">28 NOV 2026 // 00:00:00</span>';
-            }
-            updateCountdown();
         }
 
         /* ==========================================================================
@@ -1807,7 +1834,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
         }
 
         /* ==========================================================================
-           REPRODUCTOR DE AUDIO EN COLA (2 PISTAS REALES EN MP3)
+           REPRODUCTOR DE AUDIO EN COLA CON INICIO AUTOMÁTICO
            ========================================================================== */
         const AUDIO_PLAYLIST = [
             { title: 'Where Hearts Remain', src: 'Where_Hearts_Remain.mp3', fallback: 'cancion1.mp3', triedFallback: false },
@@ -1816,7 +1843,43 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
 
         let currentTrackIndex = 0;
         let isMusicPlaying = false;
+        let userPausedManually = false;
         let audioPlayer = null;
+
+        function tryAutoStartAudio() {
+            if (!audioPlayer || isMusicPlaying || userPausedManually) return;
+            const playPromise = audioPlayer.play();
+            if (playPromise && typeof playPromise.then === 'function') {
+                playPromise.then(() => {
+                    isMusicPlaying = true;
+                    updateMusicUI();
+                    detachAutoplayUnlockListeners();
+                }).catch(() => {
+                    // Si el navegador bloquea el autoplay inicial, arrancará al primer toque
+                    attachAutoplayUnlockListeners();
+                });
+            }
+        }
+
+        function handleFirstInteractionUnlock() {
+            if (userPausedManually || isMusicPlaying) {
+                detachAutoplayUnlockListeners();
+                return;
+            }
+            tryAutoStartAudio();
+        }
+
+        function attachAutoplayUnlockListeners() {
+            document.addEventListener('click', handleFirstInteractionUnlock, { passive: true });
+            document.addEventListener('touchstart', handleFirstInteractionUnlock, { passive: true });
+            document.addEventListener('keydown', handleFirstInteractionUnlock, { passive: true });
+        }
+
+        function detachAutoplayUnlockListeners() {
+            document.removeEventListener('click', handleFirstInteractionUnlock);
+            document.removeEventListener('touchstart', handleFirstInteractionUnlock);
+            document.removeEventListener('keydown', handleFirstInteractionUnlock);
+        }
 
         function initAudioPlaylist() {
             audioPlayer = document.getElementById('bgAudioPlayer');
@@ -1825,7 +1888,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
             audioPlayer.volume = 0.75;
             audioPlayer.src = AUDIO_PLAYLIST[currentTrackIndex].src;
 
-            // Al terminar una pista, iniciar automáticamente la siguiente en cola
+            // Al terminar una pista, arranca automáticamente la siguiente en cola
             audioPlayer.addEventListener('ended', () => {
                 currentTrackIndex = (currentTrackIndex + 1) % AUDIO_PLAYLIST.length;
                 loadAndPlayCurrentTrack();
@@ -1847,34 +1910,32 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
                     track.triedFallback = true;
                     audioPlayer.src = track.fallback;
                     audioPlayer.load();
-                    if (isMusicPlaying) {
+                    if (!userPausedManually) {
                         audioPlayer.play().catch(() => {});
                     }
                     return;
                 }
                 isMusicPlaying = false;
                 updateMusicUI();
-                showToast('Sube los 2 MP3 a GitHub (o usa "📁 Cargar MP3 local" aquí)');
             });
 
             updateMusicUI();
+            tryAutoStartAudio();
         }
 
         function loadAndPlayCurrentTrack() {
             if (!audioPlayer) return;
             const track = AUDIO_PLAYLIST[currentTrackIndex];
             track.triedFallback = false;
+            userPausedManually = false;
             audioPlayer.src = track.src;
             audioPlayer.load();
-            isMusicPlaying = true;
             audioPlayer.play().then(() => {
                 isMusicPlaying = true;
                 updateMusicUI();
-                showToast(`🎵 Reproduciendo: ${track.title}`);
             }).catch(() => {
                 isMusicPlaying = false;
                 updateMusicUI();
-                showToast('Toca ▶ de nuevo o sube tus 2 MP3 a GitHub');
             });
         }
 
@@ -1883,10 +1944,10 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
             if (!audioPlayer) return;
 
             if (audioPlayer.paused) {
+                userPausedManually = false;
                 if (!audioPlayer.getAttribute('src')) {
                     audioPlayer.src = AUDIO_PLAYLIST[currentTrackIndex].src;
                 }
-                isMusicPlaying = true;
                 audioPlayer.play().then(() => {
                     isMusicPlaying = true;
                     updateMusicUI();
@@ -1897,6 +1958,8 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
                     showToast('Sube los 2 MP3 a GitHub (o usa "📁 Cargar MP3 local")');
                 });
             } else {
+                userPausedManually = true;
+                detachAutoplayUnlockListeners();
                 audioPlayer.pause();
                 isMusicPlaying = false;
                 updateMusicUI();
@@ -1974,7 +2037,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
             if (subEl) {
                 subEl.textContent = isMusicPlaying
                     ? `Reproduciendo (${currentTrackIndex + 1} de ${AUDIO_PLAYLIST.length}) • En cola`
-                    : `En espera (${currentTrackIndex + 1} de ${AUDIO_PLAYLIST.length})`;
+                    : `Autoplay listo (${currentTrackIndex + 1} de ${AUDIO_PLAYLIST.length})`;
             }
 
             AUDIO_PLAYLIST.forEach((_, idx) => {
