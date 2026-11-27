@@ -187,46 +187,21 @@
 
         <!-- 1. HERO SECTION CON DETALLES SUTILES LINE-ART -->
         <section class="relative text-center space-y-6 pt-2 pb-2">
-            <!-- Detalle flotante sutil izquierda: Stitch minimalista -->
+            <!-- Detalle flotante sutil izquierda: Stitch -->
             <button onclick="selectCharacter('stitch', true)" title="Stitch: Ohana & Aventura (Haz clic para ver mensaje)"
-                class="hidden md:flex flex-col items-center gap-1 absolute left-2 top-4 opacity-60 hover:opacity-100 transition animate-float-1 cursor-pointer group">
-                <svg class="w-14 h-14 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                    <!-- Orejas grandes estilizadas -->
-                    <path d="M21 26 C11 16, 6 22, 9 32 C11 37, 17 37, 21 34" />
-                    <path d="M13 24 C11 26, 12 30, 16 31" stroke-dasharray="2 2"/>
-                    <path d="M43 26 C53 16, 58 22, 55 32 C53 37, 47 37, 43 34" />
-                    <path d="M51 24 C53 26, 52 30, 48 31" stroke-dasharray="2 2"/>
-                    <!-- Cabeza y mechón -->
-                    <path d="M21 30 C21 22, 43 22, 43 30 C44 40, 39 46, 32 46 C25 46, 20 40, 21 30 Z" />
-                    <path d="M30 22 L32 18 L34 22" />
-                    <!-- Ojos expresivos y nariz -->
-                    <ellipse cx="26.5" cy="33" rx="2.5" ry="3.2" />
-                    <ellipse cx="37.5" cy="33" rx="2.5" ry="3.2" />
-                    <path d="M30 37.5 Q32 36 34 37.5 Q32 39.5 30 37.5 Z" />
-                    <path d="M27 41.5 Q32 44 37 41.5" />
-                </svg>
+                class="hidden md:flex flex-col items-center gap-1 absolute left-2 top-4 opacity-80 hover:opacity-100 transition animate-float-1 cursor-pointer group">
+                <div class="w-14 h-14 rounded-2xl overflow-hidden bg-white/90 border border-pink-500/40 p-0.5 svg-neon-glow">
+                    <img src="images.jpeg" alt="Stitch" class="w-full h-full object-contain rounded-xl">
+                </div>
                 <span class="font-mono text-[10px] text-roseGold/70 group-hover:text-roseGold tracking-wider">OHANA</span>
             </button>
 
-            <!-- Detalle flotante sutil derecha: Marie con moño rosa -->
+            <!-- Detalle flotante sutil derecha: Marie -->
             <button onclick="selectCharacter('marie', true)" title="Marie: Elegancia & Esencia (Haz clic para ver mensaje)"
-                class="hidden md:flex flex-col items-center gap-1 absolute right-2 top-4 opacity-60 hover:opacity-100 transition animate-float-2 cursor-pointer group">
-                <svg class="w-14 h-14 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                    <!-- Orejas de gatita -->
-                    <path d="M21 28 L19 16 L28 23" />
-                    <path d="M43 28 L45 16 L36 23" />
-                    <!-- Moño icónico arriba -->
-                    <path d="M32 21 L25 16 C23 19, 23 22, 26 23 L32 21 Z" fill="rgba(244,63,94,0.2)" />
-                    <path d="M32 21 L39 16 C41 19, 41 22, 38 23 L32 21 Z" fill="rgba(244,63,94,0.2)" />
-                    <circle cx="32" cy="21" r="1.5" />
-                    <!-- Rostro suave y bigotes -->
-                    <path d="M20 29 C19 39, 24 45, 32 45 C40 45, 45 39, 44 29" />
-                    <path d="M25 34 Q27 32 29 34" />
-                    <path d="M35 34 Q37 32 39 34" />
-                    <path d="M31 38 L33 38 L32 39.5 Z" />
-                    <path d="M15 36 L21 37 M15 40 L21 39.5" />
-                    <path d="M49 36 L43 37 M49 40 L43 39.5" />
-                </svg>
+                class="hidden md:flex flex-col items-center gap-1 absolute right-2 top-4 opacity-80 hover:opacity-100 transition animate-float-2 cursor-pointer group">
+                <div class="w-14 h-14 rounded-2xl overflow-hidden bg-white/90 border border-pink-500/40 p-0.5 svg-neon-glow">
+                    <img src="Marie.jpeg" alt="Marie" class="w-full h-full object-contain rounded-xl">
+                </div>
                 <span class="font-mono text-[10px] text-roseGold/70 group-hover:text-roseGold tracking-wider">ESENCIA</span>
             </button>
 
@@ -518,24 +493,38 @@
                     </div>
                 </button>
 
+            <!-- Grid de los 4 Personajes -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                
+                <!-- 1. STITCH -->
+                <button id="card-stitch" onclick="selectCharacter('stitch', false)"
+                    class="character-card active-char group text-left p-4 sm:p-5 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-3 cursor-pointer">
+                    <div class="w-20 h-20 rounded-2xl overflow-hidden bg-white/95 border border-pink-500/30 p-1 flex items-center justify-center shadow-lg">
+                        <img src="images.jpeg" alt="Stitch" class="w-full h-full object-contain rounded-xl transition-transform duration-300 group-hover:scale-105">
+                    </div>
+                    <div>
+                        <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">01 // STITCH</div>
+                        <h3 class="font-display text-sm sm:text-base font-bold text-white mt-0.5">Ohana & Aventura</h3>
+                    </div>
+                </button>
+
+                <!-- 2. MARIE LA GATITA -->
+                <button id="card-marie" onclick="selectCharacter('marie', false)"
+                    class="character-card group text-left p-4 sm:p-5 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-3 cursor-pointer">
+                    <div class="w-20 h-20 rounded-2xl overflow-hidden bg-white/95 border border-pink-500/30 p-1 flex items-center justify-center shadow-lg">
+                        <img src="Marie.jpeg" alt="Marie" class="w-full h-full object-contain rounded-xl transition-transform duration-300 group-hover:scale-105">
+                    </div>
+                    <div>
+                        <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">02 // MARIE</div>
+                        <h3 class="font-display text-sm sm:text-base font-bold text-white mt-0.5">Elegancia & Esencia</h3>
+                    </div>
+                </button>
+
                 <!-- 3. WINNIE POOH -->
                 <button id="card-pooh" onclick="selectCharacter('pooh', false)"
-                    class="character-card text-left p-4 sm:p-5 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-3 cursor-pointer">
-                    <div class="w-16 h-16 rounded-2xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center">
-                        <svg class="w-12 h-12 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                            <!-- Orejitas redondas de osito -->
-                            <circle cx="21" cy="21" r="4.5" />
-                            <circle cx="43" cy="21" r="4.5" />
-                            <!-- Cabeza -->
-                            <path d="M23 23 C19 27, 19 36, 24 40 C28 43, 36 43, 40 40 C45 36, 45 27, 41 23" />
-                            <circle cx="27.5" cy="30" r="1.2" fill="#fb7185" />
-                            <circle cx="36.5" cy="30" r="1.2" fill="#fb7185" />
-                            <path d="M30.5 33.5 Q32 32.5 33.5 33.5 Q32 35 30.5 33.5 Z" />
-                            <path d="M28 37 Q32 39.5 36 37" />
-                            <!-- Pequeño tarrito de miel estilizado -->
-                            <path d="M26 44 L38 44 L39 51 C39 53, 25 53, 25 51 Z" />
-                            <path d="M26 46 Q29 48 32 46 Q35 48 38 46" />
-                        </svg>
+                    class="character-card group text-left p-4 sm:p-5 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-3 cursor-pointer">
+                    <div class="w-20 h-20 rounded-2xl overflow-hidden bg-white/95 border border-pink-500/30 p-1 flex items-center justify-center shadow-lg">
+                        <img src="Phoo.jpeg" alt="Winnie Pooh" class="w-full h-full object-contain rounded-xl transition-transform duration-300 group-hover:scale-105">
                     </div>
                     <div>
                         <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">03 // POOH</div>
@@ -543,25 +532,11 @@
                     </div>
                 </button>
 
-                <!-- 4. COCODRILO TIERNO CON ESTRELLA -->
+                <!-- 4. COCODRILO -->
                 <button id="card-croc" onclick="selectCharacter('croc', false)"
-                    class="character-card text-left p-4 sm:p-5 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-3 cursor-pointer">
-                    <div class="w-16 h-16 rounded-2xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center">
-                        <svg class="w-12 h-12 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                            <!-- Estrellita sobre su cabeza -->
-                            <path d="M32 12 L33.5 15.5 L37 16 L34.3 18.4 L35 22 L32 20.1 L29 22 L29.7 18.4 L27 16 L30.5 15.5 Z" />
-                            <!-- Arcos de los ojitos -->
-                            <path d="M23 29 C23 24, 29 24, 29 28" />
-                            <path d="M35 28 C35 24, 41 24, 41 29" />
-                            <circle cx="26" cy="28" r="1.2" fill="#fb7185" />
-                            <circle cx="38" cy="28" r="1.2" fill="#fb7185" />
-                            <!-- Hocico tierno y sonrisa -->
-                            <path d="M16 34 C16 29, 48 29, 48 34 C48 41, 41 44, 32 44 C23 44, 16 41, 16 34 Z" />
-                            <circle cx="27" cy="33.5" r="0.9" />
-                            <circle cx="37" cy="33.5" r="0.9" />
-                            <path d="M21 38 Q32 42.5 43 38" />
-                            <path d="M25 39.5 L26 41 L27 39.8 M37 39.8 L38 41 L39 39.5" />
-                        </svg>
+                    class="character-card group text-left p-4 sm:p-5 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-3 cursor-pointer">
+                    <div class="w-20 h-20 rounded-2xl overflow-hidden bg-white/95 border border-pink-500/30 p-1 flex items-center justify-center shadow-lg">
+                        <img src="Cocodrilo.jpeg" alt="Cocodrilo" class="w-full h-full object-contain rounded-xl transition-transform duration-300 group-hover:scale-105">
                     </div>
                     <div>
                         <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">04 // COCODRILO</div>
