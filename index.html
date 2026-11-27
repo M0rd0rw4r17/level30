@@ -1405,6 +1405,31 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
             return `https://placehold.co/1200x750/121216/f9a8d4?text=${encodeURIComponent('Sube ' + filename + ' a GitHub')}`;
         }
 
+        // Genera variantes de extensión (.jpg, .JPG, .jpeg, .JPEG) por la sensibilidad de mayúsculas en GitHub Pages
+        function getExtensionCandidates(src) {
+            if (!src || src.startsWith('data:') || src.startsWith('http')) return [];
+            const match = src.match(/^(.*)\.(jpg|jpeg|png)$/i);
+            if (!match) return [];
+            const base = match[1];
+            const currentExt = match[2];
+            const variants = ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG'];
+            return variants
+                .filter(ext => ext !== currentExt)
+                .map(ext => `${base}.${ext}`);
+        }
+
+        function handlePhotoError(imgEl, originalSrc) {
+            const candidates = getExtensionCandidates(originalSrc);
+            const attempt = Number(imgEl.dataset.retryIndex || 0);
+            if (attempt < candidates.length) {
+                imgEl.dataset.retryIndex = String(attempt + 1);
+                imgEl.src = candidates[attempt];
+            } else {
+                imgEl.onerror = null;
+                imgEl.src = getMissingPhotoFallback(originalSrc);
+            }
+        }
+
         function loadTropicalSlides() {
             try {
                 const raw = localStorage.getItem(STORAGE_KEYS.TROPICAL_PHOTOS);
@@ -1443,20 +1468,14 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
             const dotsEl = document.getElementById('carouselDots');
             const thumbsEl = document.getElementById('tropicalThumbnails');
 
-            const fallbackUrl = getMissingPhotoFallback(slide.src);
-
             if (imgEl) {
-                imgEl.onerror = () => {
-                    imgEl.onerror = null;
-                    imgEl.src = fallbackUrl;
-                };
+                imgEl.dataset.retryIndex = '0';
+                imgEl.onerror = () => handlePhotoError(imgEl, slide.src);
                 imgEl.src = slide.src;
             }
             if (bgEl) {
-                bgEl.onerror = () => {
-                    bgEl.onerror = null;
-                    bgEl.src = fallbackUrl;
-                };
+                bgEl.dataset.retryIndex = '0';
+                bgEl.onerror = () => handlePhotoError(bgEl, slide.src);
                 bgEl.src = slide.src;
             }
             if (badgeEl) {
@@ -1476,7 +1495,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
                 thumbsEl.innerHTML = tropicalSlides.map((s, idx) => `
                     <button onclick="goToTropicalSlide(${idx})"
                         class="relative w-16 h-12 rounded-xl overflow-hidden border-2 shrink-0 transition cursor-pointer bg-obsidian ${idx === currentSlideIndex ? 'border-neonPink scale-105 shadow-lg' : 'border-zinc-800 opacity-60 hover:opacity-100'}">
-                        <img src="${s.src}" onerror="this.onerror=null;this.src='${getMissingPhotoFallback(s.src)}'" alt="Miniatura ${idx + 1}" class="w-full h-full object-cover">
+                        <img src="${s.src}" data-retry-index="0" onerror="handlePhotoError(this, tropicalSlides[${idx}] ? tropicalSlides[${idx}].src : '')" alt="Miniatura ${idx + 1}" class="w-full h-full object-cover">
                     </button>
                 `).join('');
             }
@@ -1680,10 +1699,8 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
             const slide = tropicalSlides[currentSlideIndex];
             if (!slide) return;
             const lbImg = document.getElementById('lightboxImage');
-            lbImg.onerror = () => {
-                lbImg.onerror = null;
-                lbImg.src = getMissingPhotoFallback(slide.src);
-            };
+            lbImg.dataset.retryIndex = '0';
+            lbImg.onerror = () => handlePhotoError(lbImg, slide.src);
             lbImg.src = slide.src;
             document.getElementById('lightboxCaption').textContent = slide.caption;
             document.getElementById('tropicalLightbox').classList.remove('hidden');
