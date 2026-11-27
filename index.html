@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LEVEL 30 // Edición Especial 28.11</title>
+    <title>Welcome 30s Eli | Nuevo nievel Desbloqueado/title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -692,23 +692,23 @@
                                 <span class="text-neonPink">✦</span> Wishlist // Sueños por Cumplir en tus 30s
                             </h3>
                             <p class="text-zinc-400 text-xs sm:text-sm">Metas, viajes y pequeños gustos que vamos a hacer realidad juntos.</p>
+                        </div>
+                        <span id="dreamsCounter" class="font-mono text-xs text-roseGold">0 cumplidos</span>
+                    </div>
+
                     <!-- Pastel encendido como botón interactivo para soplar y revelar la lista de deseos -->
                     <div id="cakeBlowStation" class="p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-obsidian via-charcoal to-obsidian border border-pink-500/30 flex flex-col sm:flex-row items-center justify-between gap-5">
                         <div class="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
                             <button type="button" id="cakeIconButton" onclick="handleCakeAction()" title="Soplar velita y pedir un deseo"
                                 class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-pink-500/15 border border-pink-500/40 hover:border-neonPink hover:bg-pink-500/25 shadow-lg flex flex-col items-center justify-center shrink-0 transition cursor-pointer group">
                                 <svg id="birthdayCakeSvg" class="w-14 h-14 sm:w-16 sm:h-16 svg-neon-glow group-hover:scale-105 transition-transform" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                                    <!-- Vela y flama animada -->
                                     <rect x="30" y="18" width="4" height="10" rx="1" />
                                     <g id="cakeFlameGroup" class="cake-flame-anim">
                                         <path d="M32 7 C28.5 11.5, 28.5 15, 32 17.5 C35.5 15, 35.5 11.5, 32 7 Z" fill="#fb7185" />
                                         <circle cx="32" cy="13.5" r="1.4" fill="#fff1f2" stroke="none" />
                                     </g>
-                                    <!-- Cobertura ondulada -->
                                     <path d="M16 34 C16 29, 48 29, 48 34 C48 37, 45 38, 43 36 C41 39, 37 39, 35 36 C33 39, 31 39, 29 36 C27 39, 23 39, 21 36 C19 38, 16 37, 16 34 Z" />
-                                    <!-- Cuerpo del pastel -->
                                     <path d="M16 34 L15 48 C15 50, 49 50, 49 48 L48 34" />
-                                    <!-- Plato base -->
                                     <path d="M10 51 L54 51" />
                                 </svg>
                             </button>
@@ -783,7 +783,7 @@
                     <label for="letterTextarea" class="block font-mono text-xs text-zinc-400">
                         Escribe o personaliza tu felicitación:
                     </label>
-                    <textarea id="letterTextarea" rows="12"
+                    <textarea id="letterTextarea" rows="13"
                         class="w-full rounded-2xl bg-obsidian border border-pink-500/40 focus:border-neonPink focus:ring-2 focus:ring-neonPink/30 text-zinc-100 p-4 sm:p-5 text-sm sm:text-base leading-relaxed outline-none transition resize-y"
                         placeholder="Escribe aquí tu mensaje especial..."></textarea>
                     <div class="flex justify-end gap-3">
@@ -835,14 +835,22 @@
 
                 <div id="planList" class="space-y-3 relative"></div>
             </section>
-
             <!-- 7. ACCIÓN FINAL DE CELEBRACIÓN -->
             <section class="text-center py-6 space-y-4">
-                <button type="button" onclick="launchMegaCelebration()"
-                    class="btn-pink-glow px-7 sm:px-8 py-3.5 sm:py-4 rounded-full font-display text-sm sm:text-lg font-bold text-white tracking-wide inline-flex items-center gap-2.5 cursor-pointer">
-                    <span>🚀</span>
-                    <span>Lanzar Sorpresa // Celebrar Nivel 30</span>
-                </button>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-3.5">
+                    <button type="button" onclick="launchMegaCelebration()"
+                        class="btn-pink-glow px-7 sm:px-8 py-3.5 sm:py-4 rounded-full font-display text-sm sm:text-lg font-bold text-white tracking-wide inline-flex items-center justify-center gap-2.5 cursor-pointer w-full sm:w-auto">
+                        <span>🚀</span>
+                        <span>Lanzar Sorpresa // Celebrar Nivel 30</span>
+                    </button>
+                    <a id="whatsappThanksBtn"
+                        href="https://wa.me/525538496342?text=%C2%A1Amor!%20Acabo%20de%20ver%20el%20portal%20de%20mis%2030%20y%20me%20encant%C3%B3%20todo%20%F0%9F%92%96%F0%9F%8E%82%20Muchas%20gracias%20por%20este%20detalle%20tan%20hermoso%2C%20por%20la%20carta%2C%20las%20fotos%20y%20por%20los%20obsequios.%20%C2%A1Te%20quiero%20much%C3%ADsimo!%20%E2%9D%A4%EF%B8%8F"
+                        target="_blank" rel="noopener noreferrer"
+                        class="px-7 sm:px-8 py-3.5 sm:py-4 rounded-full font-display text-sm sm:text-lg font-bold text-white tracking-wide inline-flex items-center justify-center gap-2.5 bg-emerald-600/90 hover:bg-emerald-500 border border-emerald-400/50 shadow-[0_0_24px_rgba(16,185,129,0.35)] hover:shadow-[0_0_32px_rgba(16,185,129,0.6)] transition-all w-full sm:w-auto">
+                        <span>💬</span>
+                        <span>Mandar agradecimiento</span>
+                    </a>
+                </div>
                 <p class="font-mono text-[11px] sm:text-xs text-zinc-500">
                     Hecho con código, mucho cariño y tu esencia favorita • Para Amor • 28.11.2026
                 </p>
@@ -942,7 +950,7 @@
            CONFIGURACIÓN E INICIALIZACIÓN DE DATOS
            ========================================================================== */
         const STORAGE_KEYS = {
-            LETTER: 'bday30_love_letter_amor_v2',
+            LETTER: 'bday30_love_letter_amor_v3',
             PLANS: 'bday30_itinerary_plans_amor_v2',
             DREAMS: 'bday30_wishlist_dreams_amor_v2',
             TROPICAL_PHOTOS: 'bday30_travesia_photos_amor_v1'
@@ -950,6 +958,7 @@
 
         const PRE_BIRTHDAY_TITLE = 'Welcome to 30´s';
         const BIRTHDAY_TITLE = 'Feliz Cumpleaños Amor';
+        const WHATSAPP_NUMBER = '525538496342';
 
         const CHARACTER_DATA = {
             stitch: {
@@ -995,9 +1004,11 @@ Gracias por ser esa mujer tan tierna, coqueta, aventurera y apasionada que lleg�
 
 Sé que pasar a los 30 a veces puede generar nervios o incertidumbre, pero quiero que hoy sueltes cualquier angustia. No tienes que apresurar nada; disfruta cada día como vaya llegando, con la certeza de que eres una mujer increíble, hermosa y llena de luz.
 
+Espero que sean de tu agrado los obsequios que he pensado para ti, que los disfrutes muchísimo y que sepas que ayudan a recordar esta fecha, pero en la memoria es donde se queda el verdadero regalo de estos 30 años cumplidos.
+
 Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo permite, de todos los capítulos que todavía nos faltan por escribir juntos. ¡Te quiero muchísimo, amor!
 
-Amor quiero que sepas que estoy feliz de verte crecer, de querer mejorar en aspectos que tenías miedo y estás derrotando poco a poco. Aún falta por ser mejores muchos más y poder emprender eso que tanto queremos. Agradezco a la vida por habernos dejado cruzar caminos y que nos permita seguir compartiendo.
+Amor, quiero que sepas que estoy feliz de verte crecer, de querer mejorar en aspectos que tenías miedo y estás derrotando poco a poco. Aún falta por ser mejores mucho más y poder emprender eso que tanto queremos. Agradezco a la vida por habernos dejado cruzar caminos y que nos permita seguir compartiendo.
 
 Con cariño y amor.
 Alex`;
@@ -1082,6 +1093,12 @@ Alex`;
             const div = document.createElement('div');
             div.textContent = str;
             return div.innerHTML;
+        }
+
+        function sendWhatsAppGratitude() {
+            const message = encodeURIComponent('¡Hola amor! Acabo de ver mi portal de los 30s, muchísimas gracias por este detalle tan bonito y por todo tu cariño. ¡Te quiero mucho! 💖🎂');
+            const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+            window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
         }
 
         /* ==========================================================================
@@ -1668,7 +1685,6 @@ Alex`;
             saveDreams(dreams);
         }
 
-        // Dinámica del pastel encendido: al soplar se apaga la vela y se revela la lista de deseos
         function handleCakeAction() {
             if (isCakeBlown) {
                 relightBirthdayCake();
