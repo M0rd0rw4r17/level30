@@ -2,19 +2,22 @@
 <html lang="es" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>LEVEL 30 // Edición Especial 28.11</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Google Fonts: Plus Jakarta Sans, Space Grotesk (Tech/Display), JetBrains Mono (Código) y Playfair Display -->
+    <!-- Google Fonts: Plus Jakarta Sans, Space Grotesk, JetBrains Mono y Playfair Display -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:ital,wght@0,600;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     
     <!-- Canvas Confetti para celebraciones -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+    <!-- Tone.js para música instrumental de piano en vivo -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
 
     <script>
         tailwind.config = {
@@ -41,14 +44,17 @@
     </script>
 
     <style>
-        /* Estilos personalizados para atmósfera oscura y acentos rosa neón / oro rosado */
-        body {
+        /* Atmósfera oscura y acentos rosa neón / oro rosado */
+        html, body {
             background-color: #09090b;
             color: #f4f4f5;
             overflow-x: hidden;
+            max-width: 100vw;
+            scroll-behavior: smooth;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* Fondo de cuadrícula sutil estilo blueprint/tech */
+        /* Fondo de cuadrícula sutil estilo tech */
         .bg-tech-grid {
             background-size: 42px 42px;
             background-image: 
@@ -58,7 +64,7 @@
 
         /* Tarjetas Glassmorphism Oscuras */
         .glass-card {
-            background: rgba(18, 18, 22, 0.74);
+            background: rgba(18, 18, 22, 0.78);
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
             border: 1px solid rgba(249, 168, 212, 0.16);
@@ -80,20 +86,20 @@
         }
 
         .svg-neon-glow {
-            filter: drop-shadow(0 0 8px rgba(251, 113, 133, 0.45));
+            filter: drop-shadow(0 0 8px rgba(251, 113, 133, 0.5));
             transition: filter 0.3s ease, transform 0.3s ease;
         }
 
         .character-card:hover .svg-neon-glow,
         .character-card.active-char .svg-neon-glow {
-            filter: drop-shadow(0 0 14px rgba(244, 63, 94, 0.85));
+            filter: drop-shadow(0 0 14px rgba(244, 63, 94, 0.9));
             transform: scale(1.06);
         }
 
         .character-card.active-char {
-            border-color: rgba(244, 63, 94, 0.75);
-            background: rgba(244, 63, 94, 0.09);
-            box-shadow: 0 0 28px rgba(244, 63, 94, 0.18);
+            border-color: rgba(244, 63, 94, 0.78);
+            background: rgba(244, 63, 94, 0.1);
+            box-shadow: 0 0 28px rgba(244, 63, 94, 0.2);
         }
 
         .btn-pink-glow {
@@ -111,7 +117,7 @@
             transform: translateY(0px);
         }
 
-        /* Animaciones flotantes muy sutiles para los emblemas line-art */
+        /* Animaciones flotantes para los emblemas */
         @keyframes floatSlow {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-6px) rotate(1.5deg); }
@@ -123,8 +129,25 @@
         .animate-float-1 { animation: floatSlow 5.5s ease-in-out infinite; }
         .animate-float-2 { animation: floatSlowDelayed 6.2s ease-in-out infinite; }
 
+        /* Barras animadas del ecualizador */
+        @keyframes eqBounce {
+            0%, 100% { height: 4px; }
+            50% { height: 14px; }
+        }
+        .eq-bar {
+            width: 3px;
+            height: 4px;
+            border-radius: 9999px;
+            background: linear-gradient(to top, #f43f5e, #f9a8d4);
+            transition: height 0.2s ease;
+        }
+        .is-playing .eq-bar:nth-child(1) { animation: eqBounce 0.7s ease-in-out infinite 0.05s; }
+        .is-playing .eq-bar:nth-child(2) { animation: eqBounce 0.55s ease-in-out infinite 0.18s; }
+        .is-playing .eq-bar:nth-child(3) { animation: eqBounce 0.8s ease-in-out infinite 0.32s; }
+        .is-playing .eq-bar:nth-child(4) { animation: eqBounce 0.65s ease-in-out infinite 0.12s; }
+
         /* Scrollbar personalizada */
-        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar { width: 8px; height: 6px; }
         ::-webkit-scrollbar-track { background: #09090b; }
         ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 9999px; }
         ::-webkit-scrollbar-thumb:hover { background: #f43f5e; }
@@ -144,182 +167,352 @@
         }
     </style>
 </head>
-<body class="bg-obsidian bg-tech-grid min-h-screen font-sans antialiased selection:bg-neonPink selection:text-white">
+<body class="bg-obsidian bg-tech-grid min-h-screen font-sans antialiased selection:bg-neonPink selection:text-white pb-24 sm:pb-12">
+
+    <!-- Definición global de degradado SVG (SIN display:none para que funcione en todos los navegadores) -->
+    <svg aria-hidden="true" style="position:absolute; width:0; height:0; overflow:hidden;">
+        <defs>
+            <linearGradient id="roseNeonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#f9a8d4" />
+                <stop offset="50%" stop-color="#fb7185" />
+                <stop offset="100%" stop-color="#f43f5e" />
+            </linearGradient>
+        </defs>
+    </svg>
 
     <!-- Canvas de Partículas Sutiles en el Fondo -->
     <canvas id="particleCanvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
 
     <!-- Orbes difuminados ambientales -->
-    <div class="fixed top-[-12%] left-[-10%] w-[48vw] h-[48vw] max-w-[540px] max-h-[540px] rounded-full bg-neonPink/10 blur-[130px] pointer-events-none z-0"></div>
-    <div class="fixed bottom-[-12%] right-[-10%] w-[48vw] h-[48vw] max-w-[540px] max-h-[540px] rounded-full bg-roseGold/10 blur-[130px] pointer-events-none z-0"></div>
+    <div class="fixed top-[-12%] left-[-10%] w-[52vw] h-[52vw] max-w-[540px] max-h-[540px] rounded-full bg-neonPink/10 blur-[120px] pointer-events-none z-0"></div>
+    <div class="fixed bottom-[-12%] right-[-10%] w-[52vw] h-[52vw] max-w-[540px] max-h-[540px] rounded-full bg-roseGold/10 blur-[120px] pointer-events-none z-0"></div>
 
-    <!-- Barra Superior Minimalista -->
-    <header class="relative z-20 border-b border-pink-500/15 bg-obsidian/75 backdrop-blur-md sticky top-0">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-4">
-            <div class="flex items-center gap-2.5">
-                <span class="relative flex h-2.5 w-2.5 pulse-dot">
+    <!-- Barra Superior Minimalista y Adaptable -->
+    <header class="relative z-20 border-b border-pink-500/15 bg-obsidian/80 backdrop-blur-md sticky top-0">
+        <div class="max-w-5xl mx-auto px-3 sm:px-6 py-3 flex items-center justify-between gap-2 sm:gap-4">
+            <div class="flex items-center gap-2 min-w-0">
+                <span class="relative flex h-2.5 w-2.5 shrink-0 pulse-dot">
                     <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-neonPink"></span>
                 </span>
-                <span class="font-mono text-xs sm:text-sm tracking-wider text-zinc-300">
+                <span class="font-mono text-[11px] sm:text-sm tracking-wider text-zinc-300 truncate">
                     CORE.ESSENCE<span class="text-softRose font-bold">_v3.0</span>
                 </span>
             </div>
 
-            <div class="flex items-center gap-2 sm:gap-3">
-                <a href="#tropical-memories" class="hidden sm:inline-flex px-3 py-1.5 rounded-full text-xs font-mono text-zinc-400 hover:text-roseGold transition">
+            <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+                <a href="#tropical-memories" class="hidden md:inline-flex px-2.5 py-1.5 rounded-full text-xs font-mono text-zinc-400 hover:text-roseGold transition">
                     #Tropical
                 </a>
-                <a href="#suenos" class="hidden sm:inline-flex px-3 py-1.5 rounded-full text-xs font-mono text-zinc-400 hover:text-roseGold transition">
+                <a href="#suenos" class="hidden md:inline-flex px-2.5 py-1.5 rounded-full text-xs font-mono text-zinc-400 hover:text-roseGold transition">
                     #Sueñosv3.0
                 </a>
-                <button onclick="copySummaryToClipboard()" title="Copiar texto de carta e itinerario" class="px-3 py-1.5 rounded-full text-xs font-mono bg-zinc-900/90 text-zinc-300 border border-zinc-800 hover:border-softRose/50 hover:text-roseGold transition cursor-pointer">
+                <button onclick="toggleMusicPlay()" title="Reproducir o pausar música de fondo"
+                    class="px-2.5 sm:px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-mono bg-zinc-900/90 text-roseGold border border-pink-500/30 hover:border-neonPink transition flex items-center gap-1.5 cursor-pointer">
+                    <span id="headerMusicIcon">🎵</span>
+                    <span id="headerMusicLabel" class="hidden xs:inline sm:inline">Música</span>
+                </button>
+                <button onclick="copySummaryToClipboard()" title="Copiar texto de carta e itinerario"
+                    class="hidden sm:inline-flex px-3 py-1.5 rounded-full text-xs font-mono bg-zinc-900/90 text-zinc-300 border border-zinc-800 hover:border-softRose/50 hover:text-roseGold transition cursor-pointer">
                     📋 Respaldar
                 </button>
-                <button onclick="launchPinkConfetti()" class="px-3.5 py-1.5 rounded-full text-xs font-mono font-medium bg-pink-500/15 text-roseGold border border-pink-500/35 hover:bg-pink-500/25 hover:border-neonPink transition flex items-center gap-1.5 cursor-pointer">
-                    <span>✨</span> Celebrar
+                <button onclick="launchPinkConfetti()"
+                    class="px-3 sm:px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-mono font-medium bg-pink-500/15 text-roseGold border border-pink-500/35 hover:bg-pink-500/25 hover:border-neonPink transition flex items-center gap-1 cursor-pointer">
+                    <span>✨</span>
+                    <span>Celebrar</span>
                 </button>
             </div>
         </div>
     </header>
 
     <!-- Contenido Principal -->
-    <main class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-14 space-y-12 sm:space-y-16">
+    <main class="relative z-10 max-w-5xl mx-auto px-3.5 sm:px-6 py-8 sm:py-14 space-y-10 sm:space-y-16">
 
-        <!-- 1. HERO SECTION CON DETALLES SUTILES LINE-ART -->
-        <section class="relative text-center space-y-6 pt-2 pb-2">
-            <!-- Detalle flotante sutil izquierda: Stitch -->
-            <button onclick="selectCharacter('stitch', true)" title="Stitch: Ohana & Aventura (Haz clic para ver mensaje)"
-                class="hidden md:flex flex-col items-center gap-1 absolute left-2 top-4 opacity-80 hover:opacity-100 transition animate-float-1 cursor-pointer group">
-                <div class="w-16 h-16 rounded-2xl bg-pink-500/10 border border-pink-500/30 flex items-center justify-center p-1">
-                    <svg class="w-14 h-14 svg-neon-glow" viewBox="0 0 80 80" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <!-- Orejas grandes con muescas -->
-                        <path d="M26 34 C12 20, 5 24, 9 37 L13 38 L10 42 C14 48, 21 47, 26 43" fill="rgba(244,63,94,0.12)" />
-                        <path d="M54 34 C68 20, 75 24, 71 37 L67 38 L70 42 C66 48, 59 47, 54 43" fill="rgba(244,63,94,0.12)" />
-                        <!-- Cabeza y mechón superior -->
-                        <path d="M26 38 C26 27, 54 27, 54 38 C56 51, 49 60, 40 60 C31 60, 24 51, 26 38 Z" fill="rgba(244,63,94,0.16)" />
-                        <path d="M36 28 L38 21 L41 26 L44 22 L44 28" />
-                        <!-- Ojos grandes expresivos -->
-                        <ellipse cx="32" cy="41" rx="4.2" ry="5.5" fill="rgba(249,168,212,0.18)" />
-                        <circle cx="33" cy="39.5" r="1.4" fill="#f9a8d4" stroke="none" />
-                        <ellipse cx="48" cy="41" rx="4.2" ry="5.5" fill="rgba(249,168,212,0.18)" />
-                        <circle cx="47" cy="39.5" r="1.4" fill="#f9a8d4" stroke="none" />
-                        <!-- Nariz ancha y sonrisa traviesa -->
-                        <ellipse cx="40" cy="46.5" rx="4.2" ry="2.8" fill="rgba(244,63,94,0.45)" />
-                        <path d="M30 51.5 Q40 58 50 51.5 Q40 53.5 30 51.5 Z" fill="rgba(244,63,94,0.22)" />
-                    </svg>
-                </div>
+        <!-- 1. HERO SECTION CON MENSAJES PERSONALIZADOS Y DETALLES LINE-ART -->
+        <section class="relative text-center space-y-5 sm:space-y-6 pt-2 pb-2">
+            <!-- Emblema flotante izquierda: Stitch -->
+            <button onclick="selectCharacter('stitch', true)" title="Stitch: Ohana & Aventura"
+                class="hidden lg:flex flex-col items-center gap-1 absolute left-2 top-6 opacity-65 hover:opacity-100 transition animate-float-1 cursor-pointer group">
+                <svg class="w-14 h-14 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 26 C11 16, 6 22, 9 32 C11 37, 17 37, 21 34" />
+                    <path d="M13 24 C11 26, 12 30, 16 31" stroke-dasharray="2 2"/>
+                    <path d="M43 26 C53 16, 58 22, 55 32 C53 37, 47 37, 43 34" />
+                    <path d="M51 24 C53 26, 52 30, 48 31" stroke-dasharray="2 2"/>
+                    <path d="M21 30 C21 22, 43 22, 43 30 C44 40, 39 46, 32 46 C25 46, 20 40, 21 30 Z" />
+                    <path d="M30 22 L32 18 L34 22" />
+                    <ellipse cx="26.5" cy="33" rx="2.5" ry="3.2" />
+                    <ellipse cx="37.5" cy="33" rx="2.5" ry="3.2" />
+                    <path d="M30 37.5 Q32 36 34 37.5 Q32 39.5 30 37.5 Z" />
+                    <path d="M27 41.5 Q32 44 37 41.5" />
+                </svg>
                 <span class="font-mono text-[10px] text-roseGold/70 group-hover:text-roseGold tracking-wider">OHANA</span>
             </button>
 
-            <!-- Detalle flotante sutil derecha: Marie -->
-            <button onclick="selectCharacter('marie', true)" title="Marie: Elegancia & Esencia (Haz clic para ver mensaje)"
-                class="hidden md:flex flex-col items-center gap-1 absolute right-2 top-4 opacity-80 hover:opacity-100 transition animate-float-2 cursor-pointer group">
-                <div class="w-16 h-16 rounded-2xl bg-pink-500/10 border border-pink-500/30 flex items-center justify-center p-1">
-                    <svg class="w-14 h-14 svg-neon-glow" viewBox="0 0 80 80" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <!-- Orejas puntiagudas -->
-                        <path d="M24 35 L20 18 L34 27" fill="rgba(249,168,212,0.14)" />
-                        <path d="M56 35 L60 18 L46 27" fill="rgba(249,168,212,0.14)" />
-                        <!-- Mechón y moño superior rosa neón -->
-                        <path d="M38 25 C36 19, 41 16, 44 19" />
-                        <path d="M40 24 L31 18 C28 22, 29 26, 33 27 L40 24 Z" fill="rgba(244,63,94,0.45)" />
-                        <path d="M40 24 L49 18 C52 22, 51 26, 47 27 L40 24 Z" fill="rgba(244,63,94,0.45)" />
-                        <circle cx="40" cy="24" r="2.2" fill="#f43f5e" />
-                        <!-- Rostro y mejillas esponjosas -->
-                        <path d="M24 35 C20 42, 22 50, 29 53 C33 55, 47 55, 51 53 C58 50, 60 42, 56 35" fill="rgba(249,168,212,0.12)" />
-                        <!-- Ojos con pestañas -->
-                        <path d="M30 41 Q33 38 36 41" />
-                        <path d="M29 40 L27 38.5 M31 39 L30 37" />
-                        <path d="M44 41 Q47 38 50 41" />
-                        <path d="M51 40 L53 38.5 M49 39 L50 37" />
-                        <!-- Naricita y bigotes -->
-                        <path d="M38.5 45.5 L41.5 45.5 L40 47.5 Z" fill="#fb7185" />
-                        <path d="M16 44 L26 45 M17 48 L26 47.5 M64 44 L54 45 M63 48 L54 47.5" />
-                        <!-- Moño en el cuello -->
-                        <path d="M40 57 L32 54 L33 61 L40 57 L48 54 L47 61 Z" fill="rgba(244,63,94,0.4)" />
-                    </svg>
-                </div>
+            <!-- Emblema flotante derecha: Marie -->
+            <button onclick="selectCharacter('marie', true)" title="Marie: Elegancia & Esencia"
+                class="hidden lg:flex flex-col items-center gap-1 absolute right-2 top-6 opacity-65 hover:opacity-100 transition animate-float-2 cursor-pointer group">
+                <svg class="w-14 h-14 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 28 L19 16 L28 23" />
+                    <path d="M43 28 L45 16 L36 23" />
+                    <path d="M32 21 L25 16 C23 19, 23 22, 26 23 L32 21 Z" fill="rgba(244,63,94,0.22)" />
+                    <path d="M32 21 L39 16 C41 19, 41 22, 38 23 L32 21 Z" fill="rgba(244,63,94,0.22)" />
+                    <circle cx="32" cy="21" r="1.5" />
+                    <path d="M20 29 C19 39, 24 45, 32 45 C40 45, 45 39, 44 29" />
+                    <path d="M25 34 Q27 32 29 34" />
+                    <path d="M35 34 Q37 32 39 34" />
+                    <path d="M31 38 L33 38 L32 39.5 Z" />
+                    <path d="M15 36 L21 37 M15 40 L21 39.5" />
+                    <path d="M49 36 L43 37 M49 40 L43 39.5" />
+                </svg>
                 <span class="font-mono text-[10px] text-roseGold/70 group-hover:text-roseGold tracking-wider">ESENCIA</span>
             </button>
 
-            <!-- Definición global de degradado SVG oro rosado / neón -->
-            <svg width="0" height="0" class="hidden">
-                <defs>
-                    <linearGradient id="roseNeonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#f9a8d4" />
-                        <stop offset="50%" stop-color="#fb7185" />
-                        <stop offset="100%" stop-color="#f43f5e" />
-                    </linearGradient>
-                </defs>
-            </svg>
-
             <!-- Insignia Tech -->
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-card border border-pink-500/30 text-xs font-mono tracking-widest text-roseGold uppercase">
+            <div class="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full glass-card border border-pink-500/30 text-[10px] sm:text-xs font-mono tracking-widest text-roseGold uppercase">
                 <span class="text-neonPink">◆</span>
                 <span>LEVEL 30 // RELEASE 28.11.2026</span>
                 <span class="text-neonPink">◆</span>
             </div>
 
-            <!-- Título Principal Editable -->
-            <div class="space-y-3 max-w-3xl mx-auto">
-                <div class="group relative inline-block">
+            <!-- Título Principal Editable + Mensajes de Dedicatoria -->
+            <div class="space-y-4 max-w-3xl mx-auto px-1">
+                <div class="group relative inline-block max-w-full">
                     <h1 id="heroTitle" contenteditable="true" spellcheck="false" title="Haz clic para editar el nombre o título"
-                        class="font-display text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-white glow-text outline-none focus:ring-2 focus:ring-neonPink/50 rounded-2xl px-3 py-1 transition cursor-text">
-                        Feliz Cumpleaños, Mi Amor
+                        class="font-display text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white glow-text outline-none focus:ring-2 focus:ring-neonPink/50 rounded-2xl px-2 sm:px-3 py-1 transition cursor-text break-words">
+                        Feliz Cumpleaños, Eli
                     </h1>
-                    <p class="text-[11px] font-mono text-zinc-500 mt-1 opacity-80 group-hover:opacity-100 transition">
-                        [ Haz clic sobre el título superior para personalizar su nombre ]
+                    <p class="text-[10px] sm:text-[11px] font-mono text-zinc-500 mt-1 opacity-80 group-hover:opacity-100 transition">
+                        [ Toca sobre el título superior para personalizar su nombre ]
                     </p>
                 </div>
+            <!-- 4. NUESTROS 30s & SUEÑOS POR CUMPLIR (6 SILUETAS SVG NEÓN + WISHLIST v3.0) -->
+            <section id="suenos" class="glass-card rounded-3xl p-4 sm:p-8 md:p-10 space-y-7 sm:space-y-8">
+                <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-zinc-800/80 pb-5">
+                    <div>
+                        <span class="font-mono text-[11px] sm:text-xs text-neonPink uppercase tracking-wider">// CORE_VALUES & DREAMS_v3.0</span>
+                        <h2 class="font-display text-xl sm:text-3xl font-bold text-white mt-1">Nuestros 30s & Sueños por Cumplir</h2>
+                        <p class="text-zinc-400 text-xs sm:text-sm mt-1">
+                            Crecer no es dejar de ser tú: cada emblema va relacionado con tus personajes y gustos favoritos. Toca cada uno para descubrir lo que simboliza en esta nueva etapa.
+                        </p>
+                    </div>
+                    <span class="font-mono text-[11px] sm:text-xs px-3 py-1.5 rounded-full bg-pink-500/10 border border-pink-500/25 text-roseGold self-start sm:self-auto shrink-0">
+                        6 Guardianes de Esencia
+                    </span>
+                </div>
 
-                <p class="text-zinc-300 text-base sm:text-lg max-w-2xl mx-auto font-light leading-relaxed">
-                    Llegar a la versión <span class="text-roseGold font-mono font-semibold">30.0</span> no significa apagar la magia ni olvidar lo que amamos; es conservar nuestra esencia, abrazar lo que nos hace felices y seguir compilando <span class="text-softRose font-medium">sueños por cumplir</span>.
-                </p>
+                <!-- Grid Responsive de los 6 Personajes en Siluetas SVG Neón -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+                    
+                    <!-- 1. STITCH -->
+                    <button id="card-stitch" onclick="selectCharacter('stitch', false)"
+                        class="character-card active-char p-4 sm:p-5 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-3 cursor-pointer">
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center shrink-0">
+                            <svg class="w-12 h-12 sm:w-14 sm:h-14 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 26 C11 16, 6 22, 9 32 C11 37, 17 37, 21 34" />
+                                <path d="M13 24 C11 26, 12 30, 16 31" stroke-dasharray="2 2"/>
+                                <path d="M43 26 C53 16, 58 22, 55 32 C53 37, 47 37, 43 34" />
+                                <path d="M51 24 C53 26, 52 30, 48 31" stroke-dasharray="2 2"/>
+                                <path d="M21 30 C21 22, 43 22, 43 30 C44 40, 39 46, 32 46 C25 46, 20 40, 21 30 Z" />
+                                <path d="M30 22 L32 18 L34 22" />
+                                <ellipse cx="26.5" cy="33" rx="2.5" ry="3.2" />
+                                <ellipse cx="37.5" cy="33" rx="2.5" ry="3.2" />
+                                <path d="M30 37.5 Q32 36 34 37.5 Q32 39.5 30 37.5 Z" />
+                                <path d="M27 41.5 Q32 44 37 41.5" />
+                            </svg>
+                        </div>
+                        <div class="w-full">
+                            <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">01 // STITCH</div>
+                            <h3 class="font-display text-sm sm:text-base font-bold text-white mt-0.5 leading-snug">Ohana & Aventura</h3>
+                        </div>
+                    </button>
+
+                    <!-- 2. MARIE LA GATITA -->
+                    <button id="card-marie" onclick="selectCharacter('marie', false)"
+                        class="character-card p-4 sm:p-5 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-3 cursor-pointer">
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center shrink-0">
+                            <svg class="w-12 h-12 sm:w-14 sm:h-14 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 28 L19 16 L28 23" />
+                                <path d="M43 28 L45 16 L36 23" />
+                                <path d="M32 21 L25 16 C23 19, 23 22, 26 23 L32 21 Z" fill="rgba(244,63,94,0.28)" />
+                                <path d="M32 21 L39 16 C41 19, 41 22, 38 23 L32 21 Z" fill="rgba(244,63,94,0.28)" />
+                                <circle cx="32" cy="21" r="1.5" />
+                                <path d="M20 29 C19 39, 24 45, 32 45 C40 45, 45 39, 44 29" />
+                                <path d="M25 34 Q27 32 29 34" />
+                                <path d="M35 34 Q37 32 39 34" />
+                                <path d="M31 38 L33 38 L32 39.5 Z" />
+                                <path d="M15 36 L21 37 M15 40 L21 39.5" />
+                                <path d="M49 36 L43 37 M49 40 L43 39.5" />
+                            </svg>
+                        </div>
+                        <div class="w-full">
+                            <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">02 // MARIE</div>
+                            <h3 class="font-display text-sm sm:text-base font-bold text-white mt-0.5 leading-snug">Coqueta & Única</h3>
+                        </div>
+                    </button>
+
+                    <!-- 3. WINNIE POOH -->
+                    <button id="card-pooh" onclick="selectCharacter('pooh', false)"
+                        class="character-card p-4 sm:p-5 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-3 cursor-pointer">
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center shrink-0">
+                            <svg class="w-12 h-12 sm:w-14 sm:h-14 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="21" cy="21" r="4.5" />
+                                <circle cx="43" cy="21" r="4.5" />
+                                <path d="M23 23 C19 27, 19 36, 24 40 C28 43, 36 43, 40 40 C45 36, 45 27, 41 23" />
+                                <circle cx="27.5" cy="30" r="1.4" fill="#fb7185" />
+                                <circle cx="36.5" cy="30" r="1.4" fill="#fb7185" />
+                                <path d="M30.5 33.5 Q32 32.5 33.5 33.5 Q32 35 30.5 33.5 Z" />
+                                <path d="M28 37 Q32 39.5 36 37" />
+                                <path d="M26 44 L38 44 L39 51 C39 53, 25 53, 25 51 Z" />
+                                <path d="M26 46 Q29 48 32 46 Q35 48 38 46" />
+                            </svg>
+                        </div>
+                        <div class="w-full">
+                            <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">03 // POOH</div>
+                            <h3 class="font-display text-sm sm:text-base font-bold text-white mt-0.5 leading-snug">Paz & Antojitos</h3>
+                        </div>
+                    </button>
+
+                    <!-- 4. COCODRILO -->
+                    <button id="card-croc" onclick="selectCharacter('croc', false)"
+                        class="character-card p-4 sm:p-5 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-3 cursor-pointer">
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center shrink-0">
+                            <svg class="w-12 h-12 sm:w-14 sm:h-14 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M32 12 L33.5 15.5 L37 16 L34.3 18.4 L35 22 L32 20.1 L29 22 L29.7 18.4 L27 16 L30.5 15.5 Z" />
+                                <path d="M23 29 C23 24, 29 24, 29 28" />
+                                <path d="M35 28 C35 24, 41 24, 41 29" />
+                                <circle cx="26" cy="28" r="1.4" fill="#fb7185" />
+                                <circle cx="38" cy="28" r="1.4" fill="#fb7185" />
+                                <path d="M16 34 C16 29, 48 29, 48 34 C48 41, 41 44, 32 44 C23 44, 16 41, 16 34 Z" />
+                                <circle cx="27" cy="33.5" r="0.9" />
+                                <circle cx="37" cy="33.5" r="0.9" />
+                                <path d="M21 38 Q32 42.5 43 38" />
+                                <path d="M25 39.5 L26 41 L27 39.8 M37 39.8 L38 41 L39 39.5" />
+                            </svg>
+                        </div>
+                        <div class="w-full">
+                            <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">04 // COCODRILO</div>
+                            <h3 class="font-display text-sm sm:text-base font-bold text-white mt-0.5 leading-snug">Sin Miedo a los 30</h3>
+                        </div>
+                    </button>
+
+                    <!-- 5. LUCIFER (EL GATO DE LA CENICIENTA) -->
+                    <button id="card-lucifer" onclick="selectCharacter('lucifer', false)"
+                        class="character-card p-4 sm:p-5 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-3 cursor-pointer">
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center shrink-0">
+                            <svg class="w-12 h-12 sm:w-14 sm:h-14 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                                <!-- Orejas puntiagudas y mechón superior -->
+                                <path d="M20 26 L16 14 L27 21" />
+                                <path d="M44 26 L48 14 L37 21" />
+                                <path d="M27 21 Q32 18 37 21" />
+                                <!-- Cabeza ancha y mejillas esponjosas de Lucifer -->
+                                <path d="M20 26 C15 30, 14 38, 19 41 L16 43 C21 46, 26 48, 32 48 C38 48, 43 46, 48 43 L45 41 C50 38, 49 30, 44 26" />
+                                <!-- Mirada icónica de desprecio / ceño caído -->
+                                <path d="M21 31 L29 33" />
+                                <path d="M43 31 L35 33" />
+                                <path d="M22 32.5 C22 36, 28 36, 28 33" />
+                                <path d="M36 33 C36 36, 42 36, 42 32.5" />
+                                <circle cx="25.5" cy="34" r="1.2" fill="#fb7185" />
+                                <circle cx="38.5" cy="34" r="1.2" fill="#fb7185" />
+                                <!-- Naricita y gesto serio/coqueto -->
+                                <path d="M30 37.5 L34 37.5 L32 39.5 Z" />
+                                <path d="M27 42.5 Q32 40.5 37 42.5" />
+                                <!-- Bigotes -->
+                                <path d="M12 37 L18 38 M12 41 L18 40.5" />
+                                <path d="M52 37 L46 38 M52 41 L46 40.5" />
+                            </svg>
+                        </div>
+                        <div class="w-full">
+                            <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">05 // LUCIFER</div>
+                            <h3 class="font-display text-sm sm:text-base font-bold text-white mt-0.5 leading-snug">Mirada de Desprecio</h3>
+                        </div>
+                    </button>
+
+                    <!-- 6. TAMBOR (DE BAMBI) -->
+                    <button id="card-tambor" onclick="selectCharacter('tambor', false)"
+                        class="character-card p-4 sm:p-5 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-3 cursor-pointer">
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center shrink-0">
+                            <svg class="w-12 h-12 sm:w-14 sm:h-14 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                                <!-- Orejas largas de conejito Tambor -->
+                                <path d="M26 26 C21 15, 22 9, 26 10 C30 11, 30 19, 30 25" />
+                                <path d="M36 25 C39 15, 45 10, 48 13 C50 16, 44 23, 40 27" />
+                                <!-- Rostro tierno con mejillas peluditas -->
+                                <path d="M22 29 C18 33, 18 41, 24 44 C28 46, 36 46, 40 44 C46 41, 46 33, 42 29" />
+                                <path d="M26 26 Q32 23 37 26" />
+                                <!-- Ojitos alegres y brillantes -->
+                                <ellipse cx="27" cy="34" rx="2" ry="2.6" />
+                                <ellipse cx="37" cy="34" rx="2" ry="2.6" />
+                                <circle cx="27.4" cy="33.2" r="0.8" fill="#fb7185" />
+                                <circle cx="37.4" cy="33.2" r="0.8" fill="#fb7185" />
+                                <!-- Naricita, sonrisa y dientecito característico -->
+                                <path d="M30.5 37.5 Q32 36.5 33.5 37.5 Q32 39 30.5 37.5 Z" />
+                                <path d="M27.5 40.5 Q32 43.5 36.5 40.5" />
+                                <path d="M30.5 41.8 L30.5 44 L33.5 44 L33.5 41.8" />
+                                <!-- Pequeño destello de energía -->
+                                <path d="M16 24 L17 21 L18 24 L21 25 L18 26 L17 29 L16 26 L13 25 Z" stroke-width="1.2" />
+                            </svg>
+                        </div>
+                        <div class="w-full">
+                            <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">06 // TAMBOR</div>
+                            <h3 class="font-display text-sm sm:text-base font-bold text-white mt-0.5 leading-snug">Chispa & Corazón</h3>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Cápsula Dinámica de Reflexión -->
+                <div id="characterQuoteBox" class="p-4 sm:p-6 rounded-2xl bg-gradient-to-r from-obsidian via-charcoal to-obsidian border border-pink-500/30 transition-all">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                        <span id="charBadge" class="font-mono text-[11px] sm:text-xs text-neonPink font-semibold tracking-wider">
+                            ◆ STITCH // OHANA & AVENTURA
+                        </span>
+                        <span class="font-mono text-[10px] sm:text-[11px] text-zinc-500">FILOSOFÍA NIVEL 30</span>
+                    </div>
+                    <p id="charQuoteText" class="text-zinc-200 text-sm sm:text-base leading-relaxed font-light">
+                        "Eli, contigo he descubierto un mundo nuevo y he aprendido tantas cosas que ni me imaginaba. Como Stitch, eres mi Ohana y mi aventura favorita: tienes esa chispa apasionada que me impulsa a superarme cada día. Los 30 apenas son el inicio de todos los caminos que quiero recorrer de tu mano."
+                    </p>
+                </div>
             </div>
         </section>
 
         <!-- 2. CONTADOR REGRESIVO AL 28 DE NOVIEMBRE -->
-        <section class="glass-card rounded-3xl p-6 sm:p-10 relative overflow-hidden">
-            <!-- Decoración superior tipo terminal -->
-            <div class="flex flex-wrap items-center justify-between gap-3 pb-6 mb-6 border-b border-zinc-800/80">
-                <div class="flex items-center gap-2">
-                    <span class="w-3 h-3 rounded-full bg-neonPink/85"></span>
-                    <span class="w-3 h-3 rounded-full bg-roseGold/65"></span>
-                    <span class="w-3 h-3 rounded-full bg-zinc-700"></span>
-                    <span id="countdownStatusLabel" class="ml-2 font-mono text-xs sm:text-sm text-zinc-400">
+        <section class="glass-card rounded-3xl p-4 sm:p-8 md:p-10 relative overflow-hidden">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 mb-5 border-b border-zinc-800/80">
+                <div class="flex items-center gap-2 min-w-0">
+                    <span class="w-2.5 h-2.5 rounded-full bg-neonPink/85 shrink-0"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-roseGold/65 shrink-0"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-zinc-700 shrink-0"></span>
+                    <span id="countdownStatusLabel" class="ml-1 font-mono text-[11px] sm:text-xs md:text-sm text-zinc-400 truncate">
                         TARGET_RELEASE: <span class="text-roseGold">28 NOV 2026 // 00:00:00</span>
                     </span>
                 </div>
 
-                <!-- Botón de simulación para previsualizar el 28 de noviembre -->
                 <button id="simulateBtn" onclick="toggleSimulation()" 
-                    class="px-3.5 py-1.5 rounded-xl font-mono text-xs bg-zinc-900/90 text-zinc-300 border border-zinc-700/80 hover:border-neonPink hover:text-roseGold transition cursor-pointer">
+                    class="self-start sm:self-auto px-3.5 py-2 rounded-xl font-mono text-[11px] sm:text-xs bg-zinc-900/90 text-zinc-300 border border-zinc-700/80 hover:border-neonPink hover:text-roseGold transition cursor-pointer shrink-0">
                     ⚡ Simular 28 de Noviembre
                 </button>
             </div>
 
             <!-- Bloques del Contador -->
-            <div id="countdownGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5">
+            <div id="countdownGrid" class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
                 <div class="bg-obsidian/80 border border-pink-500/20 rounded-2xl p-4 sm:p-6 text-center">
-                    <div id="days" class="font-display text-4xl sm:text-6xl font-bold text-white tracking-tight">00</div>
-                    <div class="font-mono text-xs uppercase tracking-widest text-roseGold mt-2">Días</div>
+                    <div id="days" class="font-display text-3xl sm:text-5xl md:text-6xl font-bold text-white tracking-tight">00</div>
+                    <div class="font-mono text-[11px] sm:text-xs uppercase tracking-widest text-roseGold mt-1.5 sm:mt-2">Días</div>
                 </div>
                 <div class="bg-obsidian/80 border border-pink-500/20 rounded-2xl p-4 sm:p-6 text-center">
-                    <div id="hours" class="font-display text-4xl sm:text-6xl font-bold text-white tracking-tight">00</div>
-                    <div class="font-mono text-xs uppercase tracking-widest text-roseGold mt-2">Horas</div>
+                    <div id="hours" class="font-display text-3xl sm:text-5xl md:text-6xl font-bold text-white tracking-tight">00</div>
+                    <div class="font-mono text-[11px] sm:text-xs uppercase tracking-widest text-roseGold mt-1.5 sm:mt-2">Horas</div>
                 </div>
                 <div class="bg-obsidian/80 border border-pink-500/20 rounded-2xl p-4 sm:p-6 text-center">
-                    <div id="minutes" class="font-display text-4xl sm:text-6xl font-bold text-white tracking-tight">00</div>
-                    <div class="font-mono text-xs uppercase tracking-widest text-roseGold mt-2">Minutos</div>
+                    <div id="minutes" class="font-display text-3xl sm:text-5xl md:text-6xl font-bold text-white tracking-tight">00</div>
+                    <div class="font-mono text-[11px] sm:text-xs uppercase tracking-widest text-roseGold mt-1.5 sm:mt-2">Minutos</div>
                 </div>
                 <div class="bg-obsidian/80 border border-pink-500/20 rounded-2xl p-4 sm:p-6 text-center relative overflow-hidden">
-                    <div id="seconds" class="font-display text-4xl sm:text-6xl font-bold text-neonPink tracking-tight">00</div>
-                    <div class="font-mono text-xs uppercase tracking-widest text-roseGold mt-2">Segundos</div>
+                    <div id="seconds" class="font-display text-3xl sm:text-5xl md:text-6xl font-bold text-neonPink tracking-tight">00</div>
+                    <div class="font-mono text-[11px] sm:text-xs uppercase tracking-widest text-roseGold mt-1.5 sm:mt-2">Segundos</div>
                 </div>
             </div>
 
-            <!-- Banner Especial de Celebración (Oculto hasta llegar a 0 o activar simulación) -->
-            <div id="celebrationBanner" class="hidden mt-6 p-6 rounded-2xl bg-gradient-to-r from-neonPink/20 via-pink-500/15 to-roseGold/20 border border-neonPink/50 text-center space-y-3">
-                <div class="inline-block px-3 py-1 rounded-full bg-neonPink text-white font-mono text-xs font-bold tracking-wider">
+            <!-- Banner Especial de Celebración (Visible cuando el contador llega a 0) -->
+            <div id="celebrationBanner" class="hidden mt-6 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-neonPink/20 via-pink-500/15 to-roseGold/20 border border-neonPink/50 text-center space-y-3">
+                <div class="inline-block px-3 py-1 rounded-full bg-neonPink text-white font-mono text-[11px] sm:text-xs font-bold tracking-wider">
                     STATUS: 200 OK // ¡HOY COMIENZA TU NIVEL 30!
                 </div>
                 <h2 class="font-display text-2xl sm:text-4xl font-bold text-white">
@@ -336,458 +529,542 @@
             </div>
         </section>
 
-        <!-- 2.5 TROPICAL_MEMORIES // CARRUSEL DEL FESTEJO TROPICAL (SÁBADO PASADO) -->
-        <section id="tropical-memories" class="glass-card rounded-3xl p-6 sm:p-10 relative overflow-hidden space-y-6">
-            <!-- Detalle SVG sutil: Hoja de Monstera / Palmera en line-art rosa neón -->
-            <svg class="hidden sm:block absolute -top-6 -right-6 w-44 h-44 opacity-20 pointer-events-none svg-neon-glow" viewBox="0 0 120 120" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 102 C35 72, 62 45, 102 18" />
-                <path d="M45 72 C32 62, 24 46, 32 32 C42 36, 52 46, 58 58" />
-                <path d="M62 56 C52 42, 48 24, 58 14 C68 20, 74 34, 75 46" />
-                <path d="M77 42 C72 28, 74 14, 84 8 C92 16, 94 28, 90 38" />
-                <path d="M48 75 C62 86, 80 90, 92 80 C86 70, 74 62, 62 62" />
-                <path d="M65 59 C80 68, 96 68, 106 58 C98 49, 86 44, 75 47" />
-            </svg>
-
-            <!-- Encabezado de la sección -->
-            <div class="relative z-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-800/80 pb-5">
-                <div>
-                    <div class="inline-flex items-center gap-2 font-mono text-xs text-neonPink uppercase tracking-wider">
-                        <span>🌴</span>
-                        <span>// TROPICAL_MEMORIES // SÁBADO_PASADO.GALLERY</span>
-                    </div>
-                    <h2 class="font-display text-2xl sm:text-3xl font-bold text-white mt-1">
-                        Tropical_Memories // Festejo Tropical
-                    </h2>
-                    <p class="text-zinc-400 text-sm mt-1">
-                        Aloha vibes, flores y sonrisas: revive los mejores momentos de tu pre-festejo tropical.
-                    </p>
-                </div>
-
-                <!-- Botones de carga y control de auto-play -->
-                <div class="flex flex-wrap items-center gap-2.5">
-                    <input type="file" id="tropicalPhotoInput" accept="image/*" multiple class="hidden" onchange="handleTropicalFileSelect(event)">
-                    <button onclick="document.getElementById('tropicalPhotoInput').click()" 
-                        class="btn-pink-glow text-white font-mono text-xs font-bold px-4 py-2.5 rounded-xl inline-flex items-center gap-2 cursor-pointer">
-                        <span>📸</span>
-                        <span>Subir Fotos</span>
-                    </button>
-                    <button id="carouselPlayPauseBtn" onclick="toggleCarouselAutoplay()" 
-                        class="px-3.5 py-2.5 rounded-xl font-mono text-xs bg-obsidian/90 text-roseGold border border-pink-500/30 hover:border-neonPink transition cursor-pointer">
-                        ⏸ Pausar
-                    </button>
-                </div>
+        <!-- CÁPSULA SELLADA (SE ACTIVARÁ CUANDO ME DIGAS "CERRAR") -->
+        <section id="lockedVaultBanner" class="hidden glass-card rounded-3xl p-6 sm:p-10 text-center space-y-6 border border-pink-500/25">
+            <div class="w-16 h-16 mx-auto rounded-2xl bg-pink-500/15 border border-pink-500/35 flex items-center justify-center text-3xl shadow-lg">
+                🔒
             </div>
-
-            <!-- Visor Principal del Carrusel con soporte Drag & Drop -->
-            <div id="tropicalDropZone" 
-                class="relative rounded-2xl bg-obsidian/90 border border-pink-500/25 overflow-hidden group transition-all">
-                
-                <!-- Barra de progreso del Auto-play -->
-                <div class="w-full h-1 bg-zinc-900 overflow-hidden">
-                    <div id="carouselProgressBar" class="h-full bg-gradient-to-r from-neonPink via-softRose to-roseGold transition-all duration-100 ease-linear" style="width: 0%;"></div>
-                </div>
-
-                <!-- Contenedor de la Diapositiva Activa -->
-                <div class="relative aspect-[16/10] sm:aspect-[16/9] w-full flex items-center justify-center bg-gradient-to-br from-obsidian via-charcoal to-obsidian overflow-hidden">
-                    <img id="carouselActiveImage" src="" alt="Recuerdo Festejo Tropical" onclick="openLightbox()"
-                        class="w-full h-full object-contain sm:object-cover cursor-zoom-in transition-opacity duration-500 select-none">
-
-                    <!-- Overlay superior con contador y acción de eliminar -->
-                    <div class="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between gap-2 pointer-events-none">
-                        <span id="carouselSlideBadge" class="px-3 py-1 rounded-full bg-obsidian/80 backdrop-blur-md border border-pink-500/30 font-mono text-[11px] text-roseGold">
-                            01 / 02 • TROPICAL EDITION
-                        </span>
-
-                        <div class="flex items-center gap-2 pointer-events-auto">
-                            <button onclick="openLightbox()" title="Ver en pantalla completa"
-                                class="p-2 rounded-full bg-obsidian/80 backdrop-blur-md border border-zinc-700/80 text-zinc-200 hover:border-neonPink hover:text-roseGold text-xs transition cursor-pointer">
-                                🔍
-                            </button>
-                            <button id="deleteTropicalPhotoBtn" onclick="deleteCurrentTropicalPhoto()" title="Eliminar esta foto"
-                                class="p-2 rounded-full bg-obsidian/80 backdrop-blur-md border border-zinc-700/80 text-zinc-300 hover:border-neonPink hover:text-neonPink text-xs transition cursor-pointer">
-                                🗑️
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Flechas Anterior / Siguiente -->
-                    <button onclick="prevTropicalSlide()" aria-label="Foto anterior"
-                        class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-obsidian/80 backdrop-blur-md border border-pink-500/35 text-white hover:bg-neonPink hover:border-neonPink flex items-center justify-center transition opacity-85 sm:opacity-0 sm:group-hover:opacity-100 cursor-pointer">
-                        ‹
-                    </button>
-                    <button onclick="nextTropicalSlide()" aria-label="Siguiente foto"
-                        class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-obsidian/80 backdrop-blur-md border border-pink-500/35 text-white hover:bg-neonPink hover:border-neonPink flex items-center justify-center transition opacity-85 sm:opacity-0 sm:group-hover:opacity-100 cursor-pointer">
-                        ›
-                    </button>
-
-                    <!-- Pie de foto editable superpuesto en la parte inferior -->
-                    <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-obsidian via-obsidian/85 to-transparent pt-10 pb-4 px-4 sm:px-6">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <div class="flex-1">
-                                <p id="carouselCaptionText" contenteditable="true" spellcheck="false" onblur="saveTropicalCaption()"
-                                    title="Haz clic para editar el recuerdo de esta foto"
-                                    class="font-display text-sm sm:text-base font-medium text-white outline-none focus:ring-1 focus:ring-neonPink rounded-lg px-2 py-0.5 cursor-text">
-                                    Festejo Tropical • Sábado Pasado 🌺
-                                </p>
-                                <span class="font-mono text-[10px] text-zinc-400 px-2">
-                                    [ Haz clic en el texto para editar la descripción del recuerdo ]
-                                </span>
-                            </div>
-
-                            <!-- Indicadores (Dots) -->
-                            <div id="carouselDots" class="flex items-center gap-1.5 px-2"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Overlay visual al arrastrar archivos sobre el carrusel -->
-                <div id="dropOverlay" class="hidden absolute inset-0 z-30 bg-obsidian/90 backdrop-blur-md border-2 border-dashed border-neonPink flex flex-col items-center justify-center gap-2 text-center p-6 pointer-events-none">
-                    <span class="text-4xl">🌺</span>
-                    <p class="font-display text-lg font-bold text-white">Suelta tus fotos del festejo tropical aquí</p>
-                    <p class="font-mono text-xs text-roseGold">Se optimizarán y guardarán automáticamente en el carrusel</p>
-                </div>
-            </div>
-
-            <!-- Tira de Miniaturas + Zona rápida de arrastrar y soltar -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
-                <div id="tropicalThumbnails" class="flex items-center gap-2.5 overflow-x-auto pb-1">
-                    <!-- Miniaturas generadas con JS -->
-                </div>
-
-                <div class="flex items-center gap-2 shrink-0 text-[11px] font-mono text-zinc-500">
-                    <span>Arrastra imágenes o usa "Subir Fotos"</span>
-                    <button id="restoreSampleSlidesBtn" onclick="restoreDefaultTropicalSlides()" class="hidden text-roseGold hover:underline cursor-pointer">
-                        • Restaurar muestra
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- 3. NUESTROS 30s & SUEÑOS POR CUMPLIR (LOS 4 PERSONAJES + WISHLIST v3.0) -->
-        <section id="suenos" class="glass-card rounded-3xl p-6 sm:p-10 space-y-8">
-            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-800/80 pb-5">
-                <div>
-                    <span class="font-mono text-xs text-neonPink uppercase tracking-wider">// CORE_VALUES & DREAMS_v3.0</span>
-                    <h2 class="font-display text-2xl sm:text-3xl font-bold text-white mt-1">Nuestros 30s & Sueños por Cumplir</h2>
-                    <p class="text-zinc-400 text-sm mt-1">
-                        Crecer no es dejar de ser tú: toca cada emblema para descubrir lo que simboliza en esta nueva etapa.
-                    </p>
-                </div>
-                <span class="font-mono text-xs px-3 py-1.5 rounded-full bg-pink-500/10 border border-pink-500/25 text-roseGold self-start sm:self-auto">
-                    4 Guardianes de Esencia
+            <div class="space-y-2 max-w-xl mx-auto">
+                <span class="font-mono text-[11px] sm:text-xs text-neonPink tracking-widest uppercase">
+                    // ACCESS_LOCKED :: UNLOCKING 28.11.2026
                 </span>
-            </div>
-
-            <!-- Grid de los 4 Personajes en Siluetas SVG Neón -->
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                
-                <!-- 1. STITCH -->
-                <button id="card-stitch" onclick="selectCharacter('stitch', false)"
-                    class="character-card active-char group text-left p-4 sm:p-5 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-3 cursor-pointer">
-                    <div class="w-20 h-20 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center p-1.5">
-                        <svg class="w-16 h-16 svg-neon-glow" viewBox="0 0 80 80" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <!-- Orejas grandes con muescas características -->
-                            <path d="M26 34 C11 19, 4 23, 8 37 L13 38 L10 43 C14 49, 21 48, 26 44" fill="rgba(244,63,94,0.14)" />
-                            <path d="M14 31 C12 34, 14 39, 20 40" stroke-dasharray="2 2.5" opacity="0.7" />
-                            <path d="M54 34 C69 19, 76 23, 72 37 L67 38 L70 43 C66 49, 59 48, 54 44" fill="rgba(244,63,94,0.14)" />
-                            <path d="M66 31 C68 34, 66 39, 60 40" stroke-dasharray="2 2.5" opacity="0.7" />
-                            <!-- Cabeza y mechón superior -->
-                            <path d="M26 38 C26 26, 54 26, 54 38 C56 52, 49 62, 40 62 C31 62, 24 52, 26 38 Z" fill="rgba(244,63,94,0.16)" />
-                            <path d="M36 27 L38 20 L41 25 L44 21 L44 27" />
-                            <!-- Ojos grandes expresivos -->
-                            <ellipse cx="32" cy="41" rx="4.5" ry="5.8" fill="rgba(249,168,212,0.2)" />
-                            <circle cx="33.2" cy="39.5" r="1.5" fill="#f9a8d4" stroke="none" />
-                            <ellipse cx="48" cy="41" rx="4.5" ry="5.8" fill="rgba(249,168,212,0.2)" />
-                            <circle cx="46.8" cy="39.5" r="1.5" fill="#f9a8d4" stroke="none" />
-                            <!-- Nariz ancha -->
-                            <ellipse cx="40" cy="47" rx="4.6" ry="3" fill="rgba(244,63,94,0.5)" />
-                            <!-- Sonrisa traviesa con dientecitos -->
-                            <path d="M29 52.5 Q40 60 51 52.5 Q40 54.5 29 52.5 Z" fill="rgba(244,63,94,0.22)" />
-                            <path d="M34 53.5 L35.5 56 L37 54 M43 54 L44.5 56 L46 53.5" stroke-width="1.3" />
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">01 // STITCH</div>
-                        <h3 class="font-display text-sm sm:text-base font-bold text-white mt-0.5">Ohana & Aventura</h3>
-                    </div>
-                </button>
-
-                <!-- 2. MARIE LA GATITA -->
-                <button id="card-marie" onclick="selectCharacter('marie', false)"
-                    class="character-card group text-left p-4 sm:p-5 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-3 cursor-pointer">
-                    <div class="w-20 h-20 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center p-1.5">
-                        <svg class="w-16 h-16 svg-neon-glow" viewBox="0 0 80 80" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <!-- Orejas puntiagudas -->
-                            <path d="M23 36 L19 17 L34 27" fill="rgba(249,168,212,0.14)" />
-                            <path d="M24 29 L23 22 L29 26" stroke-width="1.2" opacity="0.65" />
-                            <path d="M57 36 L61 17 L46 27" fill="rgba(249,168,212,0.14)" />
-                            <path d="M56 29 L57 22 L51 26" stroke-width="1.2" opacity="0.65" />
-                            <!-- Mechoncito superior -->
-                            <path d="M37 25 C35 18, 41 14, 45 18" />
-                            <!-- Moño icónico rosa neón en la cabeza -->
-                            <path d="M40 24 L30 17 C27 21, 28 26, 33 27 L40 24 Z" fill="rgba(244,63,94,0.45)" />
-                            <path d="M40 24 L50 17 C53 21, 52 26, 47 27 L40 24 Z" fill="rgba(244,63,94,0.45)" />
-                            <circle cx="40" cy="24" r="2.4" fill="#f43f5e" />
-                            <!-- Rostro esponjoso -->
-                            <path d="M23 36 C19 43, 21 51, 28 54 C33 56, 47 56, 52 54 C59 51, 61 43, 57 36" fill="rgba(249,168,212,0.12)" />
-                            <!-- Ojos con pestañas largas -->
-                            <ellipse cx="32.5" cy="41.5" rx="3.2" ry="3.8" fill="rgba(249,168,212,0.18)" />
-                            <path d="M29 39.5 L26 37.5 M30.5 38 L29 35.5" stroke-width="1.4" />
-                            <ellipse cx="47.5" cy="41.5" rx="3.2" ry="3.8" fill="rgba(249,168,212,0.18)" />
-                            <path d="M51 39.5 L54 37.5 M49.5 38 L51 35.5" stroke-width="1.4" />
-                            <!-- Naricita, boquita y bigotes delicados -->
-                            <path d="M38.5 46 L41.5 46 L40 48 Z" fill="#fb7185" />
-                            <path d="M37.5 50 Q40 52 42.5 50" stroke-width="1.4" />
-                            <path d="M14 44 L25 45.5 M15 48.5 L25 48 M66 44 L55 45.5 M65 48.5 L55 48" stroke-width="1.3" />
-                            <!-- Moño rosa en el cuello -->
-                            <path d="M40 59 L31 55.5 L32 63 L40 59 L49 55.5 L48 63 Z" fill="rgba(244,63,94,0.45)" />
-                            <circle cx="40" cy="59" r="2" fill="#f43f5e" />
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">02 // MARIE</div>
-                        <h3 class="font-display text-sm sm:text-base font-bold text-white mt-0.5">Elegancia & Esencia</h3>
-                    </div>
-                </button>
-
-                <!-- 3. WINNIE POOH -->
-                <button id="card-pooh" onclick="selectCharacter('pooh', false)"
-                    class="character-card group text-left p-4 sm:p-5 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-3 cursor-pointer">
-                    <div class="w-20 h-20 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center p-1.5">
-                        <svg class="w-16 h-16 svg-neon-glow" viewBox="0 0 80 80" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <!-- Tarrito de miel (HUNNY) sostenido en alto -->
-                            <path d="M30 14 L50 14 L52 25 C52 28, 28 28, 28 25 Z" fill="rgba(249,168,212,0.2)" />
-                            <path d="M29 18 Q34 21 40 18 Q46 21 51 18" stroke-width="1.3" />
-                            <text x="40" y="24.5" fill="#f9a8d4" stroke="none" font-family="monospace" font-size="6.2" font-weight="700" text-anchor="middle" letter-spacing="0.5">HUNNY</text>
-                            <!-- Brazos alzados sosteniendo el tarro -->
-                            <path d="M31 44 C26 38, 26 29, 30 25" />
-                            <path d="M49 44 C54 38, 54 29, 50 25" />
-                            <!-- Orejitas redondas de osito -->
-                            <circle cx="31.5" cy="31.5" r="3.5" fill="rgba(244,63,94,0.14)" />
-                            <circle cx="48.5" cy="31.5" r="3.5" fill="rgba(244,63,94,0.14)" />
-                            <!-- Cabeza tierna -->
-                            <ellipse cx="40" cy="38" rx="9" ry="7.8" fill="rgba(244,63,94,0.14)" />
-                            <circle cx="37" cy="37" r="1" fill="#f9a8d4" stroke="none" />
-                            <circle cx="43" cy="37" r="1" fill="#f9a8d4" stroke="none" />
-                            <ellipse cx="40" cy="39.5" rx="1.6" ry="1.1" fill="#fb7185" stroke="none" />
-                            <path d="M37.5 42 Q40 44 42.5 42" stroke-width="1.3" />
-                            <!-- Playera estilizada en acento rosa neón -->
-                            <path d="M31 45 C35 47, 45 47, 49 45 L51 55 C45 57, 35 57, 29 55 Z" fill="rgba(244,63,94,0.45)" />
-                            <!-- Pancita y patitas sentado -->
-                            <path d="M30 55 C28 62, 33 66, 40 66 C47 66, 52 62, 50 55" fill="rgba(249,168,212,0.12)" />
-                            <ellipse cx="26" cy="64" rx="5.5" ry="3.5" fill="rgba(244,63,94,0.18)" />
-                            <ellipse cx="54" cy="64" rx="5.5" ry="3.5" fill="rgba(244,63,94,0.18)" />
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">03 // POOH</div>
-                        <h3 class="font-display text-sm sm:text-base font-bold text-white mt-0.5">Dulzura & Calma</h3>
-                    </div>
-                </button>
-
-                <!-- 4. COCODRILO -->
-                <button id="card-croc" onclick="selectCharacter('croc', false)"
-                    class="character-card group text-left p-4 sm:p-5 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-3 cursor-pointer">
-                    <div class="w-20 h-20 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center p-1.5">
-                        <svg class="w-16 h-16 svg-neon-glow" viewBox="0 0 80 80" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <!-- Cresta dorsal y cola en silueta elegante -->
-                            <path d="M12 56 C18 46, 26 42, 36 41 L42 32 C46 27, 52 27, 56 30 L68 27 C72 27, 73 31, 70 35 L58 41 C54 45, 52 51, 52 57 L62 60 L58 63 L46 61 C36 61, 24 61, 12 56 Z" fill="rgba(244,63,94,0.18)" />
-                            <!-- Escamas / cresta dorsal -->
-                            <path d="M17 49 L20 45 L23 46 L26 42 L29 43 L32 39 L35 40" stroke-width="1.5" />
-                            <!-- Ojo decidido -->
-                            <path d="M46 31 L51 32.5" stroke-width="1.6" />
-                            <circle cx="48.5" cy="33.5" r="1.4" fill="#f43f5e" stroke="none" />
-                            <!-- Fosa nasal en la punta del hocico -->
-                            <circle cx="66.5" cy="29.5" r="0.9" fill="#f9a8d4" stroke="none" />
-                            <!-- Mandíbula y dientes definidos -->
-                            <path d="M49 40 L67 34" stroke-width="1.4" />
-                            <path d="M53 39 L54.5 41.5 L56 38 M58 37.2 L59.5 39.8 L61 36.2 M63 35.5 L64.2 38 L65.5 34.5" stroke-width="1.3" />
-                            <!-- Pata delantera firme -->
-                            <path d="M34 55 L31 63 L27 63 M31 63 L34 64" stroke-width="1.6" />
-                            <path d="M48 54 L51 62" stroke-width="1.6" />
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">04 // COCODRILO</div>
-                        <h3 class="font-display text-sm sm:text-base font-bold text-white mt-0.5">Valentía & Retos</h3>
-                    </div>
-                </button>
-            </div>
-
-            <!-- Cápsula Dinámica de Reflexión del Personaje Seleccionado -->
-            <div id="characterQuoteBox" class="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-obsidian via-charcoal to-obsidian border border-pink-500/30 transition-all">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
-                    <span id="charBadge" class="font-mono text-xs text-neonPink font-semibold tracking-wider">
-                        ◆ STITCH // OHANA & AVENTURA
-                    </span>
-                    <span class="font-mono text-[11px] text-zinc-500">FILOSOFÍA NIVEL 30</span>
-                </div>
-                <p id="charQuoteText" class="text-zinc-200 text-sm sm:text-base leading-relaxed font-light">
-                    "Ohana significa familia, y la familia nunca abandona ni olvida lo que te hace sonreír. Cumplir 30 es tener la libertad de elegir nuestras propias aventuras y seguir explorando el mundo con ojos llenos de curiosidad."
+                <h2 class="font-display text-2xl sm:text-3xl font-bold text-white">
+                    Sorpresas Selladas hasta tu Cumpleaños
+                </h2>
+                <p class="text-zinc-400 text-sm sm:text-base font-light">
+                    En cuanto el reloj llegue a cero este <span class="text-roseGold font-medium">28 de Noviembre</span>, se desbloquearán automáticamente todos los apartados preparados para ti:
                 </p>
             </div>
-
-            <!-- Sub-sección: Wishlist / Sueños por Cumplir v3.0 -->
-            <div class="pt-4 border-t border-zinc-800/80 space-y-4">
-                <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 max-w-3xl mx-auto pt-2 text-left">
+                <div class="p-3.5 rounded-2xl bg-obsidian/80 border border-zinc-800/90 flex items-center gap-3">
+                    <span class="text-lg">🌴</span>
                     <div>
-                        <h3 class="font-display text-lg sm:text-xl font-bold text-white flex items-center gap-2">
-                            <span class="text-neonPink">✦</span> Wishlist // Sueños por Cumplir en los 30s
-                        </h3>
-                        <p class="text-zinc-400 text-xs sm:text-sm">Metas, viajes y pequeños gustos que vamos a hacer realidad juntos.</p>
+                        <div class="font-mono text-[10px] text-roseGold">LOCKED</div>
+                        <div class="font-display text-xs sm:text-sm font-semibold text-white">Tropical Memories</div>
                     </div>
-                    <span id="dreamsCounter" class="font-mono text-xs text-roseGold">0 cumplidos</span>
+                </div>
+                <div class="p-3.5 rounded-2xl bg-obsidian/80 border border-zinc-800/90 flex items-center gap-3">
+                    <span class="text-lg">✨</span>
+                    <div>
+                        <div class="font-mono text-[10px] text-roseGold">LOCKED</div>
+                        <div class="font-display text-xs sm:text-sm font-semibold text-white">Core Values & Wishlist</div>
+                    </div>
+                </div>
+                <div class="p-3.5 rounded-2xl bg-obsidian/80 border border-zinc-800/90 flex items-center gap-3">
+                    <span class="text-lg">💌</span>
+                    <div>
+                        <div class="font-mono text-[10px] text-roseGold">LOCKED</div>
+                        <div class="font-display text-xs sm:text-sm font-semibold text-white">Decrypted Message</div>
+                    </div>
+                </div>
+                <div class="p-3.5 rounded-2xl bg-obsidian/80 border border-zinc-800/90 flex items-center gap-3">
+                    <span class="text-lg">🗓️</span>
+                    <div>
+                        <div class="font-mono text-[10px] text-roseGold">LOCKED</div>
+                        <div class="font-display text-xs sm:text-sm font-semibold text-white">Itinerary 28 Nov</div>
+                    </div>
+                </div>
+            </div>
+            <p class="font-mono text-[11px] text-zinc-500 pt-1">
+                Mientras llega la medianoche, puedes reproducir la balada de piano de fondo 🎹✨
+            </p>
+        </section>
+
+        <!-- CONTENEDOR DE TODAS LAS SECCIONES (ABIERTO PARA PULIR DETALLES HASTA DECIR "CERRAR") -->
+        <div id="unlockedSectionsContainer" class="space-y-10 sm:space-y-16">
+
+            <!-- 3. TROPICAL_MEMORIES // CARRUSEL DEL FESTEJO TROPICAL -->
+            <section id="tropical-memories" class="glass-card rounded-3xl p-4 sm:p-8 md:p-10 relative overflow-hidden space-y-5 sm:space-y-6">
+                <!-- Hoja tropical decorativa -->
+                <svg class="hidden sm:block absolute -top-6 -right-6 w-40 h-40 opacity-20 pointer-events-none svg-neon-glow" viewBox="0 0 120 120" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 102 C35 72, 62 45, 102 18" />
+                    <path d="M45 72 C32 62, 24 46, 32 32 C42 36, 52 46, 58 58" />
+                    <path d="M62 56 C52 42, 48 24, 58 14 C68 20, 74 34, 75 46" />
+                    <path d="M77 42 C72 28, 74 14, 84 8 C92 16, 94 28, 90 38" />
+                    <path d="M48 75 C62 86, 80 90, 92 80 C86 70, 74 62, 62 62" />
+                    <path d="M65 59 C80 68, 96 68, 106 58 C98 49, 86 44, 75 47" />
+                </svg>
+
+                <!-- Encabezado -->
+                <div class="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-zinc-800/80 pb-5">
+                    <div>
+                        <div class="inline-flex items-center gap-2 font-mono text-[11px] sm:text-xs text-neonPink uppercase tracking-wider">
+                            <span>🌴</span>
+                            <span>// TROPICAL_MEMORIES // SÁBADO_PASADO</span>
+                        </div>
+                        <h2 class="font-display text-xl sm:text-3xl font-bold text-white mt-1">
+                            Tropical_Memories // Festejo Tropical
+                        </h2>
+                        <p class="text-zinc-400 text-xs sm:text-sm mt-1">
+                            Aloha vibes, flores y sonrisas: desliza o sube tus fotos favoritas del pre-festejo.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                        <input type="file" id="tropicalPhotoInput" accept="image/*" multiple class="hidden" onchange="handleTropicalFileSelect(event)">
+                        <button onclick="document.getElementById('tropicalPhotoInput').click()" 
+                            class="btn-pink-glow text-white font-mono text-xs font-bold px-4 py-2.5 rounded-xl inline-flex items-center gap-2 cursor-pointer">
+                            <span>📸</span>
+                            <span>Subir Fotos</span>
+                        </button>
+                        <button id="carouselPlayPauseBtn" onclick="toggleCarouselAutoplay()" 
+                            class="px-3.5 py-2.5 rounded-xl font-mono text-xs bg-obsidian/90 text-roseGold border border-pink-500/30 hover:border-neonPink transition cursor-pointer">
+                            ⏸ Pausar
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Formulario rápido para añadir sueños -->
-                <form onsubmit="addDreamItem(event)" class="flex flex-col sm:flex-row gap-2.5">
-                    <input type="text" id="dreamInput" required placeholder="Ej. Viajar juntos a nuestro lugar soñado, aprender algo nuevo..."
-                        class="flex-1 rounded-xl bg-obsidian border border-zinc-700/80 focus:border-neonPink text-white px-4 py-2.5 text-sm outline-none transition">
-                    <button type="submit" class="px-5 py-2.5 rounded-xl btn-pink-glow text-white font-mono text-xs font-bold tracking-wide cursor-pointer shrink-0">
-                        + Agregar Sueño
+                <!-- Visor del Carrusel con soporte táctil (swipe) y Drag & Drop -->
+                <div id="tropicalDropZone" class="relative rounded-2xl bg-obsidian/90 border border-pink-500/25 overflow-hidden group transition-all touch-pan-y">
+                    <div class="w-full h-1 bg-zinc-900 overflow-hidden">
+                        <div id="carouselProgressBar" class="h-full bg-gradient-to-r from-neonPink via-softRose to-roseGold transition-all duration-100 ease-linear" style="width: 0%;"></div>
+                    </div>
+
+                    <div class="relative aspect-[4/3] sm:aspect-[16/10] md:aspect-[16/9] w-full flex items-center justify-center bg-gradient-to-br from-obsidian via-charcoal to-obsidian overflow-hidden">
+                        <img id="carouselActiveImage" src="" alt="Recuerdo Festejo Tropical" onclick="openLightbox()"
+                            class="w-full h-full object-contain sm:object-cover cursor-zoom-in transition-opacity duration-500 select-none">
+
+                        <!-- Barra superior del visor -->
+                        <div class="absolute top-3 left-3 right-3 flex items-center justify-between gap-2 pointer-events-none">
+                            <span id="carouselSlideBadge" class="px-2.5 sm:px-3 py-1 rounded-full bg-obsidian/85 backdrop-blur-md border border-pink-500/30 font-mono text-[10px] sm:text-[11px] text-roseGold">
+                                01 / 02 • MUESTRA TROPICAL
+                            </span>
+
+                            <div class="flex items-center gap-1.5 sm:gap-2 pointer-events-auto">
+                                <button onclick="openLightbox()" title="Ver en pantalla completa"
+                                    class="w-9 h-9 rounded-full bg-obsidian/85 backdrop-blur-md border border-zinc-700/80 text-zinc-200 hover:border-neonPink hover:text-roseGold text-xs flex items-center justify-center transition cursor-pointer">
+                                    🔍
+                                </button>
+                                <button id="deleteTropicalPhotoBtn" onclick="deleteCurrentTropicalPhoto()" title="Eliminar esta foto"
+                                    class="w-9 h-9 rounded-full bg-obsidian/85 backdrop-blur-md border border-zinc-700/80 text-zinc-300 hover:border-neonPink hover:text-neonPink text-xs flex items-center justify-center transition cursor-pointer">
+                                    🗑️
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Flechas Anterior / Siguiente -->
+                        <button onclick="prevTropicalSlide()" aria-label="Foto anterior"
+                            class="absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-obsidian/85 backdrop-blur-md border border-pink-500/35 text-white hover:bg-neonPink hover:border-neonPink flex items-center justify-center text-lg transition opacity-90 md:opacity-0 md:group-hover:opacity-100 cursor-pointer">
+                            ‹
+                        </button>
+                        <button onclick="nextTropicalSlide()" aria-label="Siguiente foto"
+                            class="absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-obsidian/85 backdrop-blur-md border border-pink-500/35 text-white hover:bg-neonPink hover:border-neonPink flex items-center justify-center text-lg transition opacity-90 md:opacity-0 md:group-hover:opacity-100 cursor-pointer">
+                            ›
+                        </button>
+
+                        <!-- Pie de foto editable -->
+                        <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-obsidian via-obsidian/90 to-transparent pt-10 pb-3.5 px-3.5 sm:px-6">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <div class="flex-1 min-w-0">
+                                    <p id="carouselCaptionText" contenteditable="true" spellcheck="false" onblur="saveTropicalCaption()"
+                                        title="Haz clic para editar el recuerdo de esta foto"
+                                        class="font-display text-xs sm:text-base font-medium text-white outline-none focus:ring-1 focus:ring-neonPink rounded-lg px-2 py-0.5 cursor-text truncate sm:whitespace-normal">
+                                        Festejo Tropical • Sábado Pasado 🌺
+                                    </p>
+                                    <span class="font-mono text-[10px] text-zinc-400 px-2 hidden sm:inline">
+                                        [ Haz clic en el texto para editar la descripción del recuerdo ]
+                                    </span>
+                                </div>
+                                <div id="carouselDots" class="flex items-center gap-1.5 px-2 shrink-0"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Overlay visual al arrastrar archivos -->
+                    <div id="dropOverlay" class="hidden absolute inset-0 z-30 bg-obsidian/90 backdrop-blur-md border-2 border-dashed border-neonPink flex flex-col items-center justify-center gap-2 text-center p-6 pointer-events-none">
+                        <span class="text-4xl">🌺</span>
+                        <p class="font-display text-lg font-bold text-white">Suelta tus fotos del festejo tropical aquí</p>
+                        <p class="font-mono text-xs text-roseGold">Se optimizarán y guardarán automáticamente en el carrusel</p>
+                    </div>
+                </div>
+
+                <!-- Tira de Miniaturas -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+                    <div id="tropicalThumbnails" class="flex items-center gap-2.5 overflow-x-auto pb-1"></div>
+                    <div class="flex items-center gap-2 shrink-0 text-[11px] font-mono text-zinc-500">
+                        <span>Desliza o usa "Subir Fotos"</span>
+                        <button id="restoreSampleSlidesBtn" onclick="restoreDefaultTropicalSlides()" class="hidden text-roseGold hover:underline cursor-pointer">
+                            • Restaurar muestra
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. NUESTROS 30s & SUEÑOS POR CUMPLIR (4 SILUETAS SVG NEÓN + WISHLIST v3.0) -->
+            <section id="suenos" class="glass-card rounded-3xl p-4 sm:p-8 md:p-10 space-y-7 sm:space-y-8">
+                <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-zinc-800/80 pb-5">
+                    <div>
+                        <span class="font-mono text-[11px] sm:text-xs text-neonPink uppercase tracking-wider">// CORE_VALUES & DREAMS_v3.0</span>
+                        <h2 class="font-display text-xl sm:text-3xl font-bold text-white mt-1">Nuestros 30s & Sueños por Cumplir</h2>
+                        <p class="text-zinc-400 text-xs sm:text-sm mt-1">
+                            Crecer no es dejar de ser tú: toca cada emblema para descubrir lo que simboliza en esta nueva etapa.
+                        </p>
+                    </div>
+                    <span class="font-mono text-[11px] sm:text-xs px-3 py-1.5 rounded-full bg-pink-500/10 border border-pink-500/25 text-roseGold self-start sm:self-auto shrink-0">
+                        4 Guardianes de Esencia
+                    </span>
+                </div>
+
+                <!-- Grid Responsive de los 4 Personajes en Siluetas SVG Neón -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                    
+                    <!-- 1. STITCH -->
+                    <button id="card-stitch" onclick="selectCharacter('stitch', false)"
+                        class="character-card active-char p-4 sm:p-5 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-3 cursor-pointer">
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center shrink-0">
+                            <svg class="w-12 h-12 sm:w-14 sm:h-14 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 26 C11 16, 6 22, 9 32 C11 37, 17 37, 21 34" />
+                                <path d="M13 24 C11 26, 12 30, 16 31" stroke-dasharray="2 2"/>
+                                <path d="M43 26 C53 16, 58 22, 55 32 C53 37, 47 37, 43 34" />
+                                <path d="M51 24 C53 26, 52 30, 48 31" stroke-dasharray="2 2"/>
+                                <path d="M21 30 C21 22, 43 22, 43 30 C44 40, 39 46, 32 46 C25 46, 20 40, 21 30 Z" />
+                                <path d="M30 22 L32 18 L34 22" />
+                                <ellipse cx="26.5" cy="33" rx="2.5" ry="3.2" />
+                                <ellipse cx="37.5" cy="33" rx="2.5" ry="3.2" />
+                                <path d="M30 37.5 Q32 36 34 37.5 Q32 39.5 30 37.5 Z" />
+                                <path d="M27 41.5 Q32 44 37 41.5" />
+                            </svg>
+                        </div>
+                        <div class="w-full">
+                            <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">01 // STITCH</div>
+                            <h3 class="font-display text-sm sm:text-base font-bold text-white mt-0.5 leading-snug">Ohana & Aventura</h3>
+                        </div>
                     </button>
+
+                    <!-- 2. MARIE LA GATITA -->
+                    <button id="card-marie" onclick="selectCharacter('marie', false)"
+                        class="character-card p-4 sm:p-5 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-3 cursor-pointer">
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center shrink-0">
+                            <svg class="w-12 h-12 sm:w-14 sm:h-14 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 28 L19 16 L28 23" />
+                                <path d="M43 28 L45 16 L36 23" />
+                                <path d="M32 21 L25 16 C23 19, 23 22, 26 23 L32 21 Z" fill="rgba(244,63,94,0.28)" />
+                                <path d="M32 21 L39 16 C41 19, 41 22, 38 23 L32 21 Z" fill="rgba(244,63,94,0.28)" />
+                                <circle cx="32" cy="21" r="1.5" />
+                                <path d="M20 29 C19 39, 24 45, 32 45 C40 45, 45 39, 44 29" />
+                                <path d="M25 34 Q27 32 29 34" />
+                                <path d="M35 34 Q37 32 39 34" />
+                                <path d="M31 38 L33 38 L32 39.5 Z" />
+                                <path d="M15 36 L21 37 M15 40 L21 39.5" />
+                                <path d="M49 36 L43 37 M49 40 L43 39.5" />
+                            </svg>
+                        </div>
+                        <div class="w-full">
+                            <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">02 // MARIE</div>
+                            <h3 class="font-display text-sm sm:text-base font-bold text-white mt-0.5 leading-snug">Elegancia & Esencia</h3>
+                        </div>
+                    </button>
+
+                    <!-- 3. WINNIE POOH -->
+                    <button id="card-pooh" onclick="selectCharacter('pooh', false)"
+                        class="character-card p-4 sm:p-5 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-3 cursor-pointer">
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center shrink-0">
+                            <svg class="w-12 h-12 sm:w-14 sm:h-14 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="21" cy="21" r="4.5" />
+                                <circle cx="43" cy="21" r="4.5" />
+                                <path d="M23 23 C19 27, 19 36, 24 40 C28 43, 36 43, 40 40 C45 36, 45 27, 41 23" />
+                                <circle cx="27.5" cy="30" r="1.4" fill="#fb7185" />
+                                <circle cx="36.5" cy="30" r="1.4" fill="#fb7185" />
+                                <path d="M30.5 33.5 Q32 32.5 33.5 33.5 Q32 35 30.5 33.5 Z" />
+                                <path d="M28 37 Q32 39.5 36 37" />
+                                <path d="M26 44 L38 44 L39 51 C39 53, 25 53, 25 51 Z" />
+                                <path d="M26 46 Q29 48 32 46 Q35 48 38 46" />
+                            </svg>
+                        </div>
+                        <div class="w-full">
+                            <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">03 // POOH</div>
+                            <h3 class="font-display text-sm sm:text-base font-bold text-white mt-0.5 leading-snug">Dulzura & Calma</h3>
+                        </div>
+                    </button>
+
+                    <!-- 4. COCODRILO -->
+                    <button id="card-croc" onclick="selectCharacter('croc', false)"
+                        class="character-card p-4 sm:p-5 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-3 cursor-pointer">
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center shrink-0">
+                            <svg class="w-12 h-12 sm:w-14 sm:h-14 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M32 12 L33.5 15.5 L37 16 L34.3 18.4 L35 22 L32 20.1 L29 22 L29.7 18.4 L27 16 L30.5 15.5 Z" />
+                                <path d="M23 29 C23 24, 29 24, 29 28" />
+                                <path d="M35 28 C35 24, 41 24, 41 29" />
+                                <circle cx="26" cy="28" r="1.4" fill="#fb7185" />
+                                <circle cx="38" cy="28" r="1.4" fill="#fb7185" />
+                                <path d="M16 34 C16 29, 48 29, 48 34 C48 41, 41 44, 32 44 C23 44, 16 41, 16 34 Z" />
+                                <circle cx="27" cy="33.5" r="0.9" />
+                                <circle cx="37" cy="33.5" r="0.9" />
+                                <path d="M21 38 Q32 42.5 43 38" />
+                                <path d="M25 39.5 L26 41 L27 39.8 M37 39.8 L38 41 L39 39.5" />
+                            </svg>
+                        </div>
+                        <div class="w-full">
+                            <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">04 // COCODRILO</div>
+                            <h3 class="font-display text-sm sm:text-base font-bold text-white mt-0.5 leading-snug">Valentía & Retos</h3>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Cápsula Dinámica de Reflexión -->
+                <div id="characterQuoteBox" class="p-4 sm:p-6 rounded-2xl bg-gradient-to-r from-obsidian via-charcoal to-obsidian border border-pink-500/30 transition-all">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                        <span id="charBadge" class="font-mono text-[11px] sm:text-xs text-neonPink font-semibold tracking-wider">
+                            ◆ STITCH // OHANA & AVENTURA
+                        </span>
+                        <span class="font-mono text-[10px] sm:text-[11px] text-zinc-500">FILOSOFÍA NIVEL 30</span>
+                    </div>
+                    <p id="charQuoteText" class="text-zinc-200 text-sm sm:text-base leading-relaxed font-light">
+                        "Ohana significa familia, y la familia nunca abandona ni olvida lo que te hace sonreír. Cumplir 30 es tener la libertad de elegir nuestras propias aventuras y seguir explorando el mundo con ojos llenos de curiosidad."
+                    </p>
+                </div>
+
+                <!-- Wishlist // Sueños por Cumplir v3.0 -->
+                <div class="pt-4 border-t border-zinc-800/80 space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                            <h3 class="font-display text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+                                <span class="text-neonPink">✦</span> Wishlist // Sueños por Cumplir en los 30s
+                            </h3>
+                            <p class="text-zinc-400 text-xs sm:text-sm">Metas, viajes y pequeños gustos que vamos a hacer realidad juntos.</p>
+                        </div>
+                        <span id="dreamsCounter" class="font-mono text-xs text-roseGold">0 cumplidos</span>
+                    </div>
+
+                    <form onsubmit="addDreamItem(event)" class="flex flex-col sm:flex-row gap-2.5">
+                        <input type="text" id="dreamInput" required placeholder="Ej. Viajar juntos a nuestro lugar soñado..."
+                            class="flex-1 rounded-xl bg-obsidian border border-zinc-700/80 focus:border-neonPink text-white px-4 py-3 text-base sm:text-sm outline-none transition">
+                        <button type="submit" class="px-5 py-3 rounded-xl btn-pink-glow text-white font-mono text-xs font-bold tracking-wide cursor-pointer shrink-0">
+                            + Agregar Sueño
+                        </button>
+                    </form>
+
+                    <div id="dreamsList" class="grid grid-cols-1 md:grid-cols-2 gap-2.5"></div>
+                </div>
+            </section>
+
+            <!-- 5. CARTA DE FELICITACIÓN INTERACTIVA -->
+            <section class="glass-card glass-card-hover rounded-3xl p-4 sm:p-8 md:p-10 space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800/80 pb-5">
+                    <div>
+                        <span class="font-mono text-[11px] sm:text-xs text-neonPink uppercase tracking-wider">// DECRYPTED_MESSAGE.TXT</span>
+                        <h2 class="font-display text-xl sm:text-3xl font-bold text-white mt-1">Una carta para tus 30 años</h2>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <button id="toggleEditLetterBtn" onclick="toggleLetterMode()" 
+                            class="px-4 py-2 rounded-xl font-mono text-xs bg-pink-500/15 text-roseGold border border-pink-500/30 hover:bg-pink-500/25 transition cursor-pointer">
+                            ✏️ Editar mensaje
+                        </button>
+                        <button id="saveLetterBtn" onclick="saveLetter()" 
+                            class="hidden px-4 py-2 rounded-xl font-mono text-xs btn-pink-glow text-white font-medium cursor-pointer">
+                            💾 Guardar carta
+                        </button>
+                    </div>
+                </div>
+
+                <div id="letterViewMode" class="space-y-4">
+                    <div class="relative p-5 sm:p-8 rounded-2xl bg-obsidian/70 border border-pink-500/15">
+                        <span class="absolute top-3 right-4 font-serif text-4xl sm:text-5xl text-neonPink/20 select-none">”</span>
+                        <div id="letterDisplay" class="text-zinc-200 text-sm sm:text-base md:text-lg leading-relaxed whitespace-pre-line font-light"></div>
+                    </div>
+                    <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] sm:text-xs font-mono text-zinc-500 px-1">
+                        <span>Guardado automáticamente en este navegador</span>
+                        <button onclick="resetDefaultLetter()" class="hover:text-roseGold underline transition cursor-pointer">Restaurar plantilla original</button>
+                    </div>
+                </div>
+
+                <div id="letterEditMode" class="hidden space-y-4">
+                    <label for="letterTextarea" class="block font-mono text-xs text-zinc-400">
+                        Escribe o personaliza tu felicitación:
+                    </label>
+                    <textarea id="letterTextarea" rows="9" 
+                        class="w-full rounded-2xl bg-obsidian border border-pink-500/40 focus:border-neonPink focus:ring-2 focus:ring-neonPink/30 text-zinc-100 p-4 sm:p-5 text-base sm:text-base leading-relaxed outline-none transition resize-y"
+                        placeholder="Escribe aquí tu mensaje especial de cumpleaños..."></textarea>
+                    <div class="flex justify-end gap-3">
+                        <button onclick="cancelLetterEdit()" class="px-4 py-2.5 rounded-xl font-mono text-xs text-zinc-400 hover:text-white transition cursor-pointer">
+                            Cancelar
+                        </button>
+                        <button onclick="saveLetter()" class="px-5 py-2.5 rounded-xl font-mono text-xs btn-pink-glow text-white font-medium cursor-pointer">
+                            💾 Guardar cambios
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. ITINERARY // PLAN DE FESTEJO -->
+            <section class="glass-card rounded-3xl p-4 sm:p-8 md:p-10 space-y-7 sm:space-y-8">
+                <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-zinc-800/80 pb-5">
+                    <div>
+                        <span class="font-mono text-[11px] sm:text-xs text-neonPink uppercase tracking-wider">// ROADMAP_28_NOV</span>
+                        <h2 class="font-display text-xl sm:text-3xl font-bold text-white mt-1">Itinerary // Plan de Festejo</h2>
+                        <p class="text-zinc-400 text-xs sm:text-sm mt-1">Actividades programadas para celebrar tus 30 como se debe.</p>
+                    </div>
+                    <span id="planCounterBadge" class="font-mono text-xs px-3 py-1.5 rounded-full bg-zinc-900 border border-zinc-800 text-roseGold self-start sm:self-auto shrink-0">
+                        0 actividades listas
+                    </span>
+                </div>
+
+                <form id="addPlanForm" onsubmit="addPlanItem(event)" class="grid grid-cols-1 md:grid-cols-12 gap-3 bg-obsidian/70 p-4 rounded-2xl border border-pink-500/15">
+                    <div class="md:col-span-3">
+                        <label class="block font-mono text-[11px] text-zinc-400 mb-1">Hora</label>
+                        <input type="time" id="planTime" required value="20:00"
+                            class="w-full rounded-xl bg-charcoal border border-zinc-700/80 focus:border-neonPink text-white px-3 py-2.5 text-base sm:text-sm font-mono outline-none transition">
+                    </div>
+                    <div class="md:col-span-4">
+                        <label class="block font-mono text-[11px] text-zinc-400 mb-1">Actividad / Lugar</label>
+                        <input type="text" id="planTitle" required placeholder="Ej. Cena especial / Sorpresa"
+                            class="w-full rounded-xl bg-charcoal border border-zinc-700/80 focus:border-neonPink text-white px-3.5 py-2.5 text-base sm:text-sm outline-none transition">
+                    </div>
+                    <div class="md:col-span-3">
+                        <label class="block font-mono text-[11px] text-zinc-400 mb-1">Nota o detalle (opcional)</label>
+                        <input type="text" id="planNote" placeholder="Dress code, pista..."
+                            class="w-full rounded-xl bg-charcoal border border-zinc-700/80 focus:border-neonPink text-white px-3.5 py-2.5 text-base sm:text-sm outline-none transition">
+                    </div>
+                    <div class="md:col-span-2 flex items-end">
+                        <button type="submit" class="w-full py-3 md:py-2.5 px-4 rounded-xl btn-pink-glow text-white font-mono text-xs font-bold tracking-wide cursor-pointer">
+                            + Agregar
+                        </button>
+                    </div>
                 </form>
 
-                <!-- Lista de sueños -->
-                <div id="dreamsList" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    <!-- Se renderiza con JS -->
-                </div>
-            </div>
-        </section>
+                <div id="planList" class="space-y-3 relative"></div>
+            </section>
 
-        <!-- 4. CARTA DE FELICITACIÓN INTERACTIVA -->
-        <section class="glass-card glass-card-hover rounded-3xl p-6 sm:p-10 space-y-6">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800/80 pb-5">
-                <div>
-                    <span class="font-mono text-xs text-neonPink uppercase tracking-wider">// DECRYPTED_MESSAGE.TXT</span>
-                    <h2 class="font-display text-2xl sm:text-3xl font-bold text-white mt-1">Una carta para tus 30 años</h2>
-                </div>
+        </div> <!-- Fin de #unlockedSectionsContainer -->
 
-                <!-- Controles de Edición / Vista -->
-                <div class="flex items-center gap-2">
-                    <button id="toggleEditLetterBtn" onclick="toggleLetterMode()" 
-                        class="px-4 py-2 rounded-xl font-mono text-xs bg-pink-500/15 text-roseGold border border-pink-500/30 hover:bg-pink-500/25 transition cursor-pointer">
-                        ✏️ Editar mensaje
-                    </button>
-                    <button id="saveLetterBtn" onclick="saveLetter()" 
-                        class="hidden px-4 py-2 rounded-xl font-mono text-xs btn-pink-glow text-white font-medium cursor-pointer">
-                        💾 Guardar carta
-                    </button>
-                </div>
-            </div>
-
-            <!-- Modo Lectura (Elegante) -->
-            <div id="letterViewMode" class="space-y-5">
-                <div class="relative p-6 sm:p-8 rounded-2xl bg-obsidian/70 border border-pink-500/15">
-                    <span class="absolute top-4 right-5 font-serif text-5xl text-neonPink/20 select-none">”</span>
-                    <div id="letterDisplay" class="text-zinc-200 text-base sm:text-lg leading-relaxed whitespace-pre-line font-light"></div>
-                </div>
-                <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-zinc-500 px-1">
-                    <span>Guardado automáticamente en este navegador</span>
-                    <button onclick="resetDefaultLetter()" class="hover:text-roseGold underline transition cursor-pointer">Restaurar plantilla original</button>
-                </div>
-            </div>
-
-            <!-- Modo Edición -->
-            <div id="letterEditMode" class="hidden space-y-4">
-                <label for="letterTextarea" class="block font-mono text-xs text-zinc-400">
-                    Escribe o personaliza tu felicitación (se conservarán los saltos de línea):
-                </label>
-                <textarea id="letterTextarea" rows="9" 
-                    class="w-full rounded-2xl bg-obsidian border border-pink-500/40 focus:border-neonPink focus:ring-2 focus:ring-neonPink/30 text-zinc-100 p-4 sm:p-5 text-sm sm:text-base leading-relaxed outline-none transition resize-y"
-                    placeholder="Escribe aquí tu mensaje especial de cumpleaños..."></textarea>
-                <div class="flex justify-end gap-3">
-                    <button onclick="cancelLetterEdit()" class="px-4 py-2 rounded-xl font-mono text-xs text-zinc-400 hover:text-white transition cursor-pointer">
-                        Cancelar
-                    </button>
-                    <button onclick="saveLetter()" class="px-5 py-2 rounded-xl font-mono text-xs btn-pink-glow text-white font-medium cursor-pointer">
-                        💾 Guardar cambios
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- 5. ITINERARY // PLAN DE FESTEJO -->
-        <section class="glass-card rounded-3xl p-6 sm:p-10 space-y-8">
-            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-800/80 pb-5">
-                <div>
-                    <span class="font-mono text-xs text-neonPink uppercase tracking-wider">// ROADMAP_28_NOV</span>
-                    <h2 class="font-display text-2xl sm:text-3xl font-bold text-white mt-1">Itinerary // Plan de Festejo</h2>
-                    <p class="text-zinc-400 text-sm mt-1">Actividades programadas para celebrar tus 30 como se debe.</p>
-                </div>
-                <span id="planCounterBadge" class="font-mono text-xs px-3 py-1.5 rounded-full bg-zinc-900 border border-zinc-800 text-roseGold self-start sm:self-auto">
-                    0 actividades listas
-                </span>
-            </div>
-
-            <!-- Formulario rápido para agregar actividades (listo para usar mañana) -->
-            <form id="addPlanForm" onsubmit="addPlanItem(event)" class="grid grid-cols-1 sm:grid-cols-12 gap-3 bg-obsidian/70 p-4 rounded-2xl border border-pink-500/15">
-                <div class="sm:col-span-3">
-                    <label class="block font-mono text-[11px] text-zinc-400 mb-1">Hora</label>
-                    <input type="time" id="planTime" required value="20:00"
-                        class="w-full rounded-xl bg-charcoal border border-zinc-700/80 focus:border-neonPink text-white px-3 py-2.5 text-sm font-mono outline-none transition">
-                </div>
-                <div class="sm:col-span-4">
-                    <label class="block font-mono text-[11px] text-zinc-400 mb-1">Actividad / Lugar</label>
-                    <input type="text" id="planTitle" required placeholder="Ej. Cena especial / Sorpresa"
-                        class="w-full rounded-xl bg-charcoal border border-zinc-700/80 focus:border-neonPink text-white px-3.5 py-2.5 text-sm outline-none transition">
-                </div>
-                <div class="sm:col-span-3">
-                    <label class="block font-mono text-[11px] text-zinc-400 mb-1">Nota o detalle (opcional)</label>
-                    <input type="text" id="planNote" placeholder="Dress code, pista..."
-                        class="w-full rounded-xl bg-charcoal border border-zinc-700/80 focus:border-neonPink text-white px-3.5 py-2.5 text-sm outline-none transition">
-                </div>
-                <div class="sm:col-span-2 flex items-end">
-                    <button type="submit" class="w-full py-2.5 px-4 rounded-xl btn-pink-glow text-white font-mono text-xs font-bold tracking-wide cursor-pointer">
-                        + Agregar
-                    </button>
-                </div>
-            </form>
-
-            <!-- Línea de tiempo de actividades -->
-            <div id="planList" class="space-y-3 relative">
-                <!-- Se renderiza dinámicamente con JS -->
-            </div>
-        </section>
-
-        <!-- 6. ACCIÓN FINAL DE CELEBRACIÓN -->
+        <!-- 7. ACCIÓN FINAL DE CELEBRACIÓN -->
         <section class="text-center py-6 space-y-5">
             <button onclick="launchMegaCelebration()" 
-                class="btn-pink-glow px-8 py-4 rounded-full font-display text-base sm:text-lg font-bold text-white tracking-wide inline-flex items-center gap-3 cursor-pointer">
+                class="btn-pink-glow px-6 sm:px-8 py-4 rounded-full font-display text-sm sm:text-lg font-bold text-white tracking-wide inline-flex items-center gap-2.5 sm:gap-3 cursor-pointer">
                 <span>🚀</span>
                 <span>Lanzar Sorpresa // Celebrar Nivel 30</span>
             </button>
-            <p class="font-mono text-xs text-zinc-500">
+            <p class="font-mono text-[11px] sm:text-xs text-zinc-500 px-2">
                 Hecho con código, cariño y tu esencia favorita • 28 de Noviembre de 2026
             </p>
         </section>
 
     </main>
 
-    <!-- Notificación Toast Flotante (Sin usar alert()) -->
-    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+    <!-- REPRODUCTOR DE MÚSICA INSTRUMENTAL FLOTANTE -->
+    <aside id="musicWidget" class="fixed bottom-4 left-4 z-40 max-w-[calc(100vw-2rem)]">
+        <audio id="customAudioPlayer" src="musica.mp3" loop preload="none"></audio>
+        <input type="file" id="customAudioInput" accept="audio/*" class="hidden" onchange="handleCustomAudioFile(event)">
+
+        <!-- Vista Compacta -->
+        <div id="musicMiniPill" onclick="toggleMusicWidgetCollapse()"
+            class="glass-card border border-pink-500/40 rounded-full px-3.5 py-2.5 flex items-center gap-2.5 cursor-pointer hover:border-neonPink transition shadow-2xl">
+            <div id="miniEqBars" class="flex items-end gap-[2px] h-4 w-4 justify-center">
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+            </div>
+            <span id="miniPillText" class="font-mono text-xs text-roseGold font-medium whitespace-nowrap">
+                🎹 Balada Piano
+            </span>
+        </div>
+
+        <!-- Vista Expandida -->
+        <div id="musicExpandedCard" class="hidden glass-card border border-pink-500/40 rounded-2xl p-4 w-[290px] sm:w-[320px] shadow-2xl space-y-3">
+            <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2.5 min-w-0">
+                    <div id="expandedEqBars" class="flex items-end gap-[2px] h-4 w-5 justify-center shrink-0">
+                        <span class="eq-bar"></span>
+                        <span class="eq-bar"></span>
+                        <span class="eq-bar"></span>
+                        <span class="eq-bar"></span>
+                    </div>
+                    <div class="min-w-0">
+                        <div class="font-mono text-[10px] text-neonPink tracking-wider uppercase">SOUNDTRACK // v3.0</div>
+                        <div id="currentTrackTitle" class="font-display text-xs sm:text-sm font-semibold text-white truncate">
+                            Balada Piano (In My Heart)
+                        </div>
+                    </div>
+                </div>
+                <button onclick="toggleMusicWidgetCollapse()" title="Minimizar reproductor"
+                    class="w-7 h-7 rounded-lg bg-obsidian/80 border border-zinc-800 text-zinc-400 hover:text-white hover:border-pink-500/40 flex items-center justify-center text-xs cursor-pointer shrink-0">
+                    —
+                </button>
+            </div>
+
+            <!-- Selector de pistas instrumentales -->
+            <div class="grid grid-cols-3 gap-1.5">
+                <button id="trackBtn-piano" onclick="selectMusicTrack('piano')"
+                    class="px-2 py-1.5 rounded-xl font-mono text-[10px] border border-neonPink bg-neonPink/20 text-white transition cursor-pointer truncate">
+                    🎹 Balada
+                </button>
+                <button id="trackBtn-lofi" onclick="selectMusicTrack('lofi')"
+                    class="px-2 py-1.5 rounded-xl font-mono text-[10px] border border-zinc-800 bg-obsidian/80 text-zinc-400 hover:text-roseGold transition cursor-pointer truncate">
+                    ✨ Lo-Fi
+                </button>
+                <button id="trackBtn-mp3" onclick="selectMusicTrack('mp3')"
+                    class="px-2 py-1.5 rounded-xl font-mono text-[10px] border border-zinc-800 bg-obsidian/80 text-zinc-400 hover:text-roseGold transition cursor-pointer truncate">
+                    🎧 Tu MP3
+                </button>
+            </div>
+
+            <!-- Controles de reproducción y volumen -->
+            <div class="flex items-center gap-3">
+                <button id="playPauseMusicBtn" onclick="toggleMusicPlay()"
+                    class="w-10 h-10 rounded-full btn-pink-glow text-white flex items-center justify-center text-sm shrink-0 cursor-pointer">
+                    ▶
+                </button>
+
+                <div class="flex-1 flex items-center gap-2">
+                    <span class="text-xs text-zinc-400">🔈</span>
+                    <input id="musicVolumeSlider" type="range" min="0" max="100" value="65" oninput="setMusicVolume(this.value)"
+                        class="w-full accent-pink-500 cursor-pointer h-1.5 bg-zinc-800 rounded-lg">
+                    <span id="musicVolumeLabel" class="font-mono text-[10px] text-zinc-400 w-7 text-right">65%</span>
+                </div>
+            </div>
+
+            <!-- Opción rápida de MP3 local -->
+            <div class="flex items-center justify-between gap-2 pt-1 border-t border-zinc-800/70">
+                <button onclick="document.getElementById('customAudioInput').click()"
+                    class="font-mono text-[10px] text-roseGold hover:text-white underline cursor-pointer">
+                    📁 Cargar MP3 opcional
+                </button>
+                <span id="musicStatusHint" class="font-mono text-[10px] text-zinc-500 truncate">
+                    Listo para sonar
+                </span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Notificación Toast Flotante -->
+    <div id="toast" class="fixed bottom-4 right-4 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none max-w-[calc(100vw-2rem)]">
         <div class="glass-card border border-neonPink/60 px-4 py-3 rounded-2xl flex items-center gap-2.5 shadow-2xl">
-            <span class="text-neonPink text-sm">◆</span>
+            <span class="text-neonPink text-sm shrink-0">◆</span>
             <span id="toastMessage" class="font-mono text-xs text-white">Mensaje guardado</span>
         </div>
     </div>
 
-    <!-- Modal Lightbox para ver fotografías del Festejo Tropical en pantalla completa -->
+    <!-- Modal Lightbox para ver fotografías en pantalla completa -->
     <div id="tropicalLightbox" onclick="closeLightbox(event)" class="hidden fixed inset-0 z-50 bg-obsidian/95 backdrop-blur-xl flex flex-col items-center justify-center p-4 sm:p-8">
-        <button onclick="closeLightbox()" class="absolute top-5 right-5 w-10 h-10 rounded-full bg-zinc-900 border border-pink-500/40 text-white hover:bg-neonPink flex items-center justify-center font-mono text-sm cursor-pointer">
+        <button onclick="closeLightbox()" class="absolute top-4 right-4 sm:top-6 sm:right-6 w-10 h-10 rounded-full bg-zinc-900 border border-pink-500/40 text-white hover:bg-neonPink flex items-center justify-center font-mono text-sm cursor-pointer">
             ✕
         </button>
-        <img id="lightboxImage" src="" alt="Vista ampliada" class="max-h-[80vh] max-w-[92vw] rounded-2xl border border-pink-500/30 shadow-2xl object-contain">
-        <p id="lightboxCaption" class="mt-4 font-display text-base sm:text-lg text-roseGold text-center max-w-2xl"></p>
+        <img id="lightboxImage" src="" alt="Vista ampliada" class="max-h-[78vh] max-w-[94vw] rounded-2xl border border-pink-500/30 shadow-2xl object-contain">
+        <p id="lightboxCaption" class="mt-4 font-display text-sm sm:text-lg text-roseGold text-center max-w-2xl px-2"></p>
     </div>
 
     <script>
         /* ==========================================================================
-           CONFIGURACIÓN E INICIALIZACIÓN DE DATOS (LOCALSTORAGE)
+           1. CONFIGURACIÓN GENERAL Y DATOS INICIALES
            ========================================================================== */
+        // Candado desactivado mientras pulimos detalles (se activa al decir "cerrar")
+        const ENABLE_BIRTHDAY_LOCK = false;
+
         const STORAGE_KEYS = {
-            TITLE: 'bday30_hero_title_v2',
-            LETTER: 'bday30_love_letter_v2',
+            TITLE: 'bday30_hero_title_v3',
+            LETTER: 'bday30_love_letter_v3',
             PLANS: 'bday30_itinerary_plans_v2',
             DREAMS: 'bday30_wishlist_dreams_v2',
             TROPICAL_PHOTOS: 'bday30_tropical_photos_v1'
@@ -796,875 +1073,46 @@
         const CHARACTER_DATA = {
             stitch: {
                 badge: '◆ STITCH // OHANA & AVENTURA',
-                quote: '"Ohana significa familia, y la familia nunca abandona ni olvida lo que te hace sonreír. Cumplir 30 es tener la libertad de elegir nuestras propias aventuras y seguir explorando el mundo con ojos llenos de curiosidad."'
+                quote: '"Eli, contigo he descubierto un mundo nuevo y he aprendido tantas cosas que ni me imaginaba. Como Stitch, eres mi Ohana y mi aventura favorita: tienes esa chispa apasionada que me impulsa a superarme cada día. Los 30 apenas son el inicio de todos los caminos que quiero recorrer de tu mano."'
             },
             marie: {
-                badge: '◆ MARIE // ELEGANCIA & ESENCIA PROPIA',
-                quote: '"Como Marie con su moño rosa: la verdadera sofisticación de llegar a los 30 está en mantener intacta tu dulzura, tu estilo único y esa chispa que te hace inolvidable sin importar cuántos años pasen."'
+                badge: '◆ MARIE // COQUETA, GUAPA & ÚNICA',
+                quote: '"Como Marie con su moño rosa: eres una mujer preciosa, coqueta y con ese toque payasito que me vuelve loco. Cumplir 30 no apaga tu encanto; al contrario, hace que brilles todavía más con esa esencia tan tuya que nadie más en el mundo tiene."'
             },
             pooh: {
-                badge: '◆ WINNIE POOH // MOMENTOS DULCES & CALMA',
-                quote: '"A veces las cosas más pequeñas ocupan el mayor espacio en el corazón. Que tus 30 estén llenos de instantes sencillos, risas compartidas y esa calma bonita de saber que siempre caminamos juntos."'
+                badge: '◆ WINNIE POOH // PAZ, ANTOJITOS & HOGAR',
+                quote: '"Me enamora cómo disfrutas lo más bonito de la vida: igual podemos pasar una tarde tranquila en casa, caminar por el parque o simplemente compartir algo rico de comer como Pooh con su miel. Contigo, hasta el plan más sencillo se convierte en mi lugar favorito."'
             },
             croc: {
-                badge: '◆ COCODRILO // VALENTÍA & NUEVOS RETOS',
-                quote: '"Con una sonrisa firme y paso decidido: este símbolo representa tu fuerza para conquistar cualquier reto. Los 30 no son una meta final, son el impulso para alcanzar todos los sueños que aún nos faltan por cumplir."'
+                badge: '◆ COCODRILO // SIN MIEDO A LOS 30',
+                quote: '"Sé que llegar a los 30 a veces da un poquito de vértigo por todo lo que implica, mi amor, pero no te angusties ni un segundo. Vive cada día a tu ritmo, disfruta lo que va llegando y déjame ser parte de estos pedacitos de tu vida y de todos los que faltan, si así nos lo permite Dios."'
+            },
+            lucifer: {
+                badge: '◆ LUCIFER // TU LADO DRAMÁTICO (QUE TAMBIÉN AMO)',
+                quote: '"Y claro que tenía que estar Lucifer: ese lado mamón y esa mirada de desprecio que pones igualita a tus peluches cuando algo no te late. Aunque te pongas seria o dramática, a mí me derrites igual, porque amo absolutamente cada faceta de ti... hasta tus berrinches."'
+            },
+            tambor: {
+                badge: '◆ TAMBOR // CHISPA, ALEGRÍA & GRAN CORAZÓN',
+                quote: '"Como Tambor, tienes un corazón enorme, una alegría contagiosa y esa pasión que le pones a todo lo que haces. Gracias por celebrar la vida conmigo, por ayudarme siempre a ser un mejor hombre y por enseñarme a darle su lugar a lo que de verdad importa en la vida."'
             }
         };
 
         const DEFAULT_DREAMS = [
-            { id: 'dream-1', text: 'Seguir coleccionando viajes y lugares nuevos juntos ✈️', done: false },
-            { id: 'dream-2', text: 'Nunca dejar de disfrutar los pequeños detalles que nos hacen felices ✨', done: true },
-            { id: 'dream-3', text: 'Cumplir ese proyecto personal que tanto te emociona 🚀', done: false },
-            { id: 'dream-4', text: 'Celebrar cada año con la misma ilusión del primero 💖', done: false }
+            { id: 'dream-1', text: 'Seguir coleccionando viajes, paseos y tardes ricas juntos ✈️', done: false },
+            { id: 'dream-2', text: 'Disfrutar cada día sin prisas ni angustias, viviendo el presente ✨', done: true },
+            { id: 'dream-3', text: 'Cumplir cada meta personal que te haga brillar los ojos 🚀', done: false },
+            { id: 'dream-4', text: 'Seguir compartiendo pedacitos de nuestra vida, si Dios lo permite 💖', done: false }
         ];
 
-        const DEFAULT_LETTER = `Feliz cumpleaños número 30, mi amor.
+        const DEFAULT_LETTER = `Feliz cumpleaños número 30, Eli, mi amor.
 
-Quise crear este espacio digital combinando un poco de lo que sé hacer con los pequeños símbolos que tanto te gustan, porque alguien tan especial como tú merece un recuerdo único, hecho a la medida y pensado con todo el corazón.
+Quise hacerte este rincón digital con todo mi cariño, juntando tus personajes favoritos y un pedacito de lo que sé hacer, para que siempre tengas a la mano un recordatorio de lo increíblemente especial que eres para mí.
 
-Hoy entras oficialmente al Nivel 30, y si algo admiro de ti es que entiendes que crecer no significa apagar nuestra esencia ni olvidarnos de lo que nos ilusiona. Al contrario: significa abrazar con orgullo todo lo que amas —tu ternura, tu fuerza, tu alegría— mientras seguimos construyendo nuevos sueños por cumplir.
+Eres una mujer preciosa, tierna, aventurera, coqueta y payasita —y sí, también con tu mirada de desprecio estilo Lucifer que secretamente me encanta—. Gracias a ti he conocido y aprendido muchísimas cosas; me has motivado a superarme, a ser mejor persona y a darle su lugar a lo que realmente quiero en mi vida.
 
-Gracias por ser mi mejor equipo en cada capítulo de la vida y por iluminar mis días. Prepárate, porque este 28 de noviembre apenas es el comienzo de todo lo increíble que viene para ti y para nosotros. ¡Te amo muchísimo!`;
+Sé que pasar al piso de los 30 a veces puede dar un poco de miedo o incertidumbre, pero quiero que hoy sueltes cualquier angustia. No tienes que tener todo resuelto hoy: solo vive, disfruta cada etapa como vaya llegando —desde una tarde tranquila en casa o un paseo en el parque hasta nuestras comidas favoritas— y nunca dejes de ser esa mujer apasionada y de gran corazón de la que me enamoré.
+
+Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permite Dios, de todos los capítulos hermosos que todavía nos faltan por escribir juntos. Te quiero muchísimo, Eli. ¡Felices 30, mi amor!`;
 
         const DEFAULT_PLANS = [
-            {
-                id: 'plan-1',
-                time: '09:30',
-                title: 'Desayuno de Cumpleaños // Boot Sequence',
-                note: 'Arrancamos el día con tu café favorito y algo dulce.'
-            },
-            {
-                id: 'plan-2',
-                time: '15:00',
-                title: 'Tarde Especial & Sorpresa',
-                note: 'Detalles por confirmar mañana en la actualización v30.1 😉'
-            },
-            {
-                id: 'plan-3',
-                time: '20:30',
-                title: 'Cena de Gala // Level 30 Celebration',
-                note: 'Brindis por tus 30 años y por todos nuestros sueños.'
-            }
-        ];
-
-        let isSimulating = false;
-        let countdownInterval = null;
-        let celebrationTriggered = false;
-
-        // Mostrar notificación toast elegante
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toastMessage');
-            toastMsg.textContent = msg;
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => {
-                toast.classList.add('translate-y-20', 'opacity-0');
-            }, 2800);
-        }
-
-        /* ==========================================================================
-           TROPICAL_MEMORIES // CARRUSEL DE FOTOS, COMPRESIÓN Y LIGHTBOX
-           ========================================================================== */
-        function createTropicalPlaceholderSVG(variant) {
-            const svg1 = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720">
-                <defs>
-                    <linearGradient id="bg1" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#09090b"/>
-                        <stop offset="55%" stop-color="#18121e"/>
-                        <stop offset="100%" stop-color="#271022"/>
-                    </linearGradient>
-                    <linearGradient id="neon1" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#f9a8d4"/>
-                        <stop offset="50%" stop-color="#fb7185"/>
-                        <stop offset="100%" stop-color="#f43f5e"/>
-                    </linearGradient>
-                </defs>
-                <rect width="1200" height="720" fill="url(#bg1)"/>
-                <circle cx="950" cy="160" r="220" fill="#f43f5e" opacity="0.09"/>
-                <circle cx="240" cy="560" r="260" fill="#f9a8d4" opacity="0.07"/>
-                <!-- Palmera y Monstera line-art -->
-                <g stroke="url(#neon1)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.85">
-                    <path d="M180 620 C210 470, 260 350, 340 240"/>
-                    <path d="M340 240 C270 210, 200 230, 150 285"/>
-                    <path d="M340 240 C290 175, 225 160, 165 185"/>
-                    <path d="M340 240 C355 165, 415 135, 480 155"/>
-                    <path d="M340 240 C410 215, 475 245, 515 305"/>
-                    <!-- Guiño sutil Stitch orejas tropicales -->
-                    <path d="M920 310 C880 265, 860 290, 872 332 C880 352, 904 352, 920 340"/>
-                    <path d="M1008 310 C1048 265, 1068 290, 1056 332 C1048 352, 1024 352, 1008 340"/>
-                    <path d="M920 325 C920 293, 1008 293, 1008 325 C1012 365, 992 388, 964 388 C936 388, 916 365, 920 325 Z"/>
-                    <circle cx="944" cy="338" r="7"/>
-                    <circle cx="984" cy="338" r="7"/>
-                    <path d="M946 370 Q964 382 982 370"/>
-                </g>
-                <rect x="410" y="255" width="380" height="36" rx="18" fill="#f43f5e" fill-opacity="0.16" stroke="#fb7185" stroke-opacity="0.45"/>
-                <text x="600" y="278" fill="#f9a8d4" font-family="monospace" font-size="16" text-anchor="middle" letter-spacing="3">ALOHA LEVEL 30 // SÁBADO PASADO</text>
-                <text x="600" y="355" fill="#ffffff" font-family="sans-serif" font-weight="700" font-size="44" text-anchor="middle">Festejo Tropical 🌴🌺</text>
-                <text x="600" y="405" fill="#d4d4d8" font-family="sans-serif" font-size="21" text-anchor="middle">Sube aquí tus fotos favoritas del sábado para recordar cada sonrisa</text>
-                <text x="600" y="455" fill="#fb7185" font-family="monospace" font-size="15" text-anchor="middle">[ Pulsa "Subir Fotos" o arrastra tus imágenes aquí ]</text>
-            </svg>`;
-
-            const svg2 = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720">
-                <defs>
-                    <linearGradient id="bg2" x1="100%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stop-color="#09090b"/>
-                        <stop offset="50%" stop-color="#1f111c"/>
-                        <stop offset="100%" stop-color="#121216"/>
-                    </linearGradient>
-                </defs>
-                <rect width="1200" height="720" fill="url(#bg2)"/>
-                <g stroke="#f9a8d4" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.75">
-                    <!-- Flor de hibisco / tropical estilizada -->
-                    <circle cx="600" cy="235" r="14" fill="#f43f5e" fill-opacity="0.35"/>
-                    <path d="M600 221 C575 165, 625 165, 600 221"/>
-                    <path d="M613 230 C668 205, 668 255, 613 240"/>
-                    <path d="M608 247 C645 298, 595 312, 596 249"/>
-                    <path d="M592 247 C555 298, 605 312, 604 249"/>
-                    <path d="M587 230 C532 205, 532 255, 587 240"/>
-                </g>
-                <text x="600" y="365" fill="#ffffff" font-family="sans-serif" font-weight="700" font-size="40" text-anchor="middle">Vibras Tropicales &amp; Buenos Momentos</text>
-                <text x="600" y="415" fill="#f9a8d4" font-family="sans-serif" font-size="21" text-anchor="middle">El calentamiento perfecto rumbo al 28 de Noviembre ✨</text>
-            </svg>`;
-
-            return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(variant === 1 ? svg1 : svg2);
-        }
-
-        const DEFAULT_TROPICAL_SLIDES = [
-            {
-                id: 'sample-1',
-                src: createTropicalPlaceholderSVG(1),
-                caption: 'Festejo Tropical • Sábado Pasado 🌴🌺 (Sube tus fotos para personalizar)',
-                isSample: true
-            },
-            {
-                id: 'sample-2',
-                src: createTropicalPlaceholderSVG(2),
-                caption: 'Vibras Aloha & Celebración rumbo a los 30 ✨',
-                isSample: true
-            }
-        ];
-
-        let tropicalSlides = [];
-        let currentSlideIndex = 0;
-        let isCarouselPlaying = true;
-        let carouselProgress = 0;
-        let carouselTimer = null;
-        const SLIDE_DURATION_MS = 4800;
-
-        function loadTropicalSlides() {
-            try {
-                const raw = localStorage.getItem(STORAGE_KEYS.TROPICAL_PHOTOS);
-                const parsed = raw ? JSON.parse(raw) : null;
-                tropicalSlides = (Array.isArray(parsed) && parsed.length > 0) ? parsed : [...DEFAULT_TROPICAL_SLIDES];
-            } catch (e) {
-                tropicalSlides = [...DEFAULT_TROPICAL_SLIDES];
-            }
-            currentSlideIndex = 0;
-            renderTropicalCarousel();
-        }
-
-        function saveTropicalSlidesToStorage() {
-            try {
-                localStorage.setItem(STORAGE_KEYS.TROPICAL_PHOTOS, JSON.stringify(tropicalSlides));
-                return true;
-            } catch (e) {
-                showToast('Espacio lleno: intenta subir fotos más ligeras o borrar alguna');
-                return false;
-            }
-        }
-
-        function renderTropicalCarousel() {
-            if (tropicalSlides.length === 0) {
-                tropicalSlides = [...DEFAULT_TROPICAL_SLIDES];
-            }
-            if (currentSlideIndex >= tropicalSlides.length) {
-                currentSlideIndex = 0;
-            }
-
-            const slide = tropicalSlides[currentSlideIndex];
-            const imgEl = document.getElementById('carouselActiveImage');
-            const badgeEl = document.getElementById('carouselSlideBadge');
-            const captionEl = document.getElementById('carouselCaptionText');
-            const dotsEl = document.getElementById('carouselDots');
-            const thumbsEl = document.getElementById('tropicalThumbnails');
-            const restoreBtn = document.getElementById('restoreSampleSlidesBtn');
-
-            imgEl.src = slide.src;
-            badgeEl.textContent = `${padZero(currentSlideIndex + 1)} / ${padZero(tropicalSlides.length)} • ${slide.isSample ? 'MUESTRA TROPICAL' : 'RECUERDO REAL'}`;
-            captionEl.textContent = slide.caption;
-
-            // Mostrar botón de restaurar muestra si ya no hay diapositivas de muestra
-            const hasSamples = tropicalSlides.some(s => s.isSample);
-            if (restoreBtn) {
-                if (!hasSamples) {
-                    restoreBtn.classList.remove('hidden');
-                } else {
-                    restoreBtn.classList.add('hidden');
-                }
-            }
-
-            // Renderizar puntos indicadores
-            if (dotsEl) {
-                dotsEl.innerHTML = tropicalSlides.map((s, idx) => `
-                    <button onclick="goToTropicalSlide(${idx})" aria-label="Ir a foto ${idx + 1}"
-                        class="h-2 rounded-full transition-all cursor-pointer ${idx === currentSlideIndex ? 'w-6 bg-neonPink' : 'w-2 bg-zinc-600 hover:bg-roseGold'}">
-                    </button>
-                `).join('');
-            }
-
-            // Renderizar miniaturas
-            if (thumbsEl) {
-                thumbsEl.innerHTML = tropicalSlides.map((s, idx) => `
-                    <button onclick="goToTropicalSlide(${idx})"
-                        class="relative w-16 h-12 rounded-xl overflow-hidden border-2 shrink-0 transition cursor-pointer ${idx === currentSlideIndex ? 'border-neonPink scale-105 shadow-lg' : 'border-zinc-800 opacity-60 hover:opacity-100'}">
-                        <img src="${s.src}" alt="Miniatura ${idx + 1}" class="w-full h-full object-cover">
-                    </button>
-                `).join('');
-            }
-        }
-
-        function nextTropicalSlide() {
-            currentSlideIndex = (currentSlideIndex + 1) % tropicalSlides.length;
-            carouselProgress = 0;
-            renderTropicalCarousel();
-        }
-
-        function prevTropicalSlide() {
-            currentSlideIndex = (currentSlideIndex - 1 + tropicalSlides.length) % tropicalSlides.length;
-            carouselProgress = 0;
-            renderTropicalCarousel();
-        }
-
-        function goToTropicalSlide(index) {
-            currentSlideIndex = index;
-            carouselProgress = 0;
-            renderTropicalCarousel();
-        }
-
-        function toggleCarouselAutoplay() {
-            isCarouselPlaying = !isCarouselPlaying;
-            const btn = document.getElementById('carouselPlayPauseBtn');
-            if (btn) btn.textContent = isCarouselPlaying ? '⏸ Pausar' : '▶ Reproducir';
-        }
-
-        function startCarouselLoop() {
-            const stepMs = 100;
-            if (carouselTimer) clearInterval(carouselTimer);
-            carouselTimer = setInterval(() => {
-                if (!isCarouselPlaying || tropicalSlides.length <= 1) return;
-                // Pausar avance si el usuario está editando el pie de foto
-                if (document.activeElement === document.getElementById('carouselCaptionText')) return;
-
-                carouselProgress += (stepMs / SLIDE_DURATION_MS) * 100;
-                const bar = document.getElementById('carouselProgressBar');
-                if (bar) bar.style.width = `${Math.min(100, carouselProgress)}%`;
-
-                if (carouselProgress >= 100) {
-                    nextTropicalSlide();
-                }
-            }, stepMs);
-        }
-
-        function saveTropicalCaption() {
-            const captionEl = document.getElementById('carouselCaptionText');
-            const newCaption = captionEl.textContent.trim() || 'Recuerdo Festejo Tropical 🌺';
-            captionEl.textContent = newCaption;
-            tropicalSlides[currentSlideIndex].caption = newCaption;
-            saveTropicalSlidesToStorage();
-            showToast('Pie de foto actualizado');
-        }
-
-        function deleteCurrentTropicalPhoto() {
-            if (tropicalSlides.length === 1 && tropicalSlides[0].isSample) {
-                showToast('Sube tus fotos para reemplazar esta diapositiva');
-                return;
-            }
-            tropicalSlides.splice(currentSlideIndex, 1);
-            if (tropicalSlides.length === 0) {
-                tropicalSlides = [...DEFAULT_TROPICAL_SLIDES];
-            }
-            currentSlideIndex = Math.max(0, currentSlideIndex - 1);
-            carouselProgress = 0;
-            saveTropicalSlidesToStorage();
-            renderTropicalCarousel();
-            showToast('Foto eliminada del carrusel');
-        }
-
-        function restoreDefaultTropicalSlides() {
-            tropicalSlides = [...tropicalSlides, ...DEFAULT_TROPICAL_SLIDES];
-            saveTropicalSlidesToStorage();
-            renderTropicalCarousel();
-            showToast('Diapositivas de muestra restauradas');
-        }
-
-        // Compresión de imágenes mediante Canvas para almacenamiento seguro en localStorage
-        function compressImageFile(file, maxDimension = 1000, quality = 0.82) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        let width = img.width;
-                        let height = img.height;
-
-                        if (width > maxDimension || height > maxDimension) {
-                            if (width > height) {
-                                height = Math.round((height * maxDimension) / width);
-                                width = maxDimension;
-                            } else {
-                                width = Math.round((width * maxDimension) / height);
-                                height = maxDimension;
-                            }
-                        }
-
-                        const canvas = document.createElement('canvas');
-                        canvas.width = width;
-                        canvas.height = height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, width, height);
-
-                        const dataUrl = canvas.toDataURL('image/jpeg', quality);
-                        resolve(dataUrl);
-                    };
-                    img.onerror = reject;
-                    img.src = e.target.result;
-                };
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
-            });
-        }
-
-        async function processUploadedFiles(fileList) {
-            const imageFiles = Array.from(fileList).filter(f => f.type.startsWith('image/'));
-            if (imageFiles.length === 0) {
-                showToast('Selecciona archivos de imagen válidos');
-                return;
-            }
-
-            showToast(`Procesando ${imageFiles.length} ${imageFiles.length === 1 ? 'foto' : 'fotos'}...`);
-
-            // Si solo estaban las diapositivas de muestra, las reemplazamos con las fotos reales
-            const onlySamples = tropicalSlides.every(s => s.isSample);
-            if (onlySamples) {
-                tropicalSlides = [];
-            }
-
-            let addedCount = 0;
-            for (const file of imageFiles) {
-                try {
-                    const compressedDataUrl = await compressImageFile(file, 1000, 0.82);
-                    const baseName = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
-                    tropicalSlides.push({
-                        id: 'photo-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6),
-                        src: compressedDataUrl,
-                        caption: `Festejo Tropical • ${baseName || 'Sábado Pasado'} 🌺`,
-                        isSample: false
-                    });
-                    addedCount++;
-                } catch (err) {
-                    console.error('Error al procesar imagen:', err);
-                }
-            }
-
-            if (addedCount > 0) {
-                currentSlideIndex = Math.max(0, tropicalSlides.length - addedCount);
-                carouselProgress = 0;
-                if (saveTropicalSlidesToStorage()) {
-                    showToast(`¡${addedCount} ${addedCount === 1 ? 'foto agregada' : 'fotos agregadas'} al recuerdo! 🌴`);
-                }
-                renderTropicalCarousel();
-            }
-        }
-
-        function handleTropicalFileSelect(event) {
-            if (event.target.files && event.target.files.length > 0) {
-                processUploadedFiles(event.target.files);
-                event.target.value = '';
-            }
-        }
-
-        function initTropicalDragAndDrop() {
-            const dropZone = document.getElementById('tropicalDropZone');
-            const overlay = document.getElementById('dropOverlay');
-            if (!dropZone || !overlay) return;
-
-            ['dragenter', 'dragover'].forEach(evtName => {
-                dropZone.addEventListener(evtName, (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    overlay.classList.remove('hidden');
-                });
-            });
-
-            ['dragleave', 'drop'].forEach(evtName => {
-                dropZone.addEventListener(evtName, (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    overlay.classList.add('hidden');
-                });
-            });
-
-            dropZone.addEventListener('drop', (e) => {
-                if (e.dataTransfer && e.dataTransfer.files) {
-                    processUploadedFiles(e.dataTransfer.files);
-                }
-            });
-        }
-
-        // Lightbox pantalla completa
-        function openLightbox() {
-            const slide = tropicalSlides[currentSlideIndex];
-            if (!slide) return;
-            document.getElementById('lightboxImage').src = slide.src;
-            document.getElementById('lightboxCaption').textContent = slide.caption;
-            document.getElementById('tropicalLightbox').classList.remove('hidden');
-        }
-
-        function closeLightbox(event) {
-            if (event && event.target && event.target.id === 'lightboxImage') return;
-            document.getElementById('tropicalLightbox').classList.add('hidden');
-        }
-
-        /* ==========================================================================
-0. INTERACCIÓN DE PERSONAJES & WISHLIST v3.0
-           ========================================================================== */
-        function selectCharacter(key, shouldScroll) {
-            const data = CHARACTER_DATA[key];
-            if (!data) return;
-
-            // Actualizar estado activo en las tarjetas
-            document.querySelectorAll('.character-card').forEach(el => el.classList.remove('active-char'));
-            const activeCard = document.getElementById(`card-${key}`);
-            if (activeCard) activeCard.classList.add('active-char');
-
-            // Actualizar cápsula de mensaje
-            document.getElementById('charBadge').textContent = data.badge;
-            document.getElementById('charQuoteText').textContent = data.quote;
-
-            if (shouldScroll) {
-                document.getElementById('suenos').scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        }
-
-        function getDreams() {
-            try {
-                const raw = localStorage.getItem(STORAGE_KEYS.DREAMS);
-                return raw ? JSON.parse(raw) : [...DEFAULT_DREAMS];
-            } catch (e) {
-                return [...DEFAULT_DREAMS];
-            }
-        }
-
-        function saveDreams(dreams) {
-            localStorage.setItem(STORAGE_KEYS.DREAMS, JSON.stringify(dreams));
-            renderDreams();
-        }
-
-        function renderDreams() {
-            const dreams = getDreams();
-            const listEl = document.getElementById('dreamsList');
-            const counterEl = document.getElementById('dreamsCounter');
-            const doneCount = dreams.filter(d => d.done).length;
-
-            counterEl.textContent = `${doneCount} / ${dreams.length} en marcha`;
-
-            listEl.innerHTML = dreams.map(dream => `
-                <div class="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-obsidian/75 border ${dream.done ? 'border-neonPink/40' : 'border-zinc-800/90'} transition">
-                    <button onclick="toggleDream('${dream.id}')" class="flex items-center gap-3 text-left flex-1 cursor-pointer group">
-                        <span class="w-5 h-5 rounded-md flex items-center justify-center border ${dream.done ? 'bg-neonPink border-neonPink text-white' : 'border-zinc-600 group-hover:border-softRose'} text-xs transition shrink-0">
-                            ${dream.done ? '✓' : ''}
-                        </span>
-                        <span class="text-xs sm:text-sm ${dream.done ? 'text-roseGold line-through opacity-80' : 'text-zinc-200'}">
-                            ${escapeHTML(dream.text)}
-                        </span>
-                    </button>
-                    <button onclick="deleteDream('${dream.id}')" title="Quitar sueño" class="text-zinc-600 hover:text-neonPink text-xs font-mono px-1.5 cursor-pointer">
-                        ✕
-                    </button>
-                </div>
-            `).join('');
-        }
-
-        function addDreamItem(event) {
-            event.preventDefault();
-            const input = document.getElementById('dreamInput');
-            const text = input.value.trim();
-            if (!text) return;
-
-            const dreams = getDreams();
-            dreams.push({
-                id: 'dream-' + Date.now(),
-                text,
-                done: false
-            });
-            saveDreams(dreams);
-            input.value = '';
-            showToast('Sueño añadido a la lista v3.0 ✨');
-        }
-
-        function toggleDream(id) {
-            const dreams = getDreams().map(d => d.id === id ? { ...d, done: !d.done } : d);
-            saveDreams(dreams);
-        }
-
-        function deleteDream(id) {
-            const dreams = getDreams().filter(d => d.id !== id);
-            saveDreams(dreams);
-        }
-
-        /* ==========================================================================
-1. TÍTULO EDITABLE EN HERO
-           ========================================================================== */
-        const heroTitleEl = document.getElementById('heroTitle');
-        const savedTitle = localStorage.getItem(STORAGE_KEYS.TITLE);
-        if (savedTitle) {
-            heroTitleEl.textContent = savedTitle;
-        }
-
-        heroTitleEl.addEventListener('blur', () => {
-            const cleanText = heroTitleEl.textContent.trim() || 'Feliz Cumpleaños, Mi Amor';
-            heroTitleEl.textContent = cleanText;
-            localStorage.setItem(STORAGE_KEYS.TITLE, cleanText);
-            showToast('Título actualizado y guardado');
-        });
-
-        heroTitleEl.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                heroTitleEl.blur();
-            }
-        });
-
-        /* ==========================================================================
-2. CONTADOR REGRESIVO AL 28 DE NOVIEMBRE DE 2026 (00:00:00 HORA LOCAL)
-           ========================================================================== */
-        const TARGET_DATE = new Date(2026, 10, 28, 0, 0, 0).getTime();
-
-        function padZero(num) {
-            return String(Math.max(0, num)).padStart(2, '0');
-        }
-
-        function updateCountdown() {
-            const now = Date.now();
-            const distance = isSimulating ? 0 : (TARGET_DATE - now);
-
-            const daysEl = document.getElementById('days');
-            const hoursEl = document.getElementById('hours');
-            const minutesEl = document.getElementById('minutes');
-            const secondsEl = document.getElementById('seconds');
-            const bannerEl = document.getElementById('celebrationBanner');
-
-            if (distance <= 0) {
-                daysEl.textContent = '00';
-                hoursEl.textContent = '00';
-                minutesEl.textContent = '00';
-                secondsEl.textContent = '00';
-                bannerEl.classList.remove('hidden');
-
-                if (!celebrationTriggered) {
-                    celebrationTriggered = true;
-                    launchPinkConfetti();
-                }
-                return;
-            }
-
-            bannerEl.classList.add('hidden');
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            daysEl.textContent = padZero(days);
-            hoursEl.textContent = padZero(hours);
-            minutesEl.textContent = padZero(minutes);
-            secondsEl.textContent = padZero(seconds);
-        }
-
-        function toggleSimulation() {
-            isSimulating = !isSimulating;
-            const btn = document.getElementById('simulateBtn');
-            const statusLabel = document.getElementById('countdownStatusLabel');
-
-            if (isSimulating) {
-                celebrationTriggered = false;
-                btn.textContent = '↩ Volver a hora real';
-                btn.classList.add('border-neonPink', 'text-roseGold');
-                statusLabel.innerHTML = 'MODE: <span class="text-neonPink font-bold">SIMULACIÓN 28 NOV 2026</span>';
-            } else {
-                btn.textContent = '⚡ Simular 28 de Noviembre';
-                btn.classList.remove('border-neonPink', 'text-roseGold');
-                statusLabel.innerHTML = 'TARGET_RELEASE: <span class="text-roseGold">28 NOV 2026 // 00:00:00</span>';
-            }
-            updateCountdown();
-        }
-
-        /* ==========================================================================
-3. EDITOR Y VISOR DE CARTA DE FELICITACIÓN
-           ========================================================================== */
-        function loadLetter() {
-            const savedLetter = localStorage.getItem(STORAGE_KEYS.LETTER) || DEFAULT_LETTER;
-            document.getElementById('letterDisplay').textContent = savedLetter;
-            document.getElementById('letterTextarea').value = savedLetter;
-        }
-
-        function toggleLetterMode() {
-            const viewMode = document.getElementById('letterViewMode');
-            const editMode = document.getElementById('letterEditMode');
-            const editBtn = document.getElementById('toggleEditLetterBtn');
-            const saveBtn = document.getElementById('saveLetterBtn');
-
-            const isEditing = !editMode.classList.contains('hidden');
-            if (!isEditing) {
-                viewMode.classList.add('hidden');
-                editMode.classList.remove('hidden');
-                editBtn.classList.add('hidden');
-                saveBtn.classList.remove('hidden');
-                document.getElementById('letterTextarea').focus();
-            } else {
-                cancelLetterEdit();
-            }
-        }
-
-        function cancelLetterEdit() {
-            document.getElementById('letterViewMode').classList.remove('hidden');
-            document.getElementById('letterEditMode').classList.add('hidden');
-            document.getElementById('toggleEditLetterBtn').classList.remove('hidden');
-            document.getElementById('saveLetterBtn').classList.add('hidden');
-            loadLetter();
-        }
-
-        function saveLetter() {
-            const newText = document.getElementById('letterTextarea').value.trim();
-            if (!newText) {
-                showToast('La carta no puede quedar vacía');
-                return;
-            }
-            localStorage.setItem(STORAGE_KEYS.LETTER, newText);
-            document.getElementById('letterDisplay').textContent = newText;
-            cancelLetterEdit();
-            showToast('Carta guardada con éxito ❤️');
-        }
-
-        function resetDefaultLetter() {
-            localStorage.setItem(STORAGE_KEYS.LETTER, DEFAULT_LETTER);
-            loadLetter();
-            showToast('Plantilla original restaurada');
-        }
-
-        /* ==========================================================================
-4. ITINERARY // PLAN DE FESTEJO INTERACTIVO
-           ========================================================================== */
-        function getPlans() {
-            try {
-                const raw = localStorage.getItem(STORAGE_KEYS.PLANS);
-                return raw ? JSON.parse(raw) : [...DEFAULT_PLANS];
-            } catch (e) {
-                return [...DEFAULT_PLANS];
-            }
-        }
-
-        function savePlans(plans) {
-            plans.sort((a, b) => a.time.localeCompare(b.time));
-            localStorage.setItem(STORAGE_KEYS.PLANS, JSON.stringify(plans));
-            renderPlans();
-        }
-
-        function renderPlans() {
-            const plans = getPlans();
-            const listEl = document.getElementById('planList');
-            const badgeEl = document.getElementById('planCounterBadge');
-
-            badgeEl.textContent = `${plans.length} ${plans.length === 1 ? 'actividad lista' : 'actividades listas'}`;
-
-            if (plans.length === 0) {
-                listEl.innerHTML = `
-                    <div class="text-center py-8 px-4 rounded-2xl border border-dashed border-zinc-800 text-zinc-500 font-mono text-xs">
-                        Aún no hay actividades en el itinerario. Usa el formulario superior para agregar tu plan.
-                    </div>`;
-                return;
-            }
-
-            listEl.innerHTML = plans.map((item) => `
-                <div class="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 sm:p-5 rounded-2xl bg-obsidian/80 border border-zinc-800/90 hover:border-pink-500/40 transition">
-                    <div class="flex items-start sm:items-center gap-4">
-                        <span class="px-3 py-1.5 rounded-xl bg-neonPink/15 border border-neonPink/30 text-roseGold font-mono text-xs sm:text-sm font-bold shrink-0">
-                            ${escapeHTML(item.time)}
-                        </span>
-                        <div>
-                            <h3 class="font-display text-base sm:text-lg font-semibold text-white">
-                                ${escapeHTML(item.title)}
-                            </h3>
-                            ${item.note ? `<p class="text-zinc-400 text-xs sm:text-sm mt-0.5">${escapeHTML(item.note)}</p>` : ''}
-                        </div>
-                    </div>
-                    <button onclick="deletePlanItem('${item.id}')" title="Eliminar actividad"
-                        class="self-end sm:self-center px-3 py-1.5 rounded-lg font-mono text-xs text-zinc-500 hover:text-neonPink hover:bg-neonPink/10 transition cursor-pointer">
-                        ✕ Quitar
-                    </button>
-                </div>
-            `).join('');
-        }
-
-        function addPlanItem(event) {
-            event.preventDefault();
-            const time = document.getElementById('planTime').value;
-            const title = document.getElementById('planTitle').value.trim();
-            const note = document.getElementById('planNote').value.trim();
-
-            if (!time || !title) return;
-
-            const plans = getPlans();
-            plans.push({
-                id: 'plan-' + Date.now(),
-                time,
-                title,
-                note
-            });
-
-            savePlans(plans);
-            document.getElementById('planTitle').value = '';
-            document.getElementById('planNote').value = '';
-            showToast('Actividad añadida al itinerario ✨');
-        }
-
-        function deletePlanItem(id) {
-            const plans = getPlans().filter(p => p.id !== id);
-            savePlans(plans);
-            showToast('Actividad eliminada');
-        }
-
-        function escapeHTML(str) {
-            const div = document.createElement('div');
-            div.textContent = str;
-            return div.innerHTML;
-        }
-
-        /* ==========================================================================
-5. RESPALDO RÁPIDO AL PORTAPAPELES (EXEC_COMMAND COMPATIBLE)
-           ========================================================================== */
-        function copySummaryToClipboard() {
-            const title = document.getElementById('heroTitle').textContent.trim();
-            const letter = localStorage.getItem(STORAGE_KEYS.LETTER) || DEFAULT_LETTER;
-            const plans = getPlans().map(p => `• ${p.time} - ${p.title}${p.note ? ' (' + p.note + ')' : ''}`).join('\n');
-            const dreams = getDreams().map(d => `${d.done ? '[✓]' : '[ ]'} ${d.text}`).join('\n');
-
-            const fullText = `${title}\n==============================\n\nCARTA:\n${letter}\n\nSUEÑOS v3.0:\n${dreams}\n\nITINERARIO 28 NOV:\n${plans}`;
-
-            const tempArea = document.createElement('textarea');
-            tempArea.value = fullText;
-            document.body.appendChild(tempArea);
-            tempArea.select();
-            try {
-                document.execCommand('copy');
-                showToast('Textos copiados al portapapeles 📋');
-            } catch (err) {
-                showToast('No se pudo copiar automáticamente');
-            }
-            document.body.removeChild(tempArea);
-        }
-
-        /* ==========================================================================
-6. EFECTOS VISUALES: CONFETI ROSA/ORO Y PARTÍCULAS DE FONDO
-           ========================================================================== */
-        function launchPinkConfetti() {
-            if (typeof confetti !== 'function') return;
-            const colors = ['#f43f5e', '#fb7185', '#f9a8d4', '#f5d0c5', '#ffffff'];
-
-            confetti({
-                particleCount: 85,
-                spread: 72,
-                origin: { y: 0.65 },
-                colors: colors
-            });
-        }
-
-        function launchMegaCelebration() {
-            if (typeof confetti !== 'function') return;
-            const colors = ['#f43f5e', '#fb7185', '#f9a8d4', '#f5d0c5', '#ffffff'];
-            const end = Date.now() + 2200;
-
-            (function frame() {
-                confetti({
-                    particleCount: 6,
-                    angle: 60,
-                    spread: 55,
-                    origin: { x: 0 },
-                    colors: colors
-                });
-                confetti({
-                    particleCount: 6,
-                    angle: 120,
-                    spread: 55,
-                    origin: { x: 1 },
-                    colors: colors
-                });
-
-                if (Date.now() < end) {
-                    requestAnimationFrame(frame);
-                }
-            }());
-            showToast('🎉 ¡Feliz Nivel 30!');
-        }
-
-        function initParticles() {
-            const canvas = document.getElementById('particleCanvas');
-            const ctx = canvas.getContext('2d');
-            let width = canvas.width = window.innerWidth;
-            let height = canvas.height = window.innerHeight;
-
-            window.addEventListener('resize', () => {
-                width = canvas.width = window.innerWidth;
-                height = canvas.height = window.innerHeight;
-            });
-
-            const particleCount = Math.min(45, Math.floor(width / 28));
-            const particles = Array.from({ length: particleCount }, () => ({
-                x: Math.random() * width,
-                y: Math.random() * height,
-                r: Math.random() * 1.8 + 0.6,
-                vx: (Math.random() - 0.5) * 0.35,
-                vy: (Math.random() - 0.5) * 0.35,
-                alpha: Math.random() * 0.5 + 0.15
-            }));
-
-            function animate() {
-                ctx.clearRect(0, 0, width, height);
-
-                for (let i = 0; i < particles.length; i++) {
-                    const p = particles[i];
-                    p.x += p.vx;
-                    p.y += p.vy;
-
-                    if (p.x < 0) p.x = width;
-                    if (p.x > width) p.x = 0;
-                    if (p.y < 0) p.y = height;
-                    if (p.y > height) p.y = 0;
-
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(249, 168, 212, ${p.alpha})`;
-                    ctx.fill();
-                }
-
-                requestAnimationFrame(animate);
-            }
-
-            animate();
-        }
-
-        // Inicialización al cargar la página
-        window.onload = function () {
-            initParticles();
-            loadTropicalSlides();
-            initTropicalDragAndDrop();
-            startCarouselLoop();
-            loadLetter();
-            renderPlans();
-            renderDreams();
-            updateCountdown();
-            countdownInterval = setInterval(updateCountdown, 1000);
-        };
-    </script>
-</body>
-</html>
+// ... existing code ... -->
