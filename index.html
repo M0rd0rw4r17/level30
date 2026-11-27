@@ -19,7 +19,8 @@
     <!-- Tone.js para música instrumental de piano en vivo -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
 
-    <!-- Conversor automático de fotos .HEIC (iPhone) a JPEG en el navegador -->
+    <!-- Conversores de fotos .HEIC (iPhone recientes) a JPEG en el navegador -->
+    <script src="https://cdn.jsdelivr.net/npm/heic-to@1.1.14/dist/iife/heic-to.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
 
     <script>
@@ -884,7 +885,7 @@
             LETTER: 'bday30_love_letter_v4',
             PLANS: 'bday30_itinerary_plans_v2',
             DREAMS: 'bday30_wishlist_dreams_v2',
-            TROPICAL_PHOTOS: 'bday30_travesia_photos_v4'
+            TROPICAL_PHOTOS: 'bday30_travesia_photos_v5'
         };
 
         // 6 Guardianes de Esencia personalizados para Eli
@@ -1032,6 +1033,15 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
             return `https://placehold.co/1200x750/121216/f9a8d4?text=${encodeURIComponent('Foto: ' + filename)}`;
         }
 
+        function canBrowserRenderUrl(url) {
+            return new Promise((resolve) => {
+                const testImg = new Image();
+                testImg.onload = () => resolve(testImg.naturalWidth > 0);
+                testImg.onerror = () => resolve(false);
+                testImg.src = url;
+            });
+        }
+
         async function resolveSlideImageSrc(src) {
             if (!isHeicFile(src)) return src;
             if (heicBlobCache[src]) return heicBlobCache[src];
@@ -1039,22 +1049,59 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
 
             heicPendingTasks[src] = (async () => {
                 try {
+                    // 1. Si existen versiones convertidas a .jpg/.JPG/.jpeg en GitHub, usarlas al instante
+                    const baseName = src.replace(/\.heic$/i, '');
+                    for (const ext of ['JPG', 'jpg', 'jpeg', 'JPEG']) {
+                        const jpgCandidate = `${baseName}.${ext}`;
+                        if (await canBrowserRenderUrl(jpgCandidate)) {
+                            heicBlobCache[src] = jpgCandidate;
+                            updateThumbnailIfReady(src, jpgCandidate);
+                            return jpgCandidate;
+                        }
+                    }
+
+                    // 2. Si el navegador soporta .HEIC de forma nativa (Safari en Mac / iPhone / iPad)
+                    if (await canBrowserRenderUrl(src)) {
+                        heicBlobCache[src] = src;
+                        updateThumbnailIfReady(src, src);
+                        return src;
+                    }
+
+                    // 3. Descargar y convertir .HEIC a JPEG en el navegador (Chrome / Edge / Android)
                     const response = await fetch(src);
                     if (!response.ok) throw new Error('Archivo no encontrado');
-                    const blob = await response.blob();
-                    if (typeof heic2any === 'function') {
+                    const rawBlob = await response.blob();
+                    const heicBlob = new Blob([rawBlob], { type: 'image/heic' });
+
+                    let finalBlob = null;
+
+                    if (typeof HeicTo === 'function') {
+                        try {
+                            finalBlob = await HeicTo({
+                                blob: heicBlob,
+                                type: 'image/jpeg',
+                                quality: 0.82
+                            });
+                        } catch (e) {
+                            console.warn('HeicTo no pudo convertir, probando alternativa:', e);
+                        }
+                    }
+
+                    if (!finalBlob && typeof heic2any === 'function') {
                         const converted = await heic2any({
-                            blob,
+                            blob: heicBlob,
                             toType: 'image/jpeg',
                             quality: 0.82
                         });
-                        const finalBlob = Array.isArray(converted) ? converted[0] : converted;
-                        const objectUrl = URL.createObjectURL(finalBlob);
-                        heicBlobCache[src] = objectUrl;
-                        updateThumbnailIfReady(src, objectUrl);
-                        return objectUrl;
+                        finalBlob = Array.isArray(converted) ? converted[0] : converted;
                     }
-                    return src;
+
+                    if (!finalBlob) throw new Error('No se pudo decodificar HEIC');
+
+                    const objectUrl = URL.createObjectURL(finalBlob);
+                    heicBlobCache[src] = objectUrl;
+                    updateThumbnailIfReady(src, objectUrl);
+                    return objectUrl;
                 } catch (err) {
                     return getMissingPhotoFallback(src);
                 } finally {
@@ -1063,6 +1110,14 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
             })();
 
             return heicPendingTasks[src];
+        }
+
+        async function preloadHeicThumbnails() {
+            for (const slide of tropicalSlides) {
+                if (isHeicFile(slide.src) && !heicBlobCache[slide.src]) {
+                    await resolveSlideImageSrc(slide.src);
+                }
+            }
         }
 
         function updateThumbnailIfReady(originalSrc, resolvedUrl) {
@@ -1103,6 +1158,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
             }
             currentSlideIndex = 0;
             renderTropicalCarousel();
+            setTimeout(preloadHeicThumbnails, 1200);
         }
 
         function saveTropicalSlidesToStorage() {
