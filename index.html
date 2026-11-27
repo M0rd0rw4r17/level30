@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome 30s Eli | Nuevo nievel Desbloqueado/title>
+    <title>LEVEL 30s // 28.11.2026</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -844,8 +844,9 @@
                         <span>Lanzar Sorpresa // Celebrar Nivel 30</span>
                     </button>
                     <a id="whatsappThanksBtn"
-                        href="https://wa.me/525538496342?text=%C2%A1Amor!%20Acabo%20de%20ver%20el%20portal%20de%20mis%2030%20y%20me%20encant%C3%B3%20todo%20%F0%9F%92%96%F0%9F%8E%82%20Muchas%20gracias%20por%20este%20detalle%20tan%20hermoso%2C%20por%20la%20carta%2C%20las%20fotos%20y%20por%20los%20obsequios.%20%C2%A1Te%20quiero%20much%C3%ADsimo!%20%E2%9D%A4%EF%B8%8F"
+                        href="https://api.whatsapp.com/send?phone=525538496342&text=%C2%A1Amor!%20Acabo%20de%20ver%20el%20portal%20de%20mis%2030%20y%20me%20encant%C3%B3%20todo%20%F0%9F%92%96%F0%9F%8E%82%20Muchas%20gracias%20por%20este%20detalle%20tan%20hermoso%2C%20por%20la%20carta%2C%20las%20fotos%20y%20por%20los%20obsequios.%20%C2%A1Te%20quiero%20much%C3%ADsimo!%20%E2%9D%A4%EF%B8%8F"
                         target="_blank" rel="noopener noreferrer"
+                        onclick="showToast('Abriendo WhatsApp... 💬')"
                         class="px-7 sm:px-8 py-3.5 sm:py-4 rounded-full font-display text-sm sm:text-lg font-bold text-white tracking-wide inline-flex items-center justify-center gap-2.5 bg-emerald-600/90 hover:bg-emerald-500 border border-emerald-400/50 shadow-[0_0_24px_rgba(16,185,129,0.35)] hover:shadow-[0_0_32px_rgba(16,185,129,0.6)] transition-all w-full sm:w-auto">
                         <span>💬</span>
                         <span>Mandar agradecimiento</span>
@@ -1096,8 +1097,8 @@ Alex`;
         }
 
         function sendWhatsAppGratitude() {
-            const message = encodeURIComponent('¡Hola amor! Acabo de ver mi portal de los 30s, muchísimas gracias por este detalle tan bonito y por todo tu cariño. ¡Te quiero mucho! 💖🎂');
-            const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+            const message = encodeURIComponent('¡Amor! Acabo de ver el portal de mis 30 y me encantó todo 💖🎂 Muchas gracias por este detalle tan hermoso, por la carta, las fotos y por los obsequios. ¡Te quiero muchísimo! ❤️');
+            const whatsappUrl = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${message}`;
             window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
         }
 
