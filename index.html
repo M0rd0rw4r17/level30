@@ -2,22 +2,25 @@
 <html lang="es" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LEVEL 30 // Edición Especial 28.11</title>
-    
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Google Fonts: Plus Jakarta Sans, Space Grotesk, JetBrains Mono y Playfair Display -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:ital,wght@0,600;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-    
+
     <!-- Canvas Confetti para celebraciones -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 
     <!-- Tone.js para música instrumental de piano en vivo -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+    <!-- Conversor automático de fotos .HEIC (iPhone) a JPEG en el navegador -->
+    <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
 
     <script>
         tailwind.config = {
@@ -40,31 +43,32 @@
                     }
                 }
             }
-        }
+        };
     </script>
 
     <style>
-        /* Atmósfera oscura y acentos rosa neón / oro rosado */
-        html, body {
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
             background-color: #09090b;
             color: #f4f4f5;
             overflow-x: hidden;
-            max-width: 100vw;
-            scroll-behavior: smooth;
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Fondo de cuadrícula sutil estilo tech */
+        /* Fondo de cuadrícula sutil estilo blueprint/tech */
         .bg-tech-grid {
             background-size: 42px 42px;
-            background-image: 
+            background-image:
                 linear-gradient(to right, rgba(244, 63, 94, 0.045) 1px, transparent 1px),
                 linear-gradient(to bottom, rgba(244, 63, 94, 0.045) 1px, transparent 1px);
         }
 
         /* Tarjetas Glassmorphism Oscuras */
         .glass-card {
-            background: rgba(18, 18, 22, 0.78);
+            background: rgba(18, 18, 22, 0.76);
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
             border: 1px solid rgba(249, 168, 212, 0.16);
@@ -86,7 +90,7 @@
         }
 
         .svg-neon-glow {
-            filter: drop-shadow(0 0 8px rgba(251, 113, 133, 0.5));
+            filter: drop-shadow(0 0 8px rgba(251, 113, 133, 0.48));
             transition: filter 0.3s ease, transform 0.3s ease;
         }
 
@@ -99,7 +103,7 @@
         .character-card.active-char {
             border-color: rgba(244, 63, 94, 0.78);
             background: rgba(244, 63, 94, 0.1);
-            box-shadow: 0 0 28px rgba(244, 63, 94, 0.2);
+            box-shadow: 0 0 28px rgba(244, 63, 94, 0.18);
         }
 
         .btn-pink-glow {
@@ -117,7 +121,7 @@
             transform: translateY(0px);
         }
 
-        /* Animaciones flotantes para los emblemas */
+        /* Animaciones flotantes sutiles */
         @keyframes floatSlow {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-6px) rotate(1.5deg); }
@@ -129,22 +133,21 @@
         .animate-float-1 { animation: floatSlow 5.5s ease-in-out infinite; }
         .animate-float-2 { animation: floatSlowDelayed 6.2s ease-in-out infinite; }
 
-        /* Barras animadas del ecualizador */
-        @keyframes eqBounce {
-            0%, 100% { height: 4px; }
-            50% { height: 14px; }
+        /* Barras ecualizador del reproductor */
+        @keyframes eqBar {
+            0%, 100% { height: 25%; }
+            50% { height: 100%; }
         }
         .eq-bar {
             width: 3px;
-            height: 4px;
             border-radius: 9999px;
-            background: linear-gradient(to top, #f43f5e, #f9a8d4);
+            background: #f43f5e;
+            height: 30%;
             transition: height 0.2s ease;
         }
-        .is-playing .eq-bar:nth-child(1) { animation: eqBounce 0.7s ease-in-out infinite 0.05s; }
-        .is-playing .eq-bar:nth-child(2) { animation: eqBounce 0.55s ease-in-out infinite 0.18s; }
-        .is-playing .eq-bar:nth-child(3) { animation: eqBounce 0.8s ease-in-out infinite 0.32s; }
-        .is-playing .eq-bar:nth-child(4) { animation: eqBounce 0.65s ease-in-out infinite 0.12s; }
+        .eq-playing .eq-bar-1 { animation: eqBar 0.75s ease-in-out infinite; }
+        .eq-playing .eq-bar-2 { animation: eqBar 0.55s ease-in-out 0.15s infinite; }
+        .eq-playing .eq-bar-3 { animation: eqBar 0.85s ease-in-out 0.3s infinite; }
 
         /* Scrollbar personalizada */
         ::-webkit-scrollbar { width: 8px; height: 6px; }
@@ -152,7 +155,7 @@
         ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 9999px; }
         ::-webkit-scrollbar-thumb:hover { background: #f43f5e; }
 
-        /* Animación de pulso para indicador de estado */
+        /* Pulso indicador de estado */
         @keyframes pulse-ring {
             0% { transform: scale(0.8); opacity: 0.85; }
             100% { transform: scale(2.3); opacity: 0; }
@@ -165,12 +168,19 @@
             background-color: #f43f5e;
             animation: pulse-ring 1.9s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
         }
+
+        /* Evitar zoom automático en iOS al tocar inputs */
+        @media (max-width: 640px) {
+            input, textarea, select {
+                font-size: 16px !important;
+            }
+        }
     </style>
 </head>
-<body class="bg-obsidian bg-tech-grid min-h-screen font-sans antialiased selection:bg-neonPink selection:text-white pb-24 sm:pb-12">
+<body class="bg-obsidian bg-tech-grid min-h-screen font-sans antialiased selection:bg-neonPink selection:text-white pb-24">
 
-    <!-- Definición global de degradado SVG (SIN display:none para compatibilidad en todos los navegadores) -->
-    <svg aria-hidden="true" style="position:absolute; width:0; height:0; overflow:hidden;">
+    <!-- Definición global de degradado SVG (visible en el DOM sin display:none para compatibilidad en Safari/Chrome/Edge) -->
+    <svg aria-hidden="true" focusable="false" class="absolute w-0 h-0 overflow-hidden pointer-events-none">
         <defs>
             <linearGradient id="roseNeonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stop-color="#f9a8d4" />
@@ -184,54 +194,53 @@
     <canvas id="particleCanvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
 
     <!-- Orbes difuminados ambientales -->
-    <div class="fixed top-[-12%] left-[-10%] w-[52vw] h-[52vw] max-w-[540px] max-h-[540px] rounded-full bg-neonPink/10 blur-[120px] pointer-events-none z-0"></div>
-    <div class="fixed bottom-[-12%] right-[-10%] w-[52vw] h-[52vw] max-w-[540px] max-h-[540px] rounded-full bg-roseGold/10 blur-[120px] pointer-events-none z-0"></div>
+    <div class="fixed top-[-12%] left-[-10%] w-[48vw] h-[48vw] max-w-[540px] max-h-[540px] rounded-full bg-neonPink/10 blur-[130px] pointer-events-none z-0"></div>
+    <div class="fixed bottom-[-12%] right-[-10%] w-[48vw] h-[48vw] max-w-[540px] max-h-[540px] rounded-full bg-roseGold/10 blur-[130px] pointer-events-none z-0"></div>
 
-    <!-- Barra Superior Minimalista y Adaptable -->
+    <!-- Barra Superior Minimalista y Responsiva -->
     <header class="relative z-20 border-b border-pink-500/15 bg-obsidian/80 backdrop-blur-md sticky top-0">
-        <div class="max-w-5xl mx-auto px-3 sm:px-6 py-3 flex items-center justify-between gap-2 sm:gap-4">
-            <div class="flex items-center gap-2 min-w-0">
-                <span class="relative flex h-2.5 w-2.5 shrink-0 pulse-dot">
+        <div class="max-w-5xl mx-auto px-3 sm:px-6 py-3 flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 shrink-0">
+                <span class="relative flex h-2.5 w-2.5 pulse-dot">
                     <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-neonPink"></span>
                 </span>
-                <span class="font-mono text-[11px] sm:text-sm tracking-wider text-zinc-300 truncate">
+                <span class="font-mono text-xs sm:text-sm tracking-wider text-zinc-300">
                     CORE.ESSENCE<span class="text-softRose font-bold">_v3.0</span>
                 </span>
             </div>
 
-            <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+            <div class="flex items-center gap-1.5 sm:gap-2.5">
                 <a href="#tropical-memories" class="hidden md:inline-flex px-2.5 py-1.5 rounded-full text-xs font-mono text-zinc-400 hover:text-roseGold transition">
                     #Travesía
                 </a>
                 <a href="#suenos" class="hidden md:inline-flex px-2.5 py-1.5 rounded-full text-xs font-mono text-zinc-400 hover:text-roseGold transition">
                     #Sueñosv3.0
                 </a>
-                <button onclick="toggleMusicPlay()" title="Reproducir o pausar música de fondo"
-                    class="px-2.5 sm:px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-mono bg-zinc-900/90 text-roseGold border border-pink-500/30 hover:border-neonPink transition flex items-center gap-1.5 cursor-pointer">
+                <button id="headerMusicBtn" onclick="toggleMusicPlayback()" title="Reproducir o pausar piano de fondo"
+                    class="px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-mono bg-zinc-900/90 text-roseGold border border-pink-500/30 hover:border-neonPink transition flex items-center gap-1.5 cursor-pointer">
                     <span id="headerMusicIcon">🎵</span>
-                    <span id="headerMusicLabel" class="hidden sm:inline">Música</span>
+                    <span class="hidden sm:inline" id="headerMusicLabel">Música</span>
                 </button>
                 <button onclick="copySummaryToClipboard()" title="Copiar texto de carta e itinerario"
-                    class="hidden sm:inline-flex px-3 py-1.5 rounded-full text-xs font-mono bg-zinc-900/90 text-zinc-300 border border-zinc-800 hover:border-softRose/50 hover:text-roseGold transition cursor-pointer">
-                    📋 Respaldar
+                    class="px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-mono bg-zinc-900/90 text-zinc-300 border border-zinc-800 hover:border-softRose/50 hover:text-roseGold transition cursor-pointer">
+                    📋 <span class="hidden sm:inline">Respaldar</span>
                 </button>
                 <button onclick="launchPinkConfetti()"
-                    class="px-3 sm:px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-mono font-medium bg-pink-500/15 text-roseGold border border-pink-500/35 hover:bg-pink-500/25 hover:border-neonPink transition flex items-center gap-1 cursor-pointer">
-                    <span>✨</span>
-                    <span>Celebrar</span>
+                    class="px-3 sm:px-3.5 py-1.5 rounded-full text-xs font-mono font-medium bg-pink-500/15 text-roseGold border border-pink-500/35 hover:bg-pink-500/25 hover:border-neonPink transition flex items-center gap-1 cursor-pointer">
+                    <span>✨</span> <span class="hidden xs:inline">Celebrar</span>
                 </button>
             </div>
         </div>
     </header>
 
     <!-- Contenido Principal -->
-    <main class="relative z-10 max-w-5xl mx-auto px-3.5 sm:px-6 py-8 sm:py-14 space-y-10 sm:space-y-16">
+    <main class="relative z-10 max-w-5xl mx-auto px-3.5 sm:px-6 py-8 sm:py-14 space-y-10 sm:space-y-14">
 
-        <!-- 1. HERO SECTION CON TUS MENSAJES DE PORTADA Y DETALLES LINE-ART -->
-        <section class="relative text-center space-y-5 sm:space-y-6 pt-2 pb-2">
-            <!-- Emblema flotante izquierda: Stitch -->
+        <!-- 1. HERO SECTION CON DETALLES LINE-ART Y DEDICATORIA -->
+        <section class="relative text-center space-y-6 pt-2 pb-2">
+            <!-- Detalle flotante izquierda: Stitch minimalista -->
             <button onclick="selectCharacter('stitch', true)" title="Stitch: Ohana & Aventura"
-                class="hidden lg:flex flex-col items-center gap-1 absolute left-2 top-6 opacity-65 hover:opacity-100 transition animate-float-1 cursor-pointer group">
+                class="hidden lg:flex flex-col items-center gap-1 absolute left-2 top-4 opacity-70 hover:opacity-100 transition animate-float-1 cursor-pointer group">
                 <svg class="w-14 h-14 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 26 C11 16, 6 22, 9 32 C11 37, 17 37, 21 34" />
                     <path d="M13 24 C11 26, 12 30, 16 31" stroke-dasharray="2 2"/>
@@ -247,9 +256,9 @@
                 <span class="font-mono text-[10px] text-roseGold/70 group-hover:text-roseGold tracking-wider">OHANA</span>
             </button>
 
-            <!-- Emblema flotante derecha: Marie -->
-            <button onclick="selectCharacter('marie', true)" title="Marie: Coqueta & Única"
-                class="hidden lg:flex flex-col items-center gap-1 absolute right-2 top-6 opacity-65 hover:opacity-100 transition animate-float-2 cursor-pointer group">
+            <!-- Detalle flotante derecha: Marie con moño rosa -->
+            <button onclick="selectCharacter('marie', true)" title="Marie: Coqueta & Esencia"
+                class="hidden lg:flex flex-col items-center gap-1 absolute right-2 top-4 opacity-70 hover:opacity-100 transition animate-float-2 cursor-pointer group">
                 <svg class="w-14 h-14 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 28 L19 16 L28 23" />
                     <path d="M43 28 L45 16 L36 23" />
@@ -267,30 +276,30 @@
             </button>
 
             <!-- Insignia Tech -->
-            <div class="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full glass-card border border-pink-500/30 text-[10px] sm:text-xs font-mono tracking-widest text-roseGold uppercase">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-card border border-pink-500/30 text-[11px] sm:text-xs font-mono tracking-widest text-roseGold uppercase">
                 <span class="text-neonPink">◆</span>
                 <span>LEVEL 30 // RELEASE 28.11.2026</span>
                 <span class="text-neonPink">◆</span>
             </div>
 
-            <!-- Título Principal Editable + Tus Dos Párrafos Originales -->
+            <!-- Título Principal Editable + Dedicatoria -->
             <div class="space-y-4 max-w-3xl mx-auto px-1">
                 <div class="group relative inline-block max-w-full">
                     <h1 id="heroTitle" contenteditable="true" spellcheck="false" title="Haz clic para editar el nombre o título"
-                        class="font-display text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white glow-text outline-none focus:ring-2 focus:ring-neonPink/50 rounded-2xl px-2 sm:px-3 py-1 transition cursor-text break-words">
+                        class="font-display text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white glow-text outline-none focus:ring-2 focus:ring-neonPink/50 rounded-2xl px-3 py-1 transition cursor-text break-words">
                         Feliz Cumpleaños, Eli
                     </h1>
-                    <p class="text-[10px] sm:text-[11px] font-mono text-zinc-500 mt-1 opacity-80 group-hover:opacity-100 transition">
-                        [ Toca sobre el título superior para personalizar su nombre ]
+                    <p class="text-[11px] font-mono text-zinc-500 mt-1 opacity-80 group-hover:opacity-100 transition">
+                        [ Haz clic sobre el título superior para personalizarlo ]
                     </p>
                 </div>
 
-                <!-- Tus dos dedicatorias de bienvenida intactas -->
-                <div class="space-y-3 max-w-2xl mx-auto glass-card rounded-2xl p-4 sm:p-6 border border-pink-500/20 text-zinc-200 text-sm sm:text-base leading-relaxed font-light">
-                    <p>
-                        Amor, te dejo un pequeño adelanto de un detalle que puedas tener contigo y poder tenerlo a la mano las veces que quieras. Aunque aún no sea tu día, en este pequeño portal podrás encontrar apartados que solo se revelarán en el momento de tu cumpleaños, amor.
+                <!-- Tus dos párrafos personalizados de portada -->
+                <div class="space-y-3 max-w-2xl mx-auto">
+                    <p class="text-zinc-200 text-sm sm:text-base md:text-lg font-light leading-relaxed">
+                        Amor te dejo un pequeño adelanto de un detalle que puedas tener contigo y poder tenerlo a la mano las veces que quieras. Aunque aún no sea tu día, en este pequeño portal podrás encontrar apartados que solo se revelarán en el momento de tu cumpleaños, amor.
                     </p>
-                    <p class="text-roseGold/95">
+                    <p class="text-roseGold/90 text-sm sm:text-base font-light leading-relaxed">
                         Vas a encontrar varias cosas que he agregado en relación a esta nueva etapa, amor. Espero sea de tu agrado y lo disfrutes tanto como yo lo he hecho al hacerlo.
                     </p>
                 </div>
@@ -298,55 +307,55 @@
         </section>
 
         <!-- 2. CONTADOR REGRESIVO AL 28 DE NOVIEMBRE -->
-        <section class="glass-card rounded-3xl p-4 sm:p-8 md:p-10 relative overflow-hidden">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 mb-5 border-b border-zinc-800/80">
-                <div class="flex items-center gap-2 min-w-0">
-                    <span class="w-2.5 h-2.5 rounded-full bg-neonPink/85 shrink-0"></span>
-                    <span class="w-2.5 h-2.5 rounded-full bg-roseGold/65 shrink-0"></span>
-                    <span class="w-2.5 h-2.5 rounded-full bg-zinc-700 shrink-0"></span>
-                    <span id="countdownStatusLabel" class="ml-1 font-mono text-[11px] sm:text-xs md:text-sm text-zinc-400 truncate">
+        <section class="glass-card rounded-3xl p-5 sm:p-8 md:p-10 relative overflow-hidden">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 mb-6 border-b border-zinc-800/80">
+                <div class="flex items-center gap-2 flex-wrap">
+                    <span class="w-2.5 h-2.5 rounded-full bg-neonPink/85"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-roseGold/65"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-zinc-700"></span>
+                    <span id="countdownStatusLabel" class="ml-1 font-mono text-[11px] sm:text-xs text-zinc-400">
                         TARGET_RELEASE: <span class="text-roseGold">28 NOV 2026 // 00:00:00</span>
                     </span>
                 </div>
 
-                <button id="simulateBtn" onclick="toggleSimulation()" 
-                    class="self-start sm:self-auto px-3.5 py-2 rounded-xl font-mono text-[11px] sm:text-xs bg-zinc-900/90 text-zinc-300 border border-zinc-700/80 hover:border-neonPink hover:text-roseGold transition cursor-pointer shrink-0">
+                <button id="simulateBtn" onclick="toggleSimulation()"
+                    class="self-start sm:self-auto px-3.5 py-2 rounded-xl font-mono text-xs bg-zinc-900/90 text-zinc-300 border border-zinc-700/80 hover:border-neonPink hover:text-roseGold transition cursor-pointer">
                     ⚡ Simular 28 de Noviembre
                 </button>
             </div>
 
             <!-- Bloques del Contador -->
-            <div id="countdownGrid" class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
+            <div id="countdownGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5">
                 <div class="bg-obsidian/80 border border-pink-500/20 rounded-2xl p-4 sm:p-6 text-center">
                     <div id="days" class="font-display text-3xl sm:text-5xl md:text-6xl font-bold text-white tracking-tight">00</div>
-                    <div class="font-mono text-[11px] sm:text-xs uppercase tracking-widest text-roseGold mt-1.5 sm:mt-2">Días</div>
+                    <div class="font-mono text-[11px] sm:text-xs uppercase tracking-widest text-roseGold mt-2">Días</div>
                 </div>
                 <div class="bg-obsidian/80 border border-pink-500/20 rounded-2xl p-4 sm:p-6 text-center">
                     <div id="hours" class="font-display text-3xl sm:text-5xl md:text-6xl font-bold text-white tracking-tight">00</div>
-                    <div class="font-mono text-[11px] sm:text-xs uppercase tracking-widest text-roseGold mt-1.5 sm:mt-2">Horas</div>
+                    <div class="font-mono text-[11px] sm:text-xs uppercase tracking-widest text-roseGold mt-2">Horas</div>
                 </div>
                 <div class="bg-obsidian/80 border border-pink-500/20 rounded-2xl p-4 sm:p-6 text-center">
                     <div id="minutes" class="font-display text-3xl sm:text-5xl md:text-6xl font-bold text-white tracking-tight">00</div>
-                    <div class="font-mono text-[11px] sm:text-xs uppercase tracking-widest text-roseGold mt-1.5 sm:mt-2">Minutos</div>
+                    <div class="font-mono text-[11px] sm:text-xs uppercase tracking-widest text-roseGold mt-2">Minutos</div>
                 </div>
                 <div class="bg-obsidian/80 border border-pink-500/20 rounded-2xl p-4 sm:p-6 text-center relative overflow-hidden">
                     <div id="seconds" class="font-display text-3xl sm:text-5xl md:text-6xl font-bold text-neonPink tracking-tight">00</div>
-                    <div class="font-mono text-[11px] sm:text-xs uppercase tracking-widest text-roseGold mt-1.5 sm:mt-2">Segundos</div>
+                    <div class="font-mono text-[11px] sm:text-xs uppercase tracking-widest text-roseGold mt-2">Segundos</div>
                 </div>
             </div>
 
-            <!-- Banner Especial de Celebración (Visible cuando el contador llega a 0) -->
+            <!-- Banner Especial de Celebración -->
             <div id="celebrationBanner" class="hidden mt-6 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-neonPink/20 via-pink-500/15 to-roseGold/20 border border-neonPink/50 text-center space-y-3">
-                <div class="inline-block px-3 py-1 rounded-full bg-neonPink text-white font-mono text-[11px] sm:text-xs font-bold tracking-wider">
-                    STATUS: 200 OK // ¡HOY COMIENZA TU NIVEL 30!
+                <div class="inline-block px-3 py-1 rounded-full bg-neonPink text-white font-mono text-xs font-bold tracking-wider">
+                    STATUS: 200 OK // ¡HOY COMIENZA TU NIVEL 30, ELI!
                 </div>
                 <h2 class="font-display text-2xl sm:text-4xl font-bold text-white">
-                    🎉 ¡Feliz Cumpleaños #30, Eli Hermosa! 🎉
+                    🎉 ¡Feliz Cumpleaños #30, Mi Amor! 🎉
                 </h2>
                 <p class="text-zinc-200 text-sm sm:text-base max-w-xl mx-auto">
-                    Que nunca falte la ternura, las risas, la valentía y las ganas de seguir cumpliendo cada uno de nuestros sueños juntos.
+                    Que nunca falten las risas, la ternura, tus gestos coquetos y las ganas de seguir viviendo cada capítulo juntos.
                 </p>
-                <div class="pt-2">
+                <div class="pt-1">
                     <button onclick="launchPinkConfetti()" class="btn-pink-glow text-white font-medium text-sm px-6 py-2.5 rounded-full cursor-pointer">
                         ✨ Lanzar más confeti
                     </button>
@@ -354,736 +363,642 @@
             </div>
         </section>
 
-        <!-- CÁPSULA SELLADA (SE ACTIVARÁ CUANDO DIGAS "CERRAR") -->
-        <section id="lockedVaultBanner" class="hidden glass-card rounded-3xl p-6 sm:p-10 text-center space-y-6 border border-pink-500/25">
-            <div class="w-16 h-16 mx-auto rounded-2xl bg-pink-500/15 border border-pink-500/35 flex items-center justify-center text-3xl shadow-lg">
-                🔒
-            </div>
-            <div class="space-y-2 max-w-xl mx-auto">
-                <span class="font-mono text-[11px] sm:text-xs text-neonPink tracking-widest uppercase">
-                    // ACCESS_LOCKED :: UNLOCKING 28.11.2026
-                </span>
-                <h2 class="font-display text-2xl sm:text-3xl font-bold text-white">
-                    Sorpresas Selladas hasta tu Cumpleaños
-                </h2>
-                <p class="text-zinc-400 text-sm sm:text-base font-light">
-                    En cuanto el reloj llegue a cero este <span class="text-roseGold font-medium">28 de Noviembre</span>, se desbloquearán automáticamente todos los apartados preparados para ti:
-                </p>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 max-w-3xl mx-auto pt-2 text-left">
-                <div class="p-3.5 rounded-2xl bg-obsidian/80 border border-zinc-800/90 flex items-center gap-3">
-                    <span class="text-lg">🌴</span>
-                    <div>
-                        <div class="font-mono text-[10px] text-roseGold">LOCKED</div>
-                        <div class="font-display text-xs sm:text-sm font-semibold text-white">Travesía Tropical</div>
+        <!-- 3. MEMORIES DE UNA TRAVESÍA TROPICAL (CARRUSEL CON TUS 28 FOTOS DE GITHUB) -->
+        <section id="tropical-memories" class="glass-card rounded-3xl p-5 sm:p-8 md:p-10 relative overflow-hidden space-y-6">
+            <!-- Hoja de Monstera / Palmera en line-art rosa neón -->
+            <svg class="hidden sm:block absolute -top-6 -right-6 w-44 h-44 opacity-20 pointer-events-none svg-neon-glow" viewBox="0 0 120 120" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 102 C35 72, 62 45, 102 18" />
+                <path d="M45 72 C32 62, 24 46, 32 32 C42 36, 52 46, 58 58" />
+                <path d="M62 56 C52 42, 48 24, 58 14 C68 20, 74 34, 75 46" />
+                <path d="M77 42 C72 28, 74 14, 84 8 C92 16, 94 28, 90 38" />
+                <path d="M48 75 C62 86, 80 90, 92 80 C86 70, 74 62, 62 62" />
+                <path d="M65 59 C80 68, 96 68, 106 58 C98 49, 86 44, 75 47" />
+            </svg>
+
+            <!-- Encabezado -->
+            <div class="relative z-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-800/80 pb-5">
+                <div>
+                    <div class="inline-flex items-center gap-2 font-mono text-xs text-neonPink uppercase tracking-wider">
+                        <span>🌴</span>
+                        <span>// TRAVESÍA_TROPICAL // MEMORIES.GALLERY</span>
                     </div>
-                </div>
-                <div class="p-3.5 rounded-2xl bg-obsidian/80 border border-zinc-800/90 flex items-center gap-3">
-                    <span class="text-lg">✨</span>
-                    <div>
-                        <div class="font-mono text-[10px] text-roseGold">LOCKED</div>
-                        <div class="font-display text-xs sm:text-sm font-semibold text-white">Core Values & Wishlist</div>
-                    </div>
-                </div>
-                <div class="p-3.5 rounded-2xl bg-obsidian/80 border border-zinc-800/90 flex items-center gap-3">
-                    <span class="text-lg">💌</span>
-                    <div>
-                        <div class="font-mono text-[10px] text-roseGold">LOCKED</div>
-                        <div class="font-display text-xs sm:text-sm font-semibold text-white">Decrypted Message</div>
-                    </div>
-                </div>
-                <div class="p-3.5 rounded-2xl bg-obsidian/80 border border-zinc-800/90 flex items-center gap-3">
-                    <span class="text-lg">🗓️</span>
-                    <div>
-                        <div class="font-mono text-[10px] text-roseGold">LOCKED</div>
-                        <div class="font-display text-xs sm:text-sm font-semibold text-white">Itinerary 28 Nov</div>
-                    </div>
-                </div>
-            </div>
-            <p class="font-mono text-[11px] text-zinc-500 pt-1">
-                Mientras llega la medianoche, puedes reproducir la balada de piano de fondo 🎹✨
-            </p>
-        </section>
-
-        <!-- CONTENEDOR DE TODAS LAS SECCIONES (ABIERTO PARA PULIR DETALLES HASTA DECIR "CERRAR") -->
-        <div id="unlockedSectionsContainer" class="space-y-10 sm:space-y-16">
-
-            <!-- 3. MEMORIES DE UNA TRAVESÍA TROPICAL // CARRUSEL CON SUS 10 FOTOS -->
-            <section id="tropical-memories" class="glass-card rounded-3xl p-4 sm:p-8 md:p-10 relative overflow-hidden space-y-5 sm:space-y-6">
-                <!-- Hoja tropical decorativa -->
-                <svg class="hidden sm:block absolute -top-6 -right-6 w-40 h-40 opacity-20 pointer-events-none svg-neon-glow" viewBox="0 0 120 120" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M18 102 C35 72, 62 45, 102 18" />
-                    <path d="M45 72 C32 62, 24 46, 32 32 C42 36, 52 46, 58 58" />
-                    <path d="M62 56 C52 42, 48 24, 58 14 C68 20, 74 34, 75 46" />
-                    <path d="M77 42 C72 28, 74 14, 84 8 C92 16, 94 28, 90 38" />
-                    <path d="M48 75 C62 86, 80 90, 92 80 C86 70, 74 62, 62 62" />
-                    <path d="M65 59 C80 68, 96 68, 106 58 C98 49, 86 44, 75 47" />
-                </svg>
-
-                <!-- Encabezado -->
-                <div class="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-zinc-800/80 pb-5">
-                    <div>
-                        <div class="inline-flex items-center gap-2 font-mono text-[11px] sm:text-xs text-neonPink uppercase tracking-wider">
-                            <span>🌴</span>
-                            <span>// MEMORIES_DE_UNA_TRAVESÍA_TROPICAL</span>
-                        </div>
-                        <h2 class="font-display text-xl sm:text-3xl font-bold text-white mt-1">
-                            Memories de una travesía tropical
-                        </h2>
-                        <p class="text-zinc-400 text-xs sm:text-sm mt-1">
-                            Del festejo tropical a nuestras aventuras favoritas: cada foto guarda un pedacito de nuestra historia juntos.
-                        </p>
-                    </div>
-
-                    <div class="flex flex-wrap items-center gap-2">
-                        <input type="file" id="tropicalPhotoInput" accept="image/*" multiple class="hidden" onchange="handleTropicalFileSelect(event)">
-                        <button onclick="document.getElementById('tropicalPhotoInput').click()" 
-                            class="btn-pink-glow text-white font-mono text-xs font-bold px-4 py-2.5 rounded-xl inline-flex items-center gap-2 cursor-pointer">
-                            <span>📸</span>
-                            <span>Subir más Fotos</span>
-                        </button>
-                        <button id="carouselPlayPauseBtn" onclick="toggleCarouselAutoplay()" 
-                            class="px-3.5 py-2.5 rounded-xl font-mono text-xs bg-obsidian/90 text-roseGold border border-pink-500/30 hover:border-neonPink transition cursor-pointer">
-                            ⏸ Pausar
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Visor del Carrusel con soporte táctil (swipe), Drag & Drop y ajuste para fotos verticales/horizontales -->
-                <div id="tropicalDropZone" class="relative rounded-2xl bg-obsidian/95 border border-pink-500/25 overflow-hidden group transition-all touch-pan-y">
-                    <div class="w-full h-1 bg-zinc-900 overflow-hidden">
-                        <div id="carouselProgressBar" class="h-full bg-gradient-to-r from-neonPink via-softRose to-roseGold transition-all duration-100 ease-linear" style="width: 0%;"></div>
-                    </div>
-
-                    <div class="relative aspect-[4/3] sm:aspect-[16/10] md:aspect-[16/9] w-full flex items-center justify-center bg-gradient-to-br from-obsidian via-charcoal to-obsidian overflow-hidden">
-                        <!-- Imagen de fondo difuminada para rellenar elegantemente fotos verticales -->
-                        <img id="carouselBackdropImage" src="" alt="" aria-hidden="true"
-                            class="absolute inset-0 w-full h-full object-cover blur-2xl opacity-30 scale-110 pointer-events-none select-none">
-
-                        <!-- Fotografía Principal (object-contain para no cortar ninguna cara) -->
-                        <img id="carouselActiveImage" src="" alt="Recuerdo de nuestra travesía" onclick="openLightbox()"
-                            class="relative z-10 max-w-full max-h-full object-contain cursor-zoom-in transition-opacity duration-500 select-none">
-
-                        <!-- Barra superior del visor -->
-                        <div class="absolute top-3 left-3 right-3 z-20 flex items-center justify-between gap-2 pointer-events-none">
-                            <span id="carouselSlideBadge" class="px-2.5 sm:px-3 py-1 rounded-full bg-obsidian/85 backdrop-blur-md border border-pink-500/30 font-mono text-[10px] sm:text-[11px] text-roseGold">
-                                01 / 10 • TRAVESÍA TROPICAL
-                            </span>
-
-                            <div class="flex items-center gap-1.5 sm:gap-2 pointer-events-auto">
-                                <button onclick="openLightbox()" title="Ver en pantalla completa"
-                                    class="w-9 h-9 rounded-full bg-obsidian/85 backdrop-blur-md border border-zinc-700/80 text-zinc-200 hover:border-neonPink hover:text-roseGold text-xs flex items-center justify-center transition cursor-pointer">
-                                    🔍
-                                </button>
-                                <button id="deleteTropicalPhotoBtn" onclick="deleteCurrentTropicalPhoto()" title="Eliminar esta foto"
-                                    class="w-9 h-9 rounded-full bg-obsidian/85 backdrop-blur-md border border-zinc-700/80 text-zinc-300 hover:border-neonPink hover:text-neonPink text-xs flex items-center justify-center transition cursor-pointer">
-                                    🗑️
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Flechas Anterior / Siguiente -->
-                        <button onclick="prevTropicalSlide()" aria-label="Foto anterior"
-                            class="absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-obsidian/85 backdrop-blur-md border border-pink-500/35 text-white hover:bg-neonPink hover:border-neonPink flex items-center justify-center text-lg transition opacity-90 md:opacity-0 md:group-hover:opacity-100 cursor-pointer">
-                            ‹
-                        </button>
-                        <button onclick="nextTropicalSlide()" aria-label="Siguiente foto"
-                            class="absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-obsidian/85 backdrop-blur-md border border-pink-500/35 text-white hover:bg-neonPink hover:border-neonPink flex items-center justify-center text-lg transition opacity-90 md:opacity-0 md:group-hover:opacity-100 cursor-pointer">
-                            ›
-                        </button>
-
-                        <!-- Pie de foto editable -->
-                        <div class="absolute bottom-0 inset-x-0 z-20 bg-gradient-to-t from-obsidian via-obsidian/90 to-transparent pt-10 pb-3.5 px-3.5 sm:px-6">
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                                <div class="flex-1 min-w-0">
-                                    <p id="carouselCaptionText" contenteditable="true" spellcheck="false" onblur="saveTropicalCaption()"
-                                        title="Haz clic para editar el recuerdo de esta foto"
-                                        class="font-display text-xs sm:text-base font-medium text-white outline-none focus:ring-1 focus:ring-neonPink rounded-lg px-2 py-0.5 cursor-text truncate sm:whitespace-normal">
-                                        Nuestra Travesía Tropical 🌴🌺
-                                    </p>
-                                    <span class="font-mono text-[10px] text-zinc-400 px-2 hidden sm:inline">
-                                        [ Haz clic en el texto para editar la descripción del recuerdo ]
-                                    </span>
-                                </div>
-                                <div id="carouselDots" class="flex items-center gap-1.5 px-2 shrink-0 flex-wrap"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Overlay visual al arrastrar archivos -->
-                    <div id="dropOverlay" class="hidden absolute inset-0 z-30 bg-obsidian/90 backdrop-blur-md border-2 border-dashed border-neonPink flex flex-col items-center justify-center gap-2 text-center p-6 pointer-events-none">
-                        <span class="text-4xl">🌺</span>
-                        <p class="font-display text-lg font-bold text-white">Suelta tus fotos aquí</p>
-                        <p class="font-mono text-xs text-roseGold">Se optimizarán y guardarán automáticamente en el carrusel</p>
-                    </div>
-                </div>
-
-                <!-- Tira de Miniaturas -->
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
-                    <div id="tropicalThumbnails" class="flex items-center gap-2.5 overflow-x-auto pb-1"></div>
-                    <div class="flex items-center gap-2 shrink-0 text-[11px] font-mono text-zinc-500">
-                        <span>Desliza o toca cualquier miniatura</span>
-                        <button id="restoreSampleSlidesBtn" onclick="restoreDefaultTropicalSlides()" class="text-roseGold hover:underline cursor-pointer">
-                            • Restaurar fotos
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 4. NUESTROS 30s & SUEÑOS POR CUMPLIR (6 SILUETAS SVG NEÓN + WISHLIST v3.0) -->
-            <section id="suenos" class="glass-card rounded-3xl p-4 sm:p-8 md:p-10 space-y-7 sm:space-y-8">
-                <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-zinc-800/80 pb-5">
-                    <div>
-                        <span class="font-mono text-[11px] sm:text-xs text-neonPink uppercase tracking-wider">// CORE_VALUES & DREAMS_v3.0</span>
-                        <h2 class="font-display text-xl sm:text-3xl font-bold text-white mt-1">Nuestros 30s & Sueños por Cumplir</h2>
-                        <p class="text-zinc-400 text-xs sm:text-sm mt-1">
-                            Crecer no es dejar de ser tú: cada emblema va relacionado con tus personajes y gustos favoritos. Toca cada uno para descubrir lo que simboliza en esta nueva etapa.
-                        </p>
-                    </div>
-                    <span class="font-mono text-[11px] sm:text-xs px-3 py-1.5 rounded-full bg-pink-500/10 border border-pink-500/25 text-roseGold self-start sm:self-auto shrink-0">
-                        6 Guardianes de Esencia
-                    </span>
-                </div>
-
-                <!-- Grid Responsive de los 6 Personajes en Siluetas SVG Neón -->
-                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
-                    
-                    <!-- 1. STITCH -->
-                    <button id="card-stitch" onclick="selectCharacter('stitch', false)"
-                        class="character-card active-char p-4 sm:p-5 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-3 cursor-pointer">
-                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center shrink-0">
-                            <svg class="w-12 h-12 sm:w-14 sm:h-14 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 26 C11 16, 6 22, 9 32 C11 37, 17 37, 21 34" />
-                                <path d="M13 24 C11 26, 12 30, 16 31" stroke-dasharray="2 2"/>
-                                <path d="M43 26 C53 16, 58 22, 55 32 C53 37, 47 37, 43 34" />
-                                <path d="M51 24 C53 26, 52 30, 48 31" stroke-dasharray="2 2"/>
-                                <path d="M21 30 C21 22, 43 22, 43 30 C44 40, 39 46, 32 46 C25 46, 20 40, 21 30 Z" />
-                                <path d="M30 22 L32 18 L34 22" />
-                                <ellipse cx="26.5" cy="33" rx="2.5" ry="3.2" />
-                                <ellipse cx="37.5" cy="33" rx="2.5" ry="3.2" />
-                                <path d="M30 37.5 Q32 36 34 37.5 Q32 39.5 30 37.5 Z" />
-                                <path d="M27 41.5 Q32 44 37 41.5" />
-                            </svg>
-                        </div>
-                        <div class="w-full">
-                            <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">01 // STITCH</div>
-                            <h3 class="font-display text-sm sm:text-base font-bold text-white mt-0.5 leading-snug">Ohana & Aventura</h3>
-                        </div>
-                    </button>
-
-                    <!-- 2. MARIE LA GATITA -->
-                    <button id="card-marie" onclick="selectCharacter('marie', false)"
-                        class="character-card p-4 sm:p-5 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-3 cursor-pointer">
-                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center shrink-0">
-                            <svg class="w-12 h-12 sm:w-14 sm:h-14 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 28 L19 16 L28 23" />
-                                <path d="M43 28 L45 16 L36 23" />
-                                <path d="M32 21 L25 16 C23 19, 23 22, 26 23 L32 21 Z" fill="rgba(244,63,94,0.28)" />
-                                <path d="M32 21 L39 16 C41 19, 41 22, 38 23 L32 21 Z" fill="rgba(244,63,94,0.28)" />
-                                <circle cx="32" cy="21" r="1.5" />
-                                <path d="M20 29 C19 39, 24 45, 32 45 C40 45, 45 39, 44 29" />
-                                <path d="M25 34 Q27 32 29 34" />
-                                <path d="M35 34 Q37 32 39 34" />
-                                <path d="M31 38 L33 38 L32 39.5 Z" />
-                                <path d="M15 36 L21 37 M15 40 L21 39.5" />
-                                <path d="M49 36 L43 37 M49 40 L43 39.5" />
-                            </svg>
-                        </div>
-                        <div class="w-full">
-                            <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">02 // MARIE</div>
-                            <h3 class="font-display text-sm sm:text-base font-bold text-white mt-0.5 leading-snug">Coqueta & Única</h3>
-                        </div>
-                    </button>
-
-                    <!-- 3. WINNIE POOH -->
-                    <button id="card-pooh" onclick="selectCharacter('pooh', false)"
-                        class="character-card p-4 sm:p-5 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-3 cursor-pointer">
-                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center shrink-0">
-                            <svg class="w-12 h-12 sm:w-14 sm:h-14 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="21" cy="21" r="4.5" />
-                                <circle cx="43" cy="21" r="4.5" />
-                                <path d="M23 23 C19 27, 19 36, 24 40 C28 43, 36 43, 40 40 C45 36, 45 27, 41 23" />
-                                <circle cx="27.5" cy="30" r="1.4" fill="#fb7185" />
-                                <circle cx="36.5" cy="30" r="1.4" fill="#fb7185" />
-                                <path d="M30.5 33.5 Q32 32.5 33.5 33.5 Q32 35 30.5 33.5 Z" />
-                                <path d="M28 37 Q32 39.5 36 37" />
-                                <path d="M26 44 L38 44 L39 51 C39 53, 25 53, 25 51 Z" />
-                                <path d="M26 46 Q29 48 32 46 Q35 48 38 46" />
-                            </svg>
-                        </div>
-                        <div class="w-full">
-                            <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">03 // POOH</div>
-                            <h3 class="font-display text-sm sm:text-base font-bold text-white mt-0.5 leading-snug">Paz & Antojitos</h3>
-                        </div>
-                    </button>
-
-                    <!-- 4. COCODRILO -->
-                    <button id="card-croc" onclick="selectCharacter('croc', false)"
-                        class="character-card p-4 sm:p-5 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-3 cursor-pointer">
-                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center shrink-0">
-                            <svg class="w-12 h-12 sm:w-14 sm:h-14 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M32 12 L33.5 15.5 L37 16 L34.3 18.4 L35 22 L32 20.1 L29 22 L29.7 18.4 L27 16 L30.5 15.5 Z" />
-                                <path d="M23 29 C23 24, 29 24, 29 28" />
-                                <path d="M35 28 C35 24, 41 24, 41 29" />
-                                <circle cx="26" cy="28" r="1.4" fill="#fb7185" />
-                                <circle cx="38" cy="28" r="1.4" fill="#fb7185" />
-                                <path d="M16 34 C16 29, 48 29, 48 34 C48 41, 41 44, 32 44 C23 44, 16 41, 16 34 Z" />
-                                <circle cx="27" cy="33.5" r="0.9" />
-                                <circle cx="37" cy="33.5" r="0.9" />
-                                <path d="M21 38 Q32 42.5 43 38" />
-                                <path d="M25 39.5 L26 41 L27 39.8 M37 39.8 L38 41 L39 39.5" />
-                            </svg>
-                        </div>
-                        <div class="w-full">
-                            <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">04 // COCODRILO</div>
-                            <h3 class="font-display text-sm sm:text-base font-bold text-white mt-0.5 leading-snug">Sin Miedo a los 30</h3>
-                        </div>
-                    </button>
-
-                    <!-- 5. LUCIFER (EL GATO DE LA CENICIENTA) -->
-                    <button id="card-lucifer" onclick="selectCharacter('lucifer', false)"
-                        class="character-card p-4 sm:p-5 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-3 cursor-pointer">
-                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center shrink-0">
-                            <svg class="w-12 h-12 sm:w-14 sm:h-14 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M20 26 L16 14 L27 21" />
-                                <path d="M44 26 L48 14 L37 21" />
-                                <path d="M27 21 Q32 18 37 21" />
-                                <path d="M20 26 C15 30, 14 38, 19 41 L16 43 C21 46, 26 48, 32 48 C38 48, 43 46, 48 43 L45 41 C50 38, 49 30, 44 26" />
-                                <path d="M21 31 L29 33" />
-                                <path d="M43 31 L35 33" />
-                                <path d="M22 32.5 C22 36, 28 36, 28 33" />
-                                <path d="M36 33 C36 36, 42 36, 42 32.5" />
-                                <circle cx="25.5" cy="34" r="1.2" fill="#fb7185" />
-                                <circle cx="38.5" cy="34" r="1.2" fill="#fb7185" />
-                                <path d="M30 37.5 L34 37.5 L32 39.5 Z" />
-                                <path d="M27 42.5 Q32 40.5 37 42.5" />
-                                <path d="M12 37 L18 38 M12 41 L18 40.5" />
-                                <path d="M52 37 L46 38 M52 41 L46 40.5" />
-                            </svg>
-                        </div>
-                        <div class="w-full">
-                            <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">05 // LUCIFER</div>
-                            <h3 class="font-display text-sm sm:text-base font-bold text-white mt-0.5 leading-snug">Mirada de Desprecio</h3>
-                        </div>
-                    </button>
-
-                    <!-- 6. TAMBOR (DE BAMBI) -->
-                    <button id="card-tambor" onclick="selectCharacter('tambor', false)"
-                        class="character-card p-4 sm:p-5 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-3 cursor-pointer">
-                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center shrink-0">
-                            <svg class="w-12 h-12 sm:w-14 sm:h-14 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M26 26 C21 15, 22 9, 26 10 C30 11, 30 19, 30 25" />
-                                <path d="M36 25 C39 15, 45 10, 48 13 C50 16, 44 23, 40 27" />
-                                <path d="M22 29 C18 33, 18 41, 24 44 C28 46, 36 46, 40 44 C46 41, 46 33, 42 29" />
-                                <path d="M26 26 Q32 23 37 26" />
-                                <ellipse cx="27" cy="34" rx="2" ry="2.6" />
-                                <ellipse cx="37" cy="34" rx="2" ry="2.6" />
-                                <circle cx="27.4" cy="33.2" r="0.8" fill="#fb7185" />
-                                <circle cx="37.4" cy="33.2" r="0.8" fill="#fb7185" />
-                                <path d="M30.5 37.5 Q32 36.5 33.5 37.5 Q32 39 30.5 37.5 Z" />
-                                <path d="M27.5 40.5 Q32 43.5 36.5 40.5" />
-                                <path d="M30.5 41.8 L30.5 44 L33.5 44 L33.5 41.8" />
-                                <path d="M16 24 L17 21 L18 24 L21 25 L18 26 L17 29 L16 26 L13 25 Z" stroke-width="1.2" />
-                            </svg>
-                        </div>
-                        <div class="w-full">
-                            <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">06 // TAMBOR</div>
-                            <h3 class="font-display text-sm sm:text-base font-bold text-white mt-0.5 leading-snug">Chispa & Corazón</h3>
-                        </div>
-                    </button>
-                </div>
-
-                <!-- Cápsula Dinámica de Reflexión -->
-                <div id="characterQuoteBox" class="p-4 sm:p-6 rounded-2xl bg-gradient-to-r from-obsidian via-charcoal to-obsidian border border-pink-500/30 transition-all">
-                    <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-                        <span id="charBadge" class="font-mono text-[11px] sm:text-xs text-neonPink font-semibold tracking-wider">
-                            ◆ STITCH // OHANA & AVENTURA
-                        </span>
-                        <span class="font-mono text-[10px] sm:text-[11px] text-zinc-500">FILOSOFÍA NIVEL 30</span>
-                    </div>
-                    <p id="charQuoteText" class="text-zinc-200 text-sm sm:text-base leading-relaxed font-light">
-                        "Eli, contigo he descubierto un mundo nuevo y he aprendido tantas cosas que ni me imaginaba. Como Stitch, eres mi Ohana y mi aventura favorita: tienes esa chispa apasionada que me impulsa a superarme cada día. Los 30 apenas son el inicio de todos los caminos que quiero recorrer de tu mano."
+                    <h2 class="font-display text-2xl sm:text-3xl font-bold text-white mt-1">
+                        Memories de una travesía tropical
+                    </h2>
+                    <p class="text-zinc-400 text-xs sm:text-sm mt-1">
+                        Aloha vibes, aventuras, risas y pedacitos de nuestra historia rumbo a tus 30.
                     </p>
                 </div>
 
-                <!-- Wishlist // Sueños por Cumplir v3.0 -->
-                <div class="pt-4 border-t border-zinc-800/80 space-y-4">
-                    <div class="flex flex-wrap items-center justify-between gap-2">
-                        <div>
-                            <h3 class="font-display text-lg sm:text-xl font-bold text-white flex items-center gap-2">
-                                <span class="text-neonPink">✦</span> Wishlist // Sueños por Cumplir en los 30s
-                            </h3>
-                            <p class="text-zinc-400 text-xs sm:text-sm">Metas, viajes y pequeños gustos que vamos a hacer realidad juntos.</p>
+                <div class="flex flex-wrap items-center gap-2">
+                    <input type="file" id="tropicalPhotoInput" accept="image/*" multiple class="hidden" onchange="handleTropicalFileSelect(event)">
+                    <button onclick="document.getElementById('tropicalPhotoInput').click()"
+                        class="btn-pink-glow text-white font-mono text-xs font-bold px-3.5 py-2.5 rounded-xl inline-flex items-center gap-1.5 cursor-pointer">
+                        <span>📸</span>
+                        <span>Subir Fotos</span>
+                    </button>
+                    <button id="carouselPlayPauseBtn" onclick="toggleCarouselAutoplay()"
+                        class="px-3.5 py-2.5 rounded-xl font-mono text-xs bg-obsidian/90 text-roseGold border border-pink-500/30 hover:border-neonPink transition cursor-pointer">
+                        ⏸ Pausar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Visor Principal con Drag & Drop y Swipe Táctil -->
+            <div id="tropicalDropZone" class="relative rounded-2xl bg-obsidian/90 border border-pink-500/25 overflow-hidden group transition-all">
+                <!-- Barra de progreso Auto-play -->
+                <div class="w-full h-1 bg-zinc-900 overflow-hidden">
+                    <div id="carouselProgressBar" class="h-full bg-gradient-to-r from-neonPink via-softRose to-roseGold transition-all duration-100 ease-linear" style="width: 0%;"></div>
+                </div>
+
+                <!-- Contenedor Adaptable (Fondo difuminado + foto completa sin recortes) -->
+                <div id="carouselTouchArea" class="relative h-[340px] sm:h-[440px] md:h-[500px] w-full flex items-center justify-center bg-obsidian overflow-hidden select-none">
+                    <!-- Fondo difuminado ambiental -->
+                    <img id="carouselBackdropImage" src="" alt="" aria-hidden="true"
+                        class="absolute inset-0 w-full h-full object-cover blur-2xl opacity-30 scale-110 pointer-events-none">
+
+                    <!-- Fotografía Principal -->
+                    <img id="carouselActiveImage" src="" alt="Recuerdo de nuestra travesía" onclick="openLightbox()"
+                        class="relative z-10 max-w-full max-h-full object-contain cursor-zoom-in transition-opacity duration-500 select-none">
+
+                    <!-- Indicador de carga para fotos .HEIC de iPhone -->
+                    <div id="carouselLoadingBadge" class="hidden absolute inset-0 z-20 bg-obsidian/75 backdrop-blur-sm flex flex-col items-center justify-center gap-2 pointer-events-none">
+                        <span class="w-8 h-8 rounded-full border-2 border-neonPink border-t-transparent animate-spin"></span>
+                        <span class="font-mono text-xs text-roseGold">Revelando recuerdo...</span>
+                    </div>
+
+                    <!-- Barra superior del visor -->
+                    <div class="absolute top-3 left-3 right-3 z-20 flex items-center justify-between gap-2 pointer-events-none">
+                        <span id="carouselSlideBadge" class="px-3 py-1 rounded-full bg-obsidian/85 backdrop-blur-md border border-pink-500/30 font-mono text-[10px] sm:text-[11px] text-roseGold">
+                            01 / 28 • TRAVESÍA TROPICAL
+                        </span>
+
+                        <div class="flex items-center gap-2 pointer-events-auto">
+                            <button onclick="openLightbox()" title="Ver en pantalla completa"
+                                class="w-9 h-9 rounded-full bg-obsidian/85 backdrop-blur-md border border-zinc-700/80 text-zinc-200 hover:border-neonPink hover:text-roseGold flex items-center justify-center text-xs transition cursor-pointer">
+                                🔍
+                            </button>
+                            <button onclick="deleteCurrentTropicalPhoto()" title="Quitar esta foto del carrusel"
+                                class="w-9 h-9 rounded-full bg-obsidian/85 backdrop-blur-md border border-zinc-700/80 text-zinc-300 hover:border-neonPink hover:text-neonPink flex items-center justify-center text-xs transition cursor-pointer">
+                                🗑️
+                            </button>
                         </div>
-                        <span id="dreamsCounter" class="font-mono text-xs text-roseGold">0 cumplidos</span>
                     </div>
 
-                    <form onsubmit="addDreamItem(event)" class="flex flex-col sm:flex-row gap-2.5">
-                        <input type="text" id="dreamInput" required placeholder="Ej. Viajar juntos a nuestro lugar soñado..."
-                            class="flex-1 rounded-xl bg-obsidian border border-zinc-700/80 focus:border-neonPink text-white px-4 py-3 text-base sm:text-sm outline-none transition">
-                        <button type="submit" class="px-5 py-3 rounded-xl btn-pink-glow text-white font-mono text-xs font-bold tracking-wide cursor-pointer shrink-0">
-                            + Agregar Sueño
-                        </button>
-                    </form>
+                    <!-- Flechas Anterior / Siguiente -->
+                    <button onclick="prevTropicalSlide()" aria-label="Foto anterior"
+                        class="absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-obsidian/85 backdrop-blur-md border border-pink-500/40 text-white text-xl hover:bg-neonPink hover:border-neonPink flex items-center justify-center transition cursor-pointer">
+                        ‹
+                    </button>
+                    <button onclick="nextTropicalSlide()" aria-label="Siguiente foto"
+                        class="absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-obsidian/85 backdrop-blur-md border border-pink-500/40 text-white text-xl hover:bg-neonPink hover:border-neonPink flex items-center justify-center transition cursor-pointer">
+                        ›
+                    </button>
 
-                    <div id="dreamsList" class="grid grid-cols-1 md:grid-cols-2 gap-2.5"></div>
+                    <!-- Pie de foto editable -->
+                    <div class="absolute bottom-0 inset-x-0 z-20 bg-gradient-to-t from-obsidian via-obsidian/90 to-transparent pt-10 pb-3.5 px-3.5 sm:px-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div class="flex-1 min-w-0">
+                                <p id="carouselCaptionText" contenteditable="true" spellcheck="false" onblur="saveTropicalCaption()"
+                                    title="Haz clic para editar el recuerdo de esta foto"
+                                    class="font-display text-sm sm:text-base font-medium text-white outline-none focus:ring-1 focus:ring-neonPink rounded-lg px-2 py-0.5 cursor-text">
+                                    Memories de una travesía tropical 🌴🌺
+                                </p>
+                                <span class="font-mono text-[10px] text-zinc-400 px-2 block">
+                                    [ Toca el texto para editar o desliza con el dedo para cambiar de foto ]
+                                </span>
+                            </div>
+                            <div id="carouselDots" class="flex flex-wrap items-center gap-1 px-2 max-w-full sm:max-w-[210px] justify-start sm:justify-end"></div>
+                        </div>
+                    </div>
                 </div>
-            </section>
 
-            <!-- 5. CARTA DE FELICITACIÓN INTERACTIVA -->
-            <section class="glass-card glass-card-hover rounded-3xl p-4 sm:p-8 md:p-10 space-y-6">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800/80 pb-5">
+                <!-- Overlay Drag & Drop -->
+                <div id="dropOverlay" class="hidden absolute inset-0 z-30 bg-obsidian/90 backdrop-blur-md border-2 border-dashed border-neonPink flex flex-col items-center justify-center gap-2 text-center p-6 pointer-events-none">
+                    <span class="text-4xl">🌺</span>
+                    <p class="font-display text-lg font-bold text-white">Suelta tus fotos aquí</p>
+                    <p class="font-mono text-xs text-roseGold">Se agregarán automáticamente a la galería</p>
+                </div>
+            </div>
+
+            <!-- Tira de Miniaturas + Restaurar -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+                <div id="tropicalThumbnails" class="flex items-center gap-2 overflow-x-auto pb-1.5 w-full sm:w-auto">
+                    <!-- Miniaturas generadas con JS -->
+                </div>
+
+                <div class="flex items-center justify-between sm:justify-end gap-3 shrink-0 text-[11px] font-mono text-zinc-500">
+                    <span>Desliza las miniaturas</span>
+                    <button onclick="restoreDefaultTropicalSlides()" class="text-roseGold hover:underline cursor-pointer">
+                        ↺ Restaurar 28 fotos
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. NUESTROS 30s & SUEÑOS POR CUMPLIR (6 GUARDIANES DE ESENCIA + WISHLIST v3.0) -->
+        <section id="suenos" class="glass-card rounded-3xl p-5 sm:p-8 md:p-10 space-y-7">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-800/80 pb-5">
+                <div>
+                    <span class="font-mono text-xs text-neonPink uppercase tracking-wider">// CORE_VALUES & DREAMS_v3.0</span>
+                    <h2 class="font-display text-2xl sm:text-3xl font-bold text-white mt-1">Nuestros 30s & Sueños por Cumplir</h2>
+                    <p class="text-zinc-400 text-xs sm:text-sm mt-1">
+                        Crecer no es dejar de ser tú: cada emblema va relacionado a tus personajes y gustos favoritos. Toca cada uno para descubrir lo que simboliza en esta nueva etapa.
+                    </p>
+                </div>
+                <span class="font-mono text-xs px-3 py-1.5 rounded-full bg-pink-500/10 border border-pink-500/25 text-roseGold self-start sm:self-auto shrink-0">
+                    6 Guardianes de Esencia
+                </span>
+            </div>
+
+            <!-- Grid de los 6 Personajes en Siluetas SVG Neón -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+
+                <!-- 1. STITCH -->
+                <button id="card-stitch" onclick="selectCharacter('stitch', false)"
+                    class="character-card active-char p-3.5 sm:p-4 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-2.5 cursor-pointer">
+                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center">
+                        <svg class="w-11 h-11 sm:w-12 sm:h-12 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 26 C11 16, 6 22, 9 32 C11 37, 17 37, 21 34" />
+                            <path d="M13 24 C11 26, 12 30, 16 31" stroke-dasharray="2 2"/>
+                            <path d="M43 26 C53 16, 58 22, 55 32 C53 37, 47 37, 43 34" />
+                            <path d="M51 24 C53 26, 52 30, 48 31" stroke-dasharray="2 2"/>
+                            <path d="M21 30 C21 22, 43 22, 43 30 C44 40, 39 46, 32 46 C25 46, 20 40, 21 30 Z" />
+                            <path d="M30 22 L32 18 L34 22" />
+                            <ellipse cx="26.5" cy="33" rx="2.5" ry="3.2" />
+                            <ellipse cx="37.5" cy="33" rx="2.5" ry="3.2" />
+                            <path d="M30 37.5 Q32 36 34 37.5 Q32 39.5 30 37.5 Z" />
+                            <path d="M27 41.5 Q32 44 37 41.5" />
+                        </svg>
+                    </div>
                     <div>
-                        <span class="font-mono text-[11px] sm:text-xs text-neonPink uppercase tracking-wider">// DECRYPTED_MESSAGE.TXT</span>
-                        <h2 class="font-display text-xl sm:text-3xl font-bold text-white mt-1">Una carta para tus 30 años</h2>
+                        <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">01 // STITCH</div>
+                        <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Ohana & Aventura</h3>
                     </div>
+                </button>
 
-                    <div class="flex items-center gap-2">
-                        <button id="toggleEditLetterBtn" onclick="toggleLetterMode()" 
-                            class="px-4 py-2 rounded-xl font-mono text-xs bg-pink-500/15 text-roseGold border border-pink-500/30 hover:bg-pink-500/25 transition cursor-pointer">
-                            ✏️ Editar mensaje
-                        </button>
-                        <button id="saveLetterBtn" onclick="saveLetter()" 
-                            class="hidden px-4 py-2 rounded-xl font-mono text-xs btn-pink-glow text-white font-medium cursor-pointer">
-                            💾 Guardar carta
-                        </button>
+                <!-- 2. MARIE -->
+                <button id="card-marie" onclick="selectCharacter('marie', false)"
+                    class="character-card p-3.5 sm:p-4 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-2.5 cursor-pointer">
+                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center">
+                        <svg class="w-11 h-11 sm:w-12 sm:h-12 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 28 L19 16 L28 23" />
+                            <path d="M43 28 L45 16 L36 23" />
+                            <path d="M32 21 L25 16 C23 19, 23 22, 26 23 L32 21 Z" fill="rgba(244,63,94,0.25)" />
+                            <path d="M32 21 L39 16 C41 19, 41 22, 38 23 L32 21 Z" fill="rgba(244,63,94,0.25)" />
+                            <circle cx="32" cy="21" r="1.5" />
+                            <path d="M20 29 C19 39, 24 45, 32 45 C40 45, 45 39, 44 29" />
+                            <path d="M25 34 Q27 32 29 34" />
+                            <path d="M35 34 Q37 32 39 34" />
+                            <path d="M31 38 L33 38 L32 39.5 Z" />
+                            <path d="M15 36 L21 37 M15 40 L21 39.5" />
+                            <path d="M49 36 L43 37 M49 40 L43 39.5" />
+                        </svg>
                     </div>
-                </div>
-
-                <div id="letterViewMode" class="space-y-4">
-                    <div class="relative p-5 sm:p-8 rounded-2xl bg-obsidian/70 border border-pink-500/15">
-                        <span class="absolute top-3 right-4 font-serif text-4xl sm:text-5xl text-neonPink/20 select-none">”</span>
-                        <div id="letterDisplay" class="text-zinc-200 text-sm sm:text-base md:text-lg leading-relaxed whitespace-pre-line font-light"></div>
-                    </div>
-                    <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] sm:text-xs font-mono text-zinc-500 px-1">
-                        <span>Guardado automáticamente en este navegador</span>
-                        <button onclick="resetDefaultLetter()" class="hover:text-roseGold underline transition cursor-pointer">Restaurar plantilla original</button>
-                    </div>
-                </div>
-
-                <div id="letterEditMode" class="hidden space-y-4">
-                    <label for="letterTextarea" class="block font-mono text-xs text-zinc-400">
-                        Escribe o personaliza tu felicitación:
-                    </label>
-                    <textarea id="letterTextarea" rows="9" 
-                        class="w-full rounded-2xl bg-obsidian border border-pink-500/40 focus:border-neonPink focus:ring-2 focus:ring-neonPink/30 text-zinc-100 p-4 sm:p-5 text-base sm:text-base leading-relaxed outline-none transition resize-y"
-                        placeholder="Escribe aquí tu mensaje especial de cumpleaños..."></textarea>
-                    <div class="flex justify-end gap-3">
-                        <button onclick="cancelLetterEdit()" class="px-4 py-2.5 rounded-xl font-mono text-xs text-zinc-400 hover:text-white transition cursor-pointer">
-                            Cancelar
-                        </button>
-                        <button onclick="saveLetter()" class="px-5 py-2.5 rounded-xl font-mono text-xs btn-pink-glow text-white font-medium cursor-pointer">
-                            💾 Guardar cambios
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 6. ITINERARY // PLAN DE FESTEJO -->
-            <section class="glass-card rounded-3xl p-4 sm:p-8 md:p-10 space-y-7 sm:space-y-8">
-                <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-zinc-800/80 pb-5">
                     <div>
-                        <span class="font-mono text-[11px] sm:text-xs text-neonPink uppercase tracking-wider">// ROADMAP_28_NOV</span>
-                        <h2 class="font-display text-xl sm:text-3xl font-bold text-white mt-1">Itinerary // Plan de Festejo</h2>
-                        <p class="text-zinc-400 text-xs sm:text-sm mt-1">Actividades programadas para celebrar tus 30 como se debe.</p>
+                        <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">02 // MARIE</div>
+                        <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Coqueta & Esencia</h3>
                     </div>
-                    <span id="planCounterBadge" class="font-mono text-xs px-3 py-1.5 rounded-full bg-zinc-900 border border-zinc-800 text-roseGold self-start sm:self-auto shrink-0">
-                        0 actividades listas
+                </button>
+
+                <!-- 3. WINNIE POOH -->
+                <button id="card-pooh" onclick="selectCharacter('pooh', false)"
+                    class="character-card p-3.5 sm:p-4 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-2.5 cursor-pointer">
+                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center">
+                        <svg class="w-11 h-11 sm:w-12 sm:h-12 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="21" cy="21" r="4.5" />
+                            <circle cx="43" cy="21" r="4.5" />
+                            <path d="M23 23 C19 27, 19 36, 24 40 C28 43, 36 43, 40 40 C45 36, 45 27, 41 23" />
+                            <circle cx="27.5" cy="30" r="1.3" fill="#fb7185" />
+                            <circle cx="36.5" cy="30" r="1.3" fill="#fb7185" />
+                            <path d="M30.5 33.5 Q32 32.5 33.5 33.5 Q32 35 30.5 33.5 Z" />
+                            <path d="M28 37 Q32 39.5 36 37" />
+                            <path d="M26 44 L38 44 L39 51 C39 53, 25 53, 25 51 Z" />
+                            <path d="M26 46 Q29 48 32 46 Q35 48 38 46" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">03 // POOH</div>
+                        <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Dulzura & Antojitos</h3>
+                    </div>
+                </button>
+
+                <!-- 4. COCODRILO -->
+                <button id="card-croc" onclick="selectCharacter('croc', false)"
+                    class="character-card p-3.5 sm:p-4 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-2.5 cursor-pointer">
+                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center">
+                        <svg class="w-11 h-11 sm:w-12 sm:h-12 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M32 12 L33.5 15.5 L37 16 L34.3 18.4 L35 22 L32 20.1 L29 22 L29.7 18.4 L27 16 L30.5 15.5 Z" />
+                            <path d="M23 29 C23 24, 29 24, 29 28" />
+                            <path d="M35 28 C35 24, 41 24, 41 29" />
+                            <circle cx="26" cy="28" r="1.3" fill="#fb7185" />
+                            <circle cx="38" cy="28" r="1.3" fill="#fb7185" />
+                            <path d="M16 34 C16 29, 48 29, 48 34 C48 41, 41 44, 32 44 C23 44, 16 41, 16 34 Z" />
+                            <circle cx="27" cy="33.5" r="0.9" />
+                            <circle cx="37" cy="33.5" r="0.9" />
+                            <path d="M21 38 Q32 42.5 43 38" />
+                            <path d="M25 39.5 L26 41 L27 39.8 M37 39.8 L38 41 L39 39.5" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">04 // COCODRILO</div>
+                        <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Valentía & Fuerza</h3>
+                    </div>
+                </button>
+
+                <!-- 5. LUCIFER (EL GATO DE LA CENICIENTA) -->
+                <button id="card-lucifer" onclick="selectCharacter('lucifer', false)"
+                    class="character-card p-3.5 sm:p-4 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-2.5 cursor-pointer">
+                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center">
+                        <svg class="w-11 h-11 sm:w-12 sm:h-12 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <!-- Orejas puntiagudas y pelaje despeinado -->
+                            <path d="M18 27 L15 15 L26 21" />
+                            <path d="M46 27 L49 15 L38 21" />
+                            <path d="M28 21 L32 18 L36 21" />
+                            <!-- Rostro regordete y mejillas esponjosas -->
+                            <path d="M18 27 C14 35, 16 44, 24 46 C29 48, 35 48, 40 46 C48 44, 50 35, 46 27" />
+                            <!-- Mirada icónica de desprecio (párpados entrecerrados) -->
+                            <path d="M21 31 L29 33" />
+                            <path d="M43 31 L35 33" />
+                            <path d="M22 33 C23 36, 27 36, 28 33.5" />
+                            <path d="M42 33 C41 36, 37 36, 36 33.5" />
+                            <circle cx="25.5" cy="34" r="1.1" fill="#fb7185" />
+                            <circle cx="38.5" cy="34" r="1.1" fill="#fb7185" />
+                            <!-- Nariz y mueca dramática -->
+                            <path d="M30 37 L34 37 L32 39 Z" />
+                            <path d="M26 42 Q32 39.5 38 42" />
+                            <path d="M12 37 L18 38 M52 37 L46 38" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">05 // LUCIFER</div>
+                        <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Mirada & Carácter</h3>
+                    </div>
+                </button>
+
+                <!-- 6. TAMBOR (DE BAMBI) -->
+                <button id="card-tambor" onclick="selectCharacter('tambor', false)"
+                    class="character-card p-3.5 sm:p-4 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-2.5 cursor-pointer">
+                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center">
+                        <svg class="w-11 h-11 sm:w-12 sm:h-12 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <!-- Orejitas largas de conejito -->
+                            <path d="M26 24 C22 12, 26 9, 29 14 C30 17, 30 21, 29 24" />
+                            <path d="M38 24 C42 12, 38 9, 35 14 C34 17, 34 21, 35 24" />
+                            <!-- Cabecita tierna y cachetes esponjosos -->
+                            <path d="M22 28 C18 33, 18 41, 24 44 C28 46, 36 46, 40 44 C46 41, 46 33, 42 28 C40 24, 24 24, 22 28 Z" />
+                            <!-- Ojos alegres -->
+                            <circle cx="27" cy="33" r="1.5" fill="#fb7185" />
+                            <circle cx="37" cy="33" r="1.5" fill="#fb7185" />
+                            <!-- Nariz y dientito tierno -->
+                            <path d="M30.5 36.5 Q32 35.5 33.5 36.5 Q32 38 30.5 36.5 Z" />
+                            <path d="M27.5 40 Q32 42.5 36.5 40" />
+                            <rect x="30.8" y="40.8" width="2.4" height="2.4" rx="0.5" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">06 // TAMBOR</div>
+                        <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Alegría & Chispa</h3>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Cápsula Dinámica de Reflexión del Personaje Seleccionado -->
+            <div id="characterQuoteBox" class="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-obsidian via-charcoal to-obsidian border border-pink-500/30 transition-all">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                    <span id="charBadge" class="font-mono text-xs text-neonPink font-semibold tracking-wider">
+                        ◆ STITCH // OHANA & AVENTURA
                     </span>
+                    <span class="font-mono text-[11px] text-zinc-500">FILOSOFÍA NIVEL 30 • ELI</span>
+                </div>
+                <p id="charQuoteText" class="text-zinc-200 text-sm sm:text-base leading-relaxed font-light"></p>
+            </div>
+
+            <!-- Wishlist / Sueños por Cumplir v3.0 -->
+            <div class="pt-4 border-t border-zinc-800/80 space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                        <h3 class="font-display text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+                            <span class="text-neonPink">✦</span> Wishlist // Sueños por Cumplir en los 30s
+                        </h3>
+                        <p class="text-zinc-400 text-xs sm:text-sm">Metas, viajes y pequeños gustos que vamos a hacer realidad juntos.</p>
+                    </div>
+                    <span id="dreamsCounter" class="font-mono text-xs text-roseGold">0 cumplidos</span>
                 </div>
 
-                <form id="addPlanForm" onsubmit="addPlanItem(event)" class="grid grid-cols-1 md:grid-cols-12 gap-3 bg-obsidian/70 p-4 rounded-2xl border border-pink-500/15">
-                    <div class="md:col-span-3">
-                        <label class="block font-mono text-[11px] text-zinc-400 mb-1">Hora</label>
-                        <input type="time" id="planTime" required value="20:00"
-                            class="w-full rounded-xl bg-charcoal border border-zinc-700/80 focus:border-neonPink text-white px-3 py-2.5 text-base sm:text-sm font-mono outline-none transition">
-                    </div>
-                    <div class="md:col-span-4">
-                        <label class="block font-mono text-[11px] text-zinc-400 mb-1">Actividad / Lugar</label>
-                        <input type="text" id="planTitle" required placeholder="Ej. Cena especial / Sorpresa"
-                            class="w-full rounded-xl bg-charcoal border border-zinc-700/80 focus:border-neonPink text-white px-3.5 py-2.5 text-base sm:text-sm outline-none transition">
-                    </div>
-                    <div class="md:col-span-3">
-                        <label class="block font-mono text-[11px] text-zinc-400 mb-1">Nota o detalle (opcional)</label>
-                        <input type="text" id="planNote" placeholder="Dress code, pista..."
-                            class="w-full rounded-xl bg-charcoal border border-zinc-700/80 focus:border-neonPink text-white px-3.5 py-2.5 text-base sm:text-sm outline-none transition">
-                    </div>
-                    <div class="md:col-span-2 flex items-end">
-                        <button type="submit" class="w-full py-3 md:py-2.5 px-4 rounded-xl btn-pink-glow text-white font-mono text-xs font-bold tracking-wide cursor-pointer">
-                            + Agregar
-                        </button>
-                    </div>
+                <form onsubmit="addDreamItem(event)" class="flex flex-col sm:flex-row gap-2.5">
+                    <input type="text" id="dreamInput" required placeholder="Ej. Viajar juntos a nuestro lugar soñado, aprender algo nuevo..."
+                        class="flex-1 rounded-xl bg-obsidian border border-zinc-700/80 focus:border-neonPink text-white px-4 py-2.5 text-sm outline-none transition">
+                    <button type="submit" class="px-5 py-2.5 rounded-xl btn-pink-glow text-white font-mono text-xs font-bold tracking-wide cursor-pointer shrink-0">
+                        + Agregar Sueño
+                    </button>
                 </form>
 
-                <div id="planList" class="space-y-3 relative"></div>
-            </section>
+                <div id="dreamsList" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
+            </div>
+        </section>
 
-        </div> <!-- Fin de #unlockedSectionsContainer -->
+        <!-- 5. CARTA DE FELICITACIÓN INTERACTIVA -->
+        <section class="glass-card glass-card-hover rounded-3xl p-5 sm:p-8 md:p-10 space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800/80 pb-5">
+                <div>
+                    <span class="font-mono text-xs text-neonPink uppercase tracking-wider">// DECRYPTED_MESSAGE.TXT</span>
+                    <h2 class="font-display text-2xl sm:text-3xl font-bold text-white mt-1">Una carta para tus 30 años, Eli</h2>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button id="toggleEditLetterBtn" onclick="toggleLetterMode()"
+                        class="px-4 py-2 rounded-xl font-mono text-xs bg-pink-500/15 text-roseGold border border-pink-500/30 hover:bg-pink-500/25 transition cursor-pointer">
+                        ✏️ Editar mensaje
+                    </button>
+                    <button id="saveLetterBtn" onclick="saveLetter()"
+                        class="hidden px-4 py-2 rounded-xl font-mono text-xs btn-pink-glow text-white font-medium cursor-pointer">
+                        💾 Guardar carta
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modo Lectura -->
+            <div id="letterViewMode" class="space-y-4">
+                <div class="relative p-5 sm:p-8 rounded-2xl bg-obsidian/70 border border-pink-500/15">
+                    <span class="absolute top-3 right-5 font-serif text-5xl text-neonPink/20 select-none">”</span>
+                    <div id="letterDisplay" class="text-zinc-200 text-sm sm:text-base md:text-lg leading-relaxed whitespace-pre-line font-light"></div>
+                </div>
+                <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-zinc-500 px-1">
+                    <span>Guardado automáticamente en este navegador</span>
+                    <button onclick="resetDefaultLetter()" class="hover:text-roseGold underline transition cursor-pointer">Restaurar carta original</button>
+                </div>
+            </div>
+
+            <!-- Modo Edición -->
+            <div id="letterEditMode" class="hidden space-y-4">
+                <label for="letterTextarea" class="block font-mono text-xs text-zinc-400">
+                    Escribe o personaliza tu felicitación:
+                </label>
+                <textarea id="letterTextarea" rows="10"
+                    class="w-full rounded-2xl bg-obsidian border border-pink-500/40 focus:border-neonPink focus:ring-2 focus:ring-neonPink/30 text-zinc-100 p-4 sm:p-5 text-sm sm:text-base leading-relaxed outline-none transition resize-y"
+                    placeholder="Escribe aquí tu mensaje especial..."></textarea>
+                <div class="flex justify-end gap-3">
+                    <button onclick="cancelLetterEdit()" class="px-4 py-2 rounded-xl font-mono text-xs text-zinc-400 hover:text-white transition cursor-pointer">
+                        Cancelar
+                    </button>
+                    <button onclick="saveLetter()" class="px-5 py-2 rounded-xl font-mono text-xs btn-pink-glow text-white font-medium cursor-pointer">
+                        💾 Guardar cambios
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. ITINERARY // PLAN DE FESTEJO -->
+        <section class="glass-card rounded-3xl p-5 sm:p-8 md:p-10 space-y-7">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-800/80 pb-5">
+                <div>
+                    <span class="font-mono text-xs text-neonPink uppercase tracking-wider">// ROADMAP_28_NOV</span>
+                    <h2 class="font-display text-2xl sm:text-3xl font-bold text-white mt-1">Itinerary // Plan de Festejo</h2>
+                    <p class="text-zinc-400 text-xs sm:text-sm mt-1">Actividades programadas para celebrar tus 30 como te mereces.</p>
+                </div>
+                <span id="planCounterBadge" class="font-mono text-xs px-3 py-1.5 rounded-full bg-zinc-900 border border-zinc-800 text-roseGold self-start sm:self-auto">
+                    0 actividades listas
+                </span>
+            </div>
+
+            <form id="addPlanForm" onsubmit="addPlanItem(event)" class="grid grid-cols-1 sm:grid-cols-12 gap-3 bg-obsidian/70 p-4 rounded-2xl border border-pink-500/15">
+                <div class="sm:col-span-3">
+                    <label class="block font-mono text-[11px] text-zinc-400 mb-1">Hora</label>
+                    <input type="time" id="planTime" required value="20:00"
+                        class="w-full rounded-xl bg-charcoal border border-zinc-700/80 focus:border-neonPink text-white px-3 py-2.5 text-sm font-mono outline-none transition">
+                </div>
+                <div class="sm:col-span-4">
+                    <label class="block font-mono text-[11px] text-zinc-400 mb-1">Actividad / Lugar</label>
+                    <input type="text" id="planTitle" required placeholder="Ej. Cena especial / Sorpresa"
+                        class="w-full rounded-xl bg-charcoal border border-zinc-700/80 focus:border-neonPink text-white px-3.5 py-2.5 text-sm outline-none transition">
+                </div>
+                <div class="sm:col-span-3">
+                    <label class="block font-mono text-[11px] text-zinc-400 mb-1">Nota o detalle (opcional)</label>
+                    <input type="text" id="planNote" placeholder="Dress code, pista..."
+                        class="w-full rounded-xl bg-charcoal border border-zinc-700/80 focus:border-neonPink text-white px-3.5 py-2.5 text-sm outline-none transition">
+                </div>
+                <div class="sm:col-span-2 flex items-end">
+                    <button type="submit" class="w-full py-2.5 px-4 rounded-xl btn-pink-glow text-white font-mono text-xs font-bold tracking-wide cursor-pointer">
+                        + Agregar
+                    </button>
+                </div>
+            </form>
+
+            <div id="planList" class="space-y-3 relative"></div>
+        </section>
 
         <!-- 7. ACCIÓN FINAL DE CELEBRACIÓN -->
-        <section class="text-center py-6 space-y-5">
-            <button onclick="launchMegaCelebration()" 
-                class="btn-pink-glow px-6 sm:px-8 py-4 rounded-full font-display text-sm sm:text-lg font-bold text-white tracking-wide inline-flex items-center gap-2.5 sm:gap-3 cursor-pointer">
+        <section class="text-center py-6 space-y-4">
+            <button onclick="launchMegaCelebration()"
+                class="btn-pink-glow px-7 sm:px-8 py-3.5 sm:py-4 rounded-full font-display text-sm sm:text-lg font-bold text-white tracking-wide inline-flex items-center gap-2.5 cursor-pointer">
                 <span>🚀</span>
                 <span>Lanzar Sorpresa // Celebrar Nivel 30</span>
             </button>
-            <p class="font-mono text-[11px] sm:text-xs text-zinc-500 px-2">
-                Hecho con código, cariño y tu esencia favorita • 28 de Noviembre de 2026
+            <p class="font-mono text-[11px] sm:text-xs text-zinc-500">
+                Hecho con código, mucho cariño y tu esencia favorita • Para Eli • 28.11.2026
             </p>
         </section>
 
     </main>
 
-    <!-- REPRODUCTOR DE MÚSICA INSTRUMENTAL FLOTANTE -->
-    <aside id="musicWidget" class="fixed bottom-4 left-4 z-40 max-w-[calc(100vw-2rem)]">
-        <audio id="customAudioPlayer" src="musica.mp3" loop preload="none"></audio>
-        <input type="file" id="customAudioInput" accept="audio/*" class="hidden" onchange="handleCustomAudioFile(event)">
-
+    <!-- Reproductor de Música Flotante (Balada Piano estilo Phil Collins) -->
+    <div id="musicPlayerWidget" class="fixed bottom-4 left-4 z-40 max-w-[calc(100vw-2rem)]">
         <!-- Vista Compacta -->
-        <div id="musicMiniPill" onclick="toggleMusicWidgetCollapse()"
-            class="glass-card border border-pink-500/40 rounded-full px-3.5 py-2.5 flex items-center gap-2.5 cursor-pointer hover:border-neonPink transition shadow-2xl">
-            <div id="miniEqBars" class="flex items-end gap-[2px] h-4 w-4 justify-center">
-                <span class="eq-bar"></span>
-                <span class="eq-bar"></span>
-                <span class="eq-bar"></span>
-                <span class="eq-bar"></span>
-            </div>
-            <span id="miniPillText" class="font-mono text-xs text-roseGold font-medium whitespace-nowrap">
-                🎹 Balada Piano
-            </span>
-        </div>
+        <div id="musicCompactBar" class="glass-card border border-pink-500/40 rounded-full px-3 py-2 flex items-center gap-2.5 shadow-2xl">
+            <button onclick="toggleMusicPlayback()" aria-label="Reproducir o pausar música"
+                class="w-8 h-8 rounded-full btn-pink-glow text-white flex items-center justify-center text-xs shrink-0 cursor-pointer">
+                <span id="compactPlayIcon">▶</span>
+            </button>
 
-        <!-- Vista Expandida -->
-        <div id="musicExpandedCard" class="hidden glass-card border border-pink-500/40 rounded-2xl p-4 w-[290px] sm:w-[320px] shadow-2xl space-y-3">
-            <div class="flex items-center justify-between gap-2">
-                <div class="flex items-center gap-2.5 min-w-0">
-                    <div id="expandedEqBars" class="flex items-end gap-[2px] h-4 w-5 justify-center shrink-0">
-                        <span class="eq-bar"></span>
-                        <span class="eq-bar"></span>
-                        <span class="eq-bar"></span>
-                        <span class="eq-bar"></span>
+            <button onclick="toggleMusicPanel()" class="flex items-center gap-2 text-left pr-1 cursor-pointer">
+                <div id="musicEq" class="flex items-end gap-0.5 h-3.5">
+                    <span class="eq-bar eq-bar-1"></span>
+                    <span class="eq-bar eq-bar-2"></span>
+                    <span class="eq-bar eq-bar-3"></span>
+                </div>
+                <div class="leading-tight">
+                    <div id="compactTrackTitle" class="font-mono text-[11px] text-white font-medium truncate max-w-[130px] sm:max-w-[170px]">
+                        Balada Piano • En Mi Corazón
                     </div>
-                    <div class="min-w-0">
-                        <div class="font-mono text-[10px] text-neonPink tracking-wider uppercase">SOUNDTRACK // v3.0</div>
-                        <div id="currentTrackTitle" class="font-display text-xs sm:text-sm font-semibold text-white truncate">
-                            Balada Piano (In My Heart)
-                        </div>
+                    <div id="compactTrackSub" class="font-mono text-[9px] text-roseGold/80">
+                        Toca ▶ para escuchar
                     </div>
                 </div>
-                <button onclick="toggleMusicWidgetCollapse()" title="Minimizar reproductor"
-                    class="w-7 h-7 rounded-lg bg-obsidian/80 border border-zinc-800 text-zinc-400 hover:text-white hover:border-pink-500/40 flex items-center justify-center text-xs cursor-pointer shrink-0">
-                    —
-                </button>
+            </button>
+        </div>
+
+        <!-- Panel Expandido -->
+        <div id="musicExpandedPanel" class="hidden mt-2 glass-card border border-pink-500/40 rounded-2xl p-4 w-72 sm:w-80 space-y-3.5 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-zinc-800 pb-2.5">
+                <span class="font-mono text-xs text-roseGold font-semibold">🎹 SOUNDTRACK // ELI v3.0</span>
+                <button onclick="toggleMusicPanel()" class="text-zinc-400 hover:text-white font-mono text-xs px-1.5 cursor-pointer">✕</button>
             </div>
 
-            <!-- Selector de pistas instrumentales -->
-            <div class="grid grid-cols-3 gap-1.5">
-                <button id="trackBtn-piano" onclick="selectMusicTrack('piano')"
-                    class="px-2 py-1.5 rounded-xl font-mono text-[10px] border border-neonPink bg-neonPink/20 text-white transition cursor-pointer truncate">
-                    🎹 Balada
+            <!-- Selector de pista -->
+            <div class="grid grid-cols-2 gap-2">
+                <button id="trackBtn-ballad" onclick="selectMusicTrack('ballad')"
+                    class="px-2.5 py-2 rounded-xl font-mono text-[11px] bg-pink-500/20 text-white border border-neonPink transition cursor-pointer">
+                    🎹 Balada Piano
                 </button>
                 <button id="trackBtn-lofi" onclick="selectMusicTrack('lofi')"
-                    class="px-2 py-1.5 rounded-xl font-mono text-[10px] border border-zinc-800 bg-obsidian/80 text-zinc-400 hover:text-roseGold transition cursor-pointer truncate">
-                    ✨ Lo-Fi
-                </button>
-                <button id="trackBtn-mp3" onclick="selectMusicTrack('mp3')"
-                    class="px-2 py-1.5 rounded-xl font-mono text-[10px] border border-zinc-800 bg-obsidian/80 text-zinc-400 hover:text-roseGold transition cursor-pointer truncate">
-                    🎧 Tu MP3
+                    class="px-2.5 py-2 rounded-xl font-mono text-[11px] bg-obsidian/80 text-zinc-400 border border-zinc-800 hover:border-pink-500/40 transition cursor-pointer">
+                    ✨ Noche Suave
                 </button>
             </div>
 
-            <!-- Controles de reproducción y volumen -->
-            <div class="flex items-center gap-3">
-                <button id="playPauseMusicBtn" onclick="toggleMusicPlay()"
-                    class="w-10 h-10 rounded-full btn-pink-glow text-white flex items-center justify-center text-sm shrink-0 cursor-pointer">
-                    ▶
-                </button>
-
-                <div class="flex-1 flex items-center gap-2">
-                    <span class="text-xs text-zinc-400">🔈</span>
-                    <input id="musicVolumeSlider" type="range" min="0" max="100" value="65" oninput="setMusicVolume(this.value)"
-                        class="w-full accent-pink-500 cursor-pointer h-1.5 bg-zinc-800 rounded-lg">
-                    <span id="musicVolumeLabel" class="font-mono text-[10px] text-zinc-400 w-7 text-right">65%</span>
+            <!-- Volumen -->
+            <div class="space-y-1">
+                <div class="flex justify-between font-mono text-[10px] text-zinc-400">
+                    <span>Volumen</span>
+                    <span id="volumeLabel">70%</span>
                 </div>
-            </div>
-
-            <!-- Opción rápida de MP3 local -->
-            <div class="flex items-center justify-between gap-2 pt-1 border-t border-zinc-800/70">
-                <button onclick="document.getElementById('customAudioInput').click()"
-                    class="font-mono text-[10px] text-roseGold hover:text-white underline cursor-pointer">
-                    📁 Cargar MP3 opcional
-                </button>
-                <span id="musicStatusHint" class="font-mono text-[10px] text-zinc-500 truncate">
-                    Listo para sonar
-                </span>
+                <input id="musicVolumeSlider" type="range" min="0" max="100" value="70" oninput="updateMusicVolume(this.value)"
+                    class="w-full accent-rose-500 cursor-pointer">
             </div>
         </div>
-    </aside>
+    </div>
 
-    <!-- Notificación Toast Flotante -->
-    <div id="toast" class="fixed bottom-4 right-4 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none max-w-[calc(100vw-2rem)]">
+    <!-- Notificación Toast Flotante (Sin alert()) -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
         <div class="glass-card border border-neonPink/60 px-4 py-3 rounded-2xl flex items-center gap-2.5 shadow-2xl">
-            <span class="text-neonPink text-sm shrink-0">◆</span>
+            <span class="text-neonPink text-sm">◆</span>
             <span id="toastMessage" class="font-mono text-xs text-white">Mensaje guardado</span>
         </div>
     </div>
 
-    <!-- Modal Lightbox para ver fotografías en pantalla completa -->
+    <!-- Modal Lightbox para pantalla completa -->
     <div id="tropicalLightbox" onclick="closeLightbox(event)" class="hidden fixed inset-0 z-50 bg-obsidian/95 backdrop-blur-xl flex flex-col items-center justify-center p-4 sm:p-8">
-        <button onclick="closeLightbox()" class="absolute top-4 right-4 sm:top-6 sm:right-6 w-10 h-10 rounded-full bg-zinc-900 border border-pink-500/40 text-white hover:bg-neonPink flex items-center justify-center font-mono text-sm cursor-pointer">
+        <button onclick="closeLightbox()" class="absolute top-4 right-4 sm:top-5 sm:right-5 w-10 h-10 rounded-full bg-zinc-900 border border-pink-500/40 text-white hover:bg-neonPink flex items-center justify-center font-mono text-sm cursor-pointer">
             ✕
         </button>
-        <img id="lightboxImage" src="" alt="Vista ampliada" class="max-h-[78vh] max-w-[94vw] rounded-2xl border border-pink-500/30 shadow-2xl object-contain">
+        <img id="lightboxImage" src="" alt="Vista ampliada" class="max-h-[78vh] max-w-[92vw] rounded-2xl border border-pink-500/30 shadow-2xl object-contain">
         <p id="lightboxCaption" class="mt-4 font-display text-sm sm:text-lg text-roseGold text-center max-w-2xl px-2"></p>
     </div>
 
     <script>
         /* ==========================================================================
-           1. CONFIGURACIÓN GENERAL Y DATOS INICIALES
+           CONFIGURACIÓN E INICIALIZACIÓN DE DATOS (LOCALSTORAGE)
            ========================================================================== */
-        // Candado desactivado mientras pulimos detalles (se activa al decir "cerrar")
-        const ENABLE_BIRTHDAY_LOCK = false;
-
         const STORAGE_KEYS = {
-            TITLE: 'bday30_hero_title_v3',
-            LETTER: 'bday30_love_letter_v3',
+            TITLE: 'bday30_hero_title_v4',
+            LETTER: 'bday30_love_letter_v4',
             PLANS: 'bday30_itinerary_plans_v2',
             DREAMS: 'bday30_wishlist_dreams_v2',
-            TROPICAL_PHOTOS: 'bday30_travesia_photos_v3'
+            TROPICAL_PHOTOS: 'bday30_travesia_photos_v4'
         };
 
+        // 6 Guardianes de Esencia personalizados para Eli
         const CHARACTER_DATA = {
             stitch: {
                 badge: '◆ STITCH // OHANA & AVENTURA',
-                quote: '"Eli, contigo he descubierto un mundo nuevo y he aprendido tantas cosas que ni me imaginaba. Como Stitch, eres mi Ohana y mi aventura favorita: tienes esa chispa apasionada que me impulsa a superarme cada día. Los 30 apenas son el inicio de todos los caminos que quiero recorrer de tu mano."'
+                quote: '"Contigo he aprendido que Ohana es elegirnos todos los días. Gracias por ser tan aventurera, por sacarme de mi zona de confort y por enseñarme a vivir el mundo con curiosidad. Los 30 apenas son el inicio de todas las aventuras que nos faltan juntos."'
             },
             marie: {
-                badge: '◆ MARIE // COQUETA, GUAPA & ÚNICA',
-                quote: '"Como Marie con su moño rosa: eres una mujer preciosa, coqueta y con ese toque payasito que me vuelve loco. Cumplir 30 no apaga tu encanto; al contrario, hace que brilles todavía más con esa esencia tan tuya que nadie más en el mundo tiene."'
+                badge: '◆ MARIE // COQUETA, LINDA & ESENCIA PROPIA',
+                quote: '"Igualita a Marie con su moño rosa: hermosa, coqueta, femenina y con ese toque payasito que me enamora todos los días. Cumplir 30 no te quita nada, al contrario, te hace brillar con todavía más seguridad y encanto."'
             },
             pooh: {
-                badge: '◆ WINNIE POOH // PAZ, ANTOJITOS & HOGAR',
-                quote: '"Me enamora cómo disfrutas lo más bonito de la vida: igual podemos pasar una tarde tranquila en casa, caminar por el parque o simplemente compartir algo rico de comer como Pooh con su miel. Contigo, hasta el plan más sencillo se convierte en mi lugar favorito."'
+                badge: '◆ WINNIE POOH // DULZURA, CALMA & ANTOJITOS',
+                quote: '"Porque sabes disfrutar lo mejor de la vida sin complicaciones: desde una tarde tranquila en casa o caminando en el parque, hasta el placer simple de comer algo delicioso juntos. Que tus 30 estén llenos de paz y momentos tan dulces como tú."'
             },
             croc: {
-                badge: '◆ COCODRILO // SIN MIEDO A LOS 30',
-                quote: '"Sé que llegar a los 30 a veces da un poquito de vértigo por todo lo que implica, mi amor, pero no te angusties ni un segundo. Vive cada día a tu ritmo, disfruta lo que va llegando y déjame ser parte de estos pedacitos de tu vida y de todos los que faltan, si así nos lo permite Dios."'
+                badge: '◆ COCODRILO // VALENTÍA & FUERZA DE CORAZÓN',
+                quote: '"Sé que a veces los 30 dan tantito miedo por todo lo que significan, pero quiero que recuerdes lo fuerte y valiente que eres. Tienes un corazón enorme que siempre me impulsa a ser mejor; no te angusties, vive cada paso y déjame caminar contigo."'
             },
             lucifer: {
-                badge: '◆ LUCIFER // TU LADO DRAMÁTICO (QUE TAMBIÉN AMO)',
-                quote: '"Y claro que tenía que estar Lucifer: ese lado mamón y esa mirada de desprecio que pones igualita a tus peluches cuando algo no te late. Aunque te pongas seria o dramática, a mí me derrites igual, porque amo absolutamente cada faceta de ti... hasta tus berrinches."'
+                badge: '◆ LUCIFER // MIRADA DE DESPRECIO & CARÁCTER',
+                quote: '"Imposible no incluir tu lado dramático y esa mirada de desprecio estilo Lucifer que aparece de repente (y que secretamente me da demasiada risa y ternura). Prometo seguir aguantando y amando hasta tus momentos más mamones en esta nueva década."'
             },
             tambor: {
-                badge: '◆ TAMBOR // CHISPA, ALEGRÍA & GRAN CORAZÓN',
-                quote: '"Como Tambor, tienes un corazón enorme, una alegría contagiosa y esa pasión que le pones a todo lo que haces. Gracias por celebrar la vida conmigo, por ayudarme siempre a ser un mejor hombre y por enseñarme a darle su lugar a lo que de verdad importa en la vida."'
+                badge: '◆ TAMBOR // ALEGRÍA, CHISPA & TERNURA',
+                quote: '"Como Tambor, llegas con esa chispa apasionada y ternura que alegra cualquier lugar donde estás. Aunque ya le hayas bajado un poquito a la fiesta, esa energía tan bonita que te hace única jamás se va a apagar."'
             }
         };
 
         const DEFAULT_DREAMS = [
-            { id: 'dream-1', text: 'Seguir coleccionando viajes, paseos y tardes ricas juntos ✈️', done: false },
-            { id: 'dream-2', text: 'Disfrutar cada día sin prisas ni angustias, viviendo el presente ✨', done: true },
-            { id: 'dream-3', text: 'Cumplir cada meta personal que te haga brillar los ojos 🚀', done: false },
-            { id: 'dream-4', text: 'Seguir compartiendo pedacitos de nuestra vida, si Dios lo permite 💖', done: false }
+            { id: 'dream-1', text: 'Seguir coleccionando viajes, escapadas y tardes en el parque juntos ✈️🌿', done: false },
+            { id: 'dream-2', text: 'Disfrutar cada antojito y comida rica sin culpa modo Pooh 😋🍯', done: true },
+            { id: 'dream-3', text: 'Verte cumplir cada meta personal que te ilusiona en tus 30s 🚀✨', done: false },
+            { id: 'dream-4', text: 'Seguir construyendo nuestra historia de la mano de Dios ❤️🙏', done: false }
         ];
 
         const DEFAULT_LETTER = `Feliz cumpleaños número 30, Eli, mi amor.
 
-Quise hacerte este rincón digital con todo mi cariño, juntando tus personajes favoritos y un pedacito de lo que sé hacer, para que siempre tengas a la mano un recordatorio de lo increíblemente especial que eres para mí.
+Quise hacerte este pequeño portal combinando un poco de lo que sé hacer con los personajes y recuerdos que tanto significan para ti, porque alguien con un corazón tan grande como el tuyo merece un detalle único, hecho con paciencia y con muchísimo amor.
 
-Eres una mujer preciosa, tierna, aventurera, coqueta y payasita —y sí, también con tu mirada de desprecio estilo Lucifer que secretamente me encanta—. Gracias a ti he conocido y aprendido muchísimas cosas; me has motivado a superarme, a ser mejor persona y a darle su lugar a lo que realmente quiero en mi vida.
+Gracias por ser esa mujer tan tierna, coqueta, aventurera y apasionada que llegó a mi vida para enseñarme tantas cosas. Contigo he aprendido a superarme, a darme mi lugar y a buscar siempre ser una mejor versión de mí. Amo absolutamente todo de ti: tu lado dulce estilo Winnie Pooh, tu chispa coqueta como Marie, tus ocurrencias, y sí… hasta esa mirada de desprecio estilo Lucifer que me saca una sonrisa cada vez que aparece.
 
-Sé que pasar al piso de los 30 a veces puede dar un poco de miedo o incertidumbre, pero quiero que hoy sueltes cualquier angustia. No tienes que tener todo resuelto hoy: solo vive, disfruta cada etapa como vaya llegando —desde una tarde tranquila en casa o un paseo en el parque hasta nuestras comidas favoritas— y nunca dejes de ser esa mujer apasionada y de gran corazón de la que me enamoré.
+Sé que pasar a los 30 a veces puede generar nervios o incertidumbre, pero quiero que hoy sueltes cualquier angustia. No tienes que apresurar nada; disfruta cada día como vaya llegando, con la certeza de que eres una mujer increíble, hermosa y llena de luz.
 
-Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permite Dios, de todos los capítulos hermosos que todavía nos faltan por escribir juntos. Te quiero muchísimo, Eli. ¡Felices 30, mi amor!`;
+Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo permite, de todos los capítulos que todavía nos faltan por escribir juntos. ¡Te quiero muchísimo, Eli!`;
 
         const DEFAULT_PLANS = [
             {
                 id: 'plan-1',
                 time: '09:30',
                 title: 'Desayuno de Cumpleaños // Boot Sequence',
-                note: 'Arrancamos el día con tu café favorito y algo dulce.'
+                note: 'Arrancamos tus 30 con algo rico y tu bebida favorita.'
             },
             {
                 id: 'plan-2',
                 time: '15:00',
                 title: 'Tarde Especial & Sorpresa',
-                note: 'Detalles por confirmar en la actualización v30.1 😉'
+                note: 'Un paseo bonito y momentos para disfrutar sin prisa 😉'
             },
             {
                 id: 'plan-3',
                 time: '20:30',
                 title: 'Cena de Gala // Level 30 Celebration',
-                note: 'Brindis por tus 30 años y por todos nuestros sueños.'
+                note: 'Brindis por tus 30 años, Eli, y por todo lo que viene.'
             }
         ];
 
-        // Tus 10 fotos reales de la travesía (en GitHub deben estar en la misma carpeta que index.html)
+        // Tus 28 fotos exactas de GitHub (14 .JPG + 14 .HEIC/.heic con decodificación automática)
         const DEFAULT_TROPICAL_SLIDES = [
-            {
-                id: 'travesia-1',
-                src: 'e09ab3db-8787-43fa-bdee-331980bdde2c.JPG',
-                caption: 'Nuestro festejo tropical de tus 30: así de feliz quiero cargarte toda la vida 🌴🌺',
-                isSample: false
-            },
-            {
-                id: 'travesia-2',
-                src: 'IMG_4243.jpg',
-                caption: '¡Bienvenidos los 30! Luces neón, pastel y toda la vibra tropical ✨🎂',
-                isSample: false
-            },
-            {
-                id: 'travesia-3',
-                src: 'a782e7f5-b70c-42a2-9510-8502e164248b.JPG',
-                caption: 'Aventuras con gorritas y paletitas de huella: contigo cualquier plan es el mejor 🦒🐾',
-                isSample: false
-            },
-            {
-                id: 'travesia-4',
-                src: 'IMG_6649.jpg',
-                caption: 'Noches mágicas caminando juntos frente a Bellas Artes 🌃💖',
-                isSample: false
-            },
-            {
-                id: 'travesia-5',
-                src: 'f7df8e7d-3156-4341-a427-b13281784788.JPG',
-                caption: 'Paseo en bici, sol y tu sonrisa junto al lago 🚴‍♀️☀️',
-                isSample: false
-            },
-            {
-                id: 'travesia-6',
-                src: 'IMG_8357.jpg',
-                caption: 'Tarde tranquila rodeados de naturaleza, simplemente disfrutando estar juntos 🌿❤️',
-                isSample: false
-            },
-            {
-                id: 'travesia-7',
-                src: 'IMG_6942.jpg',
-                caption: 'Tu lado payasito y mirada de desprecio estilo Lucifer que tanto me derrite 😂😻',
-                isSample: false
-            },
-            {
-                id: 'travesia-8',
-                src: 'IMG_3353.jpg',
-                caption: 'Modo Winnie Pooh activado: felicidad pura con un buen antojito callejero 😋🔥',
-                isSample: false
-            },
-            {
-                id: 'travesia-9',
-                src: 'eca896c5-27cf-40b8-bac6-071cff55c3f5.JPG',
-                caption: 'Risas sin parar en nuestra salida especial con nuestros vasitos verdes 🥤✨',
-                isSample: false
-            },
-            {
-                id: 'travesia-10',
-                src: 'cd5910fe-23c7-4310-b8d5-2769c644ced5.JPG',
-                caption: 'Noche de fiesta, luces rosas y tú viéndote espectacular como siempre 🎸💕',
-                isSample: false
-            }
+            { id: 'travesia-01', src: 'e09ab3db-8787-43fa-bdee-331980bdde2c.JPG', caption: 'Nuestro festejo tropical de tus 30: así de feliz quiero cargarte toda la vida 🌴🌺' },
+            { id: 'travesia-02', src: 'a782e7f5-b70c-42a2-9510-8502e164248b.JPG', caption: 'Aventuras con gorritas y paletitas de huella: contigo cualquier plan es el mejor 🦒🐾' },
+            { id: 'travesia-03', src: 'f7df8e7d-3156-4341-a427-b13281784788.JPG', caption: 'Paseo en bici, sol y tu sonrisa junto al lago 🚴‍♀️☀️' },
+            { id: 'travesia-04', src: 'eca896c5-27cf-40b8-bac6-071cff55c3f5.JPG', caption: 'Risas sin parar en nuestra salida especial con nuestros vasitos verdes 🥤✨' },
+            { id: 'travesia-05', src: 'cd5910fe-23c7-4310-b8d5-2769c644ced5.JPG', caption: 'Noche de fiesta, luces rosas y tú viéndote espectacular como siempre 🎸💕' },
+            { id: 'travesia-06', src: '0601af77-ec59-40f5-9300-6481fd0383d6.JPG', caption: 'Pedacitos de nuestra historia que guardo en el corazón 💖' },
+            { id: 'travesia-07', src: '48042756-af9f-49f8-b8b3-5319a8554542.JPG', caption: 'Cada momento a tu lado vale oro, Eli ✨' },
+            { id: 'travesia-08', src: '4ffd5bd1-8c21-4ae1-95f4-af90035005ad.JPG', caption: 'Sonrisas que iluminan cualquiera de mis días 🌺' },
+            { id: 'travesia-09', src: '65c13c3c-ccd7-49a2-8188-c7cb0c3c99b5.JPG', caption: 'Nuestra travesía tropical y todo lo bonito que hemos vivido 🌴' },
+            { id: 'travesia-10', src: '7d672d39-11a6-4fde-9ff7-7dea3c8a6881.JPG', caption: 'Contigo aprendo a disfrutar cada instante sin prisa 💕' },
+            { id: 'travesia-11', src: '9482058d-9bc3-4323-8615-39cd1582646e.JPG', caption: 'Un recuerdo más de lo bien que la pasamos juntos ✨' },
+            { id: 'travesia-12', src: '96032bff-5bdf-45b3-8d09-0ba7736da3b2.JPG', caption: 'Mi compañera favorita de aventuras y risas 🌸' },
+            { id: 'travesia-13', src: 'b8a23446-07d7-4443-a2c4-4f1960f2129c.JPG', caption: 'Coleccionando momentos inolvidables rumbo a tus 30 🎉' },
+            { id: 'travesia-14', src: 'f8a2c75f-a31e-45a1-9e0b-bb8f2398ea34.JPG', caption: 'Gracias por dejarme ser parte de estos pedacitos de tu vida ❤️' },
+            { id: 'travesia-15', src: 'IMG_4243.HEIC', caption: '¡Bienvenidos los 30! Luces neón, pastel y toda la vibra tropical ✨🎂' },
+            { id: 'travesia-16', src: 'IMG_6649.HEIC', caption: 'Noches mágicas caminando juntos frente a Bellas Artes 🌃💖' },
+            { id: 'travesia-17', src: 'IMG_8357.HEIC', caption: 'Tarde tranquila rodeados de naturaleza, simplemente disfrutando estar juntos 🌿❤️' },
+            { id: 'travesia-18', src: 'IMG_6942.HEIC', caption: 'Tu lado payasito y mirada de desprecio estilo Lucifer que tanto me derrite 😂😻' },
+            { id: 'travesia-19', src: 'IMG_3353.HEIC', caption: 'Modo Winnie Pooh activado: felicidad pura con un buen antojito callejero 😋🔥' },
+            { id: 'travesia-20', src: 'IMG_0347.heic', caption: 'Instantes que se quedan grabados para siempre ✨' },
+            { id: 'travesia-21', src: 'IMG_0486.heic', caption: 'Tu alegría contagiosa en cada salida que compartimos 💕' },
+            { id: 'travesia-22', src: 'IMG_0775.heic', caption: 'Aventuras que nos hacen crecer y reír juntos 🌟' },
+            { id: 'travesia-23', src: 'IMG_2687.HEIC', caption: 'Siempre tú, con esa esencia única que tanto amo 🌺' },
+            { id: 'travesia-24', src: 'IMG_2711.HEIC', caption: 'Días bonitos que quiero repetir mil veces contigo 💖' },
+            { id: 'travesia-25', src: 'IMG_2988.heic', caption: 'Paz, cariño y el mejor equipo del mundo ✨' },
+            { id: 'travesia-26', src: 'IMG_3035.HEIC', caption: 'Más capítulos juntos en esta nueva etapa de los 30 🎉' },
+            { id: 'travesia-27', src: 'IMG_3879_SnapseedCopy.heic', caption: 'Un recuerdo especial que merece estar en tu portal 💫' },
+            { id: 'travesia-28', src: 'IMG_9203.HEIC', caption: 'Por todos los recuerdos que ya tenemos y los que faltan, Eli ❤️' }
         ];
 
         let isSimulating = false;
         let countdownInterval = null;
         let celebrationTriggered = false;
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMessage');
+            if (!toast || !toastMsg) return;
+            toastMsg.textContent = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2800);
+        }
 
         function padZero(num) {
             return String(Math.max(0, num)).padStart(2, '0');
@@ -1095,327 +1010,75 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
             return div.innerHTML;
         }
 
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toastMessage');
-            if (!toast || !toastMsg) return;
-            toastMsg.textContent = msg;
-            toast.classList.remove('translate-y-24', 'opacity-0');
-            setTimeout(() => {
-                toast.classList.add('translate-y-24', 'opacity-0');
-            }, 3000);
-        }
-
         /* ==========================================================================
-           2. REPRODUCTOR DE MÚSICA INSTRUMENTAL (PIANO ESTILO BALADA + LO-FI + MP3)
-           ========================================================================== */
-        let currentMusicTrack = 'piano';
-        let isMusicPlaying = false;
-        let isMusicWidgetExpanded = false;
-        let musicVolumePercent = 65;
-
-        let pianoMelodySynth = null;
-        let pianoAccompSynth = null;
-        let warmStringsSynth = null;
-        let lofiSynth = null;
-        let activeToneEvents = [];
-        let musicReverb = null;
-
-        function getVolumeInDb(percent) {
-            if (percent <= 0) return -60;
-            return -28 + (percent / 100) * 24;
-        }
-
-        function updateMusicUI() {
-            const playBtn = document.getElementById('playPauseMusicBtn');
-            const miniEq = document.getElementById('miniEqBars');
-            const expEq = document.getElementById('expandedEqBars');
-            const headerIcon = document.getElementById('headerMusicIcon');
-            const headerLabel = document.getElementById('headerMusicLabel');
-            const miniPillText = document.getElementById('miniPillText');
-            const statusHint = document.getElementById('musicStatusHint');
-
-            if (playBtn) playBtn.textContent = isMusicPlaying ? '⏸' : '▶';
-            if (miniEq) miniEq.classList.toggle('is-playing', isMusicPlaying);
-            if (expEq) expEq.classList.toggle('is-playing', isMusicPlaying);
-            if (headerIcon) headerIcon.textContent = isMusicPlaying ? '🎶' : '🎵';
-            if (headerLabel) headerLabel.textContent = isMusicPlaying ? 'Sonando' : 'Música';
-            if (miniPillText) miniPillText.textContent = isMusicPlaying ? 'Sonando • Piano' : '🎹 Balada Piano';
-            if (statusHint) statusHint.textContent = isMusicPlaying ? 'Reproduciendo...' : 'En pausa';
-
-            ['piano', 'lofi', 'mp3'].forEach(track => {
-                const btn = document.getElementById(`trackBtn-${track}`);
-                if (!btn) return;
-                if (track === currentMusicTrack) {
-                    btn.className = 'px-2 py-1.5 rounded-xl font-mono text-[10px] border border-neonPink bg-neonPink/20 text-white transition cursor-pointer truncate';
-                } else {
-                    btn.className = 'px-2 py-1.5 rounded-xl font-mono text-[10px] border border-zinc-800 bg-obsidian/80 text-zinc-400 hover:text-roseGold transition cursor-pointer truncate';
-                }
-            });
-        }
-
-        function toggleMusicWidgetCollapse() {
-            isMusicWidgetExpanded = !isMusicWidgetExpanded;
-            const mini = document.getElementById('musicMiniPill');
-            const expanded = document.getElementById('musicExpandedCard');
-            if (!mini || !expanded) return;
-            mini.classList.toggle('hidden', isMusicWidgetExpanded);
-            expanded.classList.toggle('hidden', !isMusicWidgetExpanded);
-        }
-
-        function stopAllMusicSources() {
-            const audioEl = document.getElementById('customAudioPlayer');
-            if (audioEl) audioEl.pause();
-
-            activeToneEvents.forEach(ev => {
-                try { ev.stop(); ev.dispose(); } catch (e) {}
-            });
-            activeToneEvents = [];
-
-            if (typeof Tone !== 'undefined' && Tone.Transport) {
-                Tone.Transport.stop();
-                Tone.Transport.cancel();
-            }
-        }
-
-        async function startSynthesizedTrack(trackType) {
-            if (typeof Tone === 'undefined') {
-                showToast('Motor de audio no disponible');
-                return;
-            }
-            await Tone.start();
-            stopAllMusicSources();
-
-            if (!musicReverb) {
-                musicReverb = new Tone.Reverb({ decay: 4.5, wet: 0.42 }).toDestination();
-            }
-
-            const db = getVolumeInDb(musicVolumePercent);
-
-            if (trackType === 'piano') {
-                // Balada de piano suave y emotiva en Mi bemol mayor a 84 BPM (referencia: "You'll Be in My Heart")
-                if (!pianoMelodySynth) {
-                    pianoMelodySynth = new Tone.PolySynth(Tone.Synth, {
-                        oscillator: { type: 'triangle' },
-                        envelope: { attack: 0.025, decay: 0.9, sustain: 0.25, release: 2.0 }
-                    }).connect(musicReverb);
-                }
-                if (!pianoAccompSynth) {
-                    pianoAccompSynth = new Tone.PolySynth(Tone.Synth, {
-                        oscillator: { type: 'sine' },
-                        envelope: { attack: 0.06, decay: 0.8, sustain: 0.3, release: 1.8 }
-                    }).connect(musicReverb);
-                }
-                if (!warmStringsSynth) {
-                    warmStringsSynth = new Tone.PolySynth(Tone.Synth, {
-                        oscillator: { type: 'sine' },
-                        envelope: { attack: 1.4, decay: 0.8, sustain: 0.5, release: 2.6 }
-                    }).connect(musicReverb);
-                }
-
-                pianoMelodySynth.volume.value = db;
-                pianoAccompSynth.volume.value = db - 6;
-                warmStringsSynth.volume.value = db - 14;
-
-                Tone.Transport.bpm.value = 84;
-
-                const chords = [
-                    { time: '0:0:0', notes: ['Eb3', 'Bb3', 'G4'] },
-                    { time: '1:0:0', notes: ['Bb2', 'F3', 'D4'] },
-                    { time: '2:0:0', notes: ['Ab2', 'Eb3', 'C4'] },
-                    { time: '3:0:0', notes: ['Bb2', 'F3', 'D4'] },
-                    { time: '4:0:0', notes: ['C3', 'G3', 'Eb4'] },
-                    { time: '5:0:0', notes: ['Ab2', 'Eb3', 'C4'] },
-                    { time: '6:0:0', notes: ['F2', 'C3', 'Ab3'] },
-                    { time: '7:0:0', notes: ['Bb2', 'F3', 'D4'] }
-                ];
-
-                const arpeggio = [
-                    { time: '0:0:0', note: 'Eb3' }, { time: '0:0:2', note: 'Bb3' }, { time: '0:1:0', note: 'Eb4' }, { time: '0:1:2', note: 'G4' },
-                    { time: '0:2:0', note: 'Bb3' }, { time: '0:2:2', note: 'Eb4' }, { time: '0:3:0', note: 'G4' }, { time: '0:3:2', note: 'Eb4' },
-                    { time: '1:0:0', note: 'Bb2' }, { time: '1:0:2', note: 'F3' },  { time: '1:1:0', note: 'Bb3' }, { time: '1:1:2', note: 'D4' },
-                    { time: '1:2:0', note: 'F3' },  { time: '1:2:2', note: 'Bb3' }, { time: '1:3:0', note: 'D4' },  { time: '1:3:2', note: 'Bb3' },
-                    { time: '2:0:0', note: 'Ab2' }, { time: '2:0:2', note: 'Eb3' }, { time: '2:1:0', note: 'Ab3' }, { time: '2:1:2', note: 'C4' },
-                    { time: '2:2:0', note: 'Eb3' }, { time: '2:2:2', note: 'Ab3' }, { time: '2:3:0', note: 'C4' },  { time: '2:3:2', note: 'Ab3' },
-                    { time: '3:0:0', note: 'Bb2' }, { time: '3:0:2', note: 'F3' },  { time: '3:1:0', note: 'Bb3' }, { time: '3:1:2', note: 'D4' },
-                    { time: '3:2:0', note: 'F3' },  { time: '3:2:2', note: 'Bb3' }, { time: '3:3:0', note: 'D4' },  { time: '3:3:2', note: 'F4' },
-                    { time: '4:0:0', note: 'C3' },  { time: '4:0:2', note: 'G3' },  { time: '4:1:0', note: 'C4' },  { time: '4:1:2', note: 'Eb4' },
-                    { time: '4:2:0', note: 'G3' },  { time: '4:2:2', note: 'C4' },  { time: '4:3:0', note: 'Eb4' }, { time: '4:3:2', note: 'C4' },
-                    { time: '5:0:0', note: 'Ab2' }, { time: '5:0:2', note: 'Eb3' }, { time: '5:1:0', note: 'Ab3' }, { time: '5:1:2', note: 'C4' },
-                    { time: '5:2:0', note: 'Eb3' }, { time: '5:2:2', note: 'Ab3' }, { time: '5:3:0', note: 'C4' },  { time: '5:3:2', note: 'Ab3' },
-                    { time: '6:0:0', note: 'F2' },  { time: '6:0:2', note: 'C3' },  { time: '6:1:0', note: 'F3' },  { time: '6:1:2', note: 'Ab3' },
-                    { time: '6:2:0', note: 'C3' },  { time: '6:2:2', note: 'F3' },  { time: '6:3:0', note: 'Ab3' }, { time: '6:3:2', note: 'C4' },
-                    { time: '7:0:0', note: 'Bb2' }, { time: '7:0:2', note: 'F3' },  { time: '7:1:0', note: 'Bb3' }, { time: '7:1:2', note: 'D4' },
-                    { time: '7:2:0', note: 'F3' },  { time: '7:2:2', note: 'Bb3' }, { time: '7:3:0', note: 'D4' },  { time: '7:3:2', note: 'F4' }
-                ];
-
-                const melody = [
-                    { time: '0:0:0', note: 'G4', dur: '4n' },   { time: '0:1:0', note: 'Bb4', dur: '4n' },
-                    { time: '0:2:0', note: 'C5', dur: '4n.' },  { time: '0:3:2', note: 'Bb4', dur: '8n' },
-                    { time: '1:0:0', note: 'Bb4', dur: '2n' },  { time: '1:2:0', note: 'F4', dur: '4n' },  { time: '1:3:0', note: 'G4', dur: '4n' },
-                    { time: '2:0:0', note: 'Ab4', dur: '4n.' }, { time: '2:1:2', note: 'G4', dur: '8n' },  { time: '2:2:0', note: 'F4', dur: '2n' },
-                    { time: '3:0:0', note: 'F4', dur: '4n' },   { time: '3:1:0', note: 'G4', dur: '4n' },  { time: '3:2:0', note: 'Bb4', dur: '2n' },
-                    { time: '4:0:0', note: 'Eb5', dur: '4n.' }, { time: '4:1:2', note: 'D5', dur: '8n' },  { time: '4:2:0', note: 'C5', dur: '4n' }, { time: '4:3:0', note: 'Bb4', dur: '4n' },
-                    { time: '5:0:0', note: 'C5', dur: '2n' },   { time: '5:2:0', note: 'Ab4', dur: '4n' }, { time: '5:3:0', note: 'Bb4', dur: '4n' },
-                    { time: '6:0:0', note: 'C5', dur: '4n.' },  { time: '6:1:2', note: 'Bb4', dur: '8n' }, { time: '6:2:0', note: 'Ab4', dur: '4n' }, { time: '6:3:0', note: 'G4', dur: '4n' },
-                    { time: '7:0:0', note: 'F4', dur: '2n.' },  { time: '7:3:0', note: 'D4', dur: '4n' }
-                ];
-
-                const padPart = new Tone.Part((time, val) => {
-                    warmStringsSynth.triggerAttackRelease(val.notes, '1m', time, 0.35);
-                }, chords);
-                padPart.loop = true;
-                padPart.loopEnd = '8m';
-                padPart.start(0);
-
-                const arpPart = new Tone.Part((time, val) => {
-                    pianoAccompSynth.triggerAttackRelease(val.note, '8n', time, 0.42);
-                }, arpeggio);
-                arpPart.loop = true;
-                arpPart.loopEnd = '8m';
-                arpPart.start(0);
-
-                const melPart = new Tone.Part((time, val) => {
-                    pianoMelodySynth.triggerAttackRelease(val.note, val.dur, time, 0.72);
-                }, melody);
-                melPart.loop = true;
-                melPart.loopEnd = '8m';
-                melPart.start(0);
-
-                activeToneEvents.push(padPart, arpPart, melPart);
-                Tone.Transport.start();
-            } else if (trackType === 'lofi') {
-                if (!lofiSynth) {
-                    lofiSynth = new Tone.PolySynth(Tone.Synth, {
-                        oscillator: { type: 'sine' },
-                        envelope: { attack: 0.7, decay: 0.5, sustain: 0.45, release: 2.2 }
-                    }).connect(musicReverb);
-                }
-                lofiSynth.volume.value = db - 4;
-                Tone.Transport.bpm.value = 72;
-
-                const lofiChords = [
-                    ['F3', 'A3', 'C4', 'E4'],
-                    ['D3', 'F3', 'A3', 'C4'],
-                    ['G3', 'B3', 'D4', 'F4'],
-                    ['C3', 'E3', 'G3', 'B3']
-                ];
-                let idx = 0;
-                const loop = new Tone.Loop((time) => {
-                    lofiSynth.triggerAttackRelease(lofiChords[idx % lofiChords.length], '1m', time, 0.55);
-                    idx++;
-                }, '1m').start(0);
-
-                activeToneEvents.push(loop);
-                Tone.Transport.start();
-            }
-        }
-
-        async function toggleMusicPlay() {
-            if (isMusicPlaying) {
-                stopAllMusicSources();
-                isMusicPlaying = false;
-                updateMusicUI();
-                return;
-            }
-
-            if (currentMusicTrack === 'mp3') {
-                const audioEl = document.getElementById('customAudioPlayer');
-                audioEl.volume = musicVolumePercent / 100;
-                try {
-                    await audioEl.play();
-                    isMusicPlaying = true;
-                    updateMusicUI();
-                } catch (err) {
-                    showToast('Sube "musica.mp3" a GitHub o elige un archivo MP3 📁');
-                    isMusicPlaying = false;
-                    updateMusicUI();
-                }
-            } else {
-                try {
-                    await startSynthesizedTrack(currentMusicTrack);
-                    isMusicPlaying = true;
-                    updateMusicUI();
-                } catch (err) {
-                    showToast('Toca de nuevo para activar el sonido');
-                }
-            }
-        }
-
-        function selectMusicTrack(track) {
-            currentMusicTrack = track;
-            const titleEl = document.getElementById('currentTrackTitle');
-            const titles = {
-                piano: 'Balada Piano (In My Heart)',
-                lofi: 'Lo-Fi Nocturno • Ambiente',
-                mp3: 'Tu Canción (musica.mp3)'
-            };
-            if (titleEl) titleEl.textContent = titles[track] || titles.piano;
-
-            if (isMusicPlaying) {
-                isMusicPlaying = false;
-                toggleMusicPlay();
-            } else {
-                updateMusicUI();
-            }
-        }
-
-        function setMusicVolume(val) {
-            musicVolumePercent = Number(val);
-            const label = document.getElementById('musicVolumeLabel');
-            if (label) label.textContent = `${musicVolumePercent}%`;
-
-            const audioEl = document.getElementById('customAudioPlayer');
-            if (audioEl) audioEl.volume = musicVolumePercent / 100;
-
-            const db = getVolumeInDb(musicVolumePercent);
-            if (pianoMelodySynth) pianoMelodySynth.volume.value = db;
-            if (pianoAccompSynth) pianoAccompSynth.volume.value = db - 6;
-            if (warmStringsSynth) warmStringsSynth.volume.value = db - 14;
-            if (lofiSynth) lofiSynth.volume.value = db - 4;
-        }
-
-        function handleCustomAudioFile(event) {
-            const file = event.target.files && event.target.files[0];
-            if (!file) return;
-            const url = URL.createObjectURL(file);
-            const audioEl = document.getElementById('customAudioPlayer');
-            audioEl.src = url;
-            currentMusicTrack = 'mp3';
-            const cleanName = file.name.replace(/\.[^/.]+$/, '');
-            document.getElementById('currentTrackTitle').textContent = cleanName;
-            stopAllMusicSources();
-            isMusicPlaying = false;
-            toggleMusicPlay();
-            showToast(`Reproduciendo: ${cleanName} 🎶`);
-        }
-
-        /* ==========================================================================
-           3. MEMORIES DE UNA TRAVESÍA TROPICAL // CARRUSEL, SWIPE Y FALLBACK
+           MEMORIES DE UNA TRAVESÍA TROPICAL (CARRUSEL + SOPORTE .HEIC + SWIPE)
            ========================================================================== */
         let tropicalSlides = [];
         let currentSlideIndex = 0;
         let isCarouselPlaying = true;
         let carouselProgress = 0;
         let carouselTimer = null;
+        let activeRenderToken = 0;
         const SLIDE_DURATION_MS = 5200;
 
-        // Placeholder elegante si una foto aún no se ha subido a GitHub
-        function getMissingPhotoFallback(filename) {
-            return `https://placehold.co/1200x750/121216/f9a8d4?text=${encodeURIComponent('Sube ' + filename + ' a GitHub')}`;
+        const heicBlobCache = {};
+        const heicPendingTasks = {};
+
+        function isHeicFile(src) {
+            return typeof src === 'string' && /\.heic$/i.test(src.split('?')[0]);
         }
 
-        // Genera variantes de extensión (.jpg, .JPG, .jpeg, .JPEG) por la sensibilidad de mayúsculas en GitHub Pages
+        function getMissingPhotoFallback(filename) {
+            return `https://placehold.co/1200x750/121216/f9a8d4?text=${encodeURIComponent('Foto: ' + filename)}`;
+        }
+
+        async function resolveSlideImageSrc(src) {
+            if (!isHeicFile(src)) return src;
+            if (heicBlobCache[src]) return heicBlobCache[src];
+            if (heicPendingTasks[src]) return heicPendingTasks[src];
+
+            heicPendingTasks[src] = (async () => {
+                try {
+                    const response = await fetch(src);
+                    if (!response.ok) throw new Error('Archivo no encontrado');
+                    const blob = await response.blob();
+                    if (typeof heic2any === 'function') {
+                        const converted = await heic2any({
+                            blob,
+                            toType: 'image/jpeg',
+                            quality: 0.82
+                        });
+                        const finalBlob = Array.isArray(converted) ? converted[0] : converted;
+                        const objectUrl = URL.createObjectURL(finalBlob);
+                        heicBlobCache[src] = objectUrl;
+                        updateThumbnailIfReady(src, objectUrl);
+                        return objectUrl;
+                    }
+                    return src;
+                } catch (err) {
+                    return getMissingPhotoFallback(src);
+                } finally {
+                    delete heicPendingTasks[src];
+                }
+            })();
+
+            return heicPendingTasks[src];
+        }
+
+        function updateThumbnailIfReady(originalSrc, resolvedUrl) {
+            document.querySelectorAll(`img[data-heic-src="${originalSrc}"]`).forEach(img => {
+                img.src = resolvedUrl;
+            });
+        }
+
         function getExtensionCandidates(src) {
-            if (!src || src.startsWith('data:') || src.startsWith('http')) return [];
+            if (!src || src.startsWith('data:') || src.startsWith('http') || src.startsWith('blob:')) return [];
             const match = src.match(/^(.*)\.(jpg|jpeg|png)$/i);
             if (!match) return [];
             const base = match[1];
             const currentExt = match[2];
-            const variants = ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG'];
-            return variants
-                .filter(ext => ext !== currentExt)
-                .map(ext => `${base}.${ext}`);
+            const variants = ['JPG', 'jpg', 'JPEG', 'jpeg', 'png', 'PNG'];
+            return variants.filter(ext => ext !== currentExt).map(ext => `${base}.${ext}`);
         }
 
         function handlePhotoError(imgEl, originalSrc) {
@@ -1452,7 +1115,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
             }
         }
 
-        function renderTropicalCarousel() {
+        async function renderTropicalCarousel() {
             if (tropicalSlides.length === 0) {
                 tropicalSlides = [...DEFAULT_TROPICAL_SLIDES];
             }
@@ -1460,24 +1123,16 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
                 currentSlideIndex = 0;
             }
 
+            const renderToken = ++activeRenderToken;
             const slide = tropicalSlides[currentSlideIndex];
             const imgEl = document.getElementById('carouselActiveImage');
             const bgEl = document.getElementById('carouselBackdropImage');
+            const loadingEl = document.getElementById('carouselLoadingBadge');
             const badgeEl = document.getElementById('carouselSlideBadge');
             const captionEl = document.getElementById('carouselCaptionText');
             const dotsEl = document.getElementById('carouselDots');
             const thumbsEl = document.getElementById('tropicalThumbnails');
 
-            if (imgEl) {
-                imgEl.dataset.retryIndex = '0';
-                imgEl.onerror = () => handlePhotoError(imgEl, slide.src);
-                imgEl.src = slide.src;
-            }
-            if (bgEl) {
-                bgEl.dataset.retryIndex = '0';
-                bgEl.onerror = () => handlePhotoError(bgEl, slide.src);
-                bgEl.src = slide.src;
-            }
             if (badgeEl) {
                 badgeEl.textContent = `${padZero(currentSlideIndex + 1)} / ${padZero(tropicalSlides.length)} • TRAVESÍA TROPICAL`;
             }
@@ -1486,18 +1141,47 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
             if (dotsEl) {
                 dotsEl.innerHTML = tropicalSlides.map((s, idx) => `
                     <button onclick="goToTropicalSlide(${idx})" aria-label="Ir a foto ${idx + 1}"
-                        class="h-2 rounded-full transition-all cursor-pointer ${idx === currentSlideIndex ? 'w-5 bg-neonPink' : 'w-2 bg-zinc-600 hover:bg-roseGold'}">
+                        class="h-1.5 rounded-full transition-all cursor-pointer ${idx === currentSlideIndex ? 'w-4 bg-neonPink' : 'w-1.5 bg-zinc-600 hover:bg-roseGold'}">
                     </button>
                 `).join('');
             }
 
             if (thumbsEl) {
-                thumbsEl.innerHTML = tropicalSlides.map((s, idx) => `
-                    <button onclick="goToTropicalSlide(${idx})"
-                        class="relative w-16 h-12 rounded-xl overflow-hidden border-2 shrink-0 transition cursor-pointer bg-obsidian ${idx === currentSlideIndex ? 'border-neonPink scale-105 shadow-lg' : 'border-zinc-800 opacity-60 hover:opacity-100'}">
-                        <img src="${s.src}" data-retry-index="0" onerror="handlePhotoError(this, tropicalSlides[${idx}] ? tropicalSlides[${idx}].src : '')" alt="Miniatura ${idx + 1}" class="w-full h-full object-cover">
-                    </button>
-                `).join('');
+                thumbsEl.innerHTML = tropicalSlides.map((s, idx) => {
+                    const isHeic = isHeicFile(s.src);
+                    const cachedUrl = isHeic ? heicBlobCache[s.src] : s.src;
+                    const thumbSrc = cachedUrl || `https://placehold.co/160x120/121216/f9a8d4?text=${padZero(idx + 1)}`;
+                    return `
+                        <button onclick="goToTropicalSlide(${idx})"
+                            class="relative w-16 h-12 rounded-xl overflow-hidden border-2 shrink-0 transition cursor-pointer bg-obsidian ${idx === currentSlideIndex ? 'border-neonPink scale-105 shadow-lg' : 'border-zinc-800 opacity-65 hover:opacity-100'}">
+                            <img src="${thumbSrc}" ${isHeic ? `data-heic-src="${s.src}"` : ''} data-retry-index="0" onerror="handlePhotoError(this, tropicalSlides[${idx}] ? tropicalSlides[${idx}].src : '')" alt="Miniatura ${idx + 1}" class="w-full h-full object-cover">
+                        </button>
+                    `;
+                }).join('');
+            }
+
+            const needsDecode = isHeicFile(slide.src) && !heicBlobCache[slide.src];
+            if (loadingEl) loadingEl.classList.toggle('hidden', !needsDecode);
+
+            const resolvedSrc = await resolveSlideImageSrc(slide.src);
+            if (renderToken !== activeRenderToken) return;
+
+            if (loadingEl) loadingEl.classList.add('hidden');
+            if (imgEl) {
+                imgEl.dataset.retryIndex = '0';
+                imgEl.onerror = () => handlePhotoError(imgEl, slide.src);
+                imgEl.src = resolvedSrc;
+            }
+            if (bgEl) {
+                bgEl.dataset.retryIndex = '0';
+                bgEl.onerror = () => handlePhotoError(bgEl, slide.src);
+                bgEl.src = resolvedSrc;
+            }
+
+            // Precarga silenciosa de la siguiente foto si es .HEIC
+            const nextSlide = tropicalSlides[(currentSlideIndex + 1) % tropicalSlides.length];
+            if (nextSlide && isHeicFile(nextSlide.src) && !heicBlobCache[nextSlide.src]) {
+                resolveSlideImageSrc(nextSlide.src);
             }
         }
 
@@ -1553,11 +1237,10 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
         }
 
         function deleteCurrentTropicalPhoto() {
-            if (tropicalSlides.length <= 1) {
-                showToast('Debe quedar al menos una foto en el carrusel');
-                return;
-            }
             tropicalSlides.splice(currentSlideIndex, 1);
+            if (tropicalSlides.length === 0) {
+                tropicalSlides = [...DEFAULT_TROPICAL_SLIDES];
+            }
             currentSlideIndex = Math.max(0, currentSlideIndex - 1);
             carouselProgress = 0;
             saveTropicalSlidesToStorage();
@@ -1571,7 +1254,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
             carouselProgress = 0;
             saveTropicalSlidesToStorage();
             renderTropicalCarousel();
-            showToast('Las 10 fotos de la travesía han sido restauradas 🌴');
+            showToast('Las 28 fotos de la travesía han sido restauradas 🌴');
         }
 
         function compressImageFile(file, maxDimension = 1000, quality = 0.82) {
@@ -1612,7 +1295,6 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
                 showToast('Selecciona archivos de imagen válidos');
                 return;
             }
-
             showToast(`Procesando ${imageFiles.length} ${imageFiles.length === 1 ? 'foto' : 'fotos'}...`);
 
             let addedCount = 0;
@@ -1623,8 +1305,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
                     tropicalSlides.push({
                         id: 'photo-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6),
                         src: compressedDataUrl,
-                        caption: `Travesía Tropical • ${baseName || 'Recuerdo especial'} 🌺`,
-                        isSample: false
+                        caption: `Travesía Tropical • ${baseName || 'Recuerdo especial'} 🌺`
                     });
                     addedCount++;
                 } catch (err) {
@@ -1676,32 +1357,32 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
                 }
             });
 
-            // Soporte de deslizamiento táctil (Swipe) para celulares y tabletas
-            let touchStartX = 0;
-            dropZone.addEventListener('touchstart', (e) => {
-                if (e.changedTouches && e.changedTouches.length > 0) {
+            // Soporte de deslizamiento táctil (swipe) para celular y tableta
+            const touchArea = document.getElementById('carouselTouchArea');
+            if (touchArea) {
+                let touchStartX = 0;
+                touchArea.addEventListener('touchstart', (e) => {
                     touchStartX = e.changedTouches[0].screenX;
-                }
-            }, { passive: true });
-
-            dropZone.addEventListener('touchend', (e) => {
-                if (e.changedTouches && e.changedTouches.length > 0) {
-                    const deltaX = e.changedTouches[0].screenX - touchStartX;
-                    if (Math.abs(deltaX) > 45) {
-                        if (deltaX < 0) nextTropicalSlide();
+                }, { passive: true });
+                touchArea.addEventListener('touchend', (e) => {
+                    const touchEndX = e.changedTouches[0].screenX;
+                    const diff = touchStartX - touchEndX;
+                    if (Math.abs(diff) > 45) {
+                        if (diff > 0) nextTropicalSlide();
                         else prevTropicalSlide();
                     }
-                }
-            }, { passive: true });
+                }, { passive: true });
+            }
         }
 
-        function openLightbox() {
+        async function openLightbox() {
             const slide = tropicalSlides[currentSlideIndex];
             if (!slide) return;
             const lbImg = document.getElementById('lightboxImage');
+            const resolvedSrc = await resolveSlideImageSrc(slide.src);
             lbImg.dataset.retryIndex = '0';
             lbImg.onerror = () => handlePhotoError(lbImg, slide.src);
-            lbImg.src = slide.src;
+            lbImg.src = resolvedSrc;
             document.getElementById('lightboxCaption').textContent = slide.caption;
             document.getElementById('tropicalLightbox').classList.remove('hidden');
         }
@@ -1712,7 +1393,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
         }
 
         /* ==========================================================================
-           4. GUARDIANES DE ESENCIA (6 PERSONAJES) & WISHLIST v3.0
+           INTERACCIÓN DE LOS 6 GUARDIANES & WISHLIST v3.0
            ========================================================================== */
         function selectCharacter(key, shouldScroll) {
             const data = CHARACTER_DATA[key];
@@ -1722,14 +1403,11 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
             const activeCard = document.getElementById(`card-${key}`);
             if (activeCard) activeCard.classList.add('active-char');
 
-            const badge = document.getElementById('charBadge');
-            const quote = document.getElementById('charQuoteText');
-            if (badge) badge.textContent = data.badge;
-            if (quote) quote.textContent = data.quote;
+            document.getElementById('charBadge').textContent = data.badge;
+            document.getElementById('charQuoteText').textContent = data.quote;
 
             if (shouldScroll) {
-                const suenosEl = document.getElementById('suenos');
-                if (suenosEl) suenosEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                document.getElementById('suenos').scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         }
 
@@ -1751,26 +1429,27 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
             const dreams = getDreams();
             const listEl = document.getElementById('dreamsList');
             const counterEl = document.getElementById('dreamsCounter');
-            if (!listEl || !counterEl) return;
-
             const doneCount = dreams.filter(d => d.done).length;
-            counterEl.textContent = `${doneCount} / ${dreams.length} en marcha`;
 
-            listEl.innerHTML = dreams.map(dream => `
-                <div class="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-obsidian/75 border ${dream.done ? 'border-neonPink/40' : 'border-zinc-800/90'} transition">
-                    <button onclick="toggleDream('${dream.id}')" class="flex items-center gap-3 text-left flex-1 cursor-pointer group min-w-0">
-                        <span class="w-5 h-5 rounded-md flex items-center justify-center border ${dream.done ? 'bg-neonPink border-neonPink text-white' : 'border-zinc-600 group-hover:border-softRose'} text-xs transition shrink-0">
-                            ${dream.done ? '✓' : ''}
-                        </span>
-                        <span class="text-xs sm:text-sm break-words ${dream.done ? 'text-roseGold line-through opacity-80' : 'text-zinc-200'}">
-                            ${escapeHTML(dream.text)}
-                        </span>
-                    </button>
-                    <button onclick="deleteDream('${dream.id}')" title="Quitar sueño" class="text-zinc-600 hover:text-neonPink text-xs font-mono p-1.5 cursor-pointer shrink-0">
-                        ✕
-                    </button>
-                </div>
-            `).join('');
+            if (counterEl) counterEl.textContent = `${doneCount} / ${dreams.length} en marcha`;
+
+            if (listEl) {
+                listEl.innerHTML = dreams.map(dream => `
+                    <div class="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-obsidian/75 border ${dream.done ? 'border-neonPink/40' : 'border-zinc-800/90'} transition">
+                        <button onclick="toggleDream('${dream.id}')" class="flex items-center gap-3 text-left flex-1 cursor-pointer group">
+                            <span class="w-5 h-5 rounded-md flex items-center justify-center border ${dream.done ? 'bg-neonPink border-neonPink text-white' : 'border-zinc-600 group-hover:border-softRose'} text-xs transition shrink-0">
+                                ${dream.done ? '✓' : ''}
+                            </span>
+                            <span class="text-xs sm:text-sm ${dream.done ? 'text-roseGold line-through opacity-80' : 'text-zinc-200'}">
+                                ${escapeHTML(dream.text)}
+                            </span>
+                        </button>
+                        <button onclick="deleteDream('${dream.id}')" title="Quitar sueño" class="text-zinc-600 hover:text-neonPink text-xs font-mono px-1.5 cursor-pointer">
+                            ✕
+                        </button>
+                    </div>
+                `).join('');
+            }
         }
 
         function addDreamItem(event) {
@@ -1778,6 +1457,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
             const input = document.getElementById('dreamInput');
             const text = input.value.trim();
             if (!text) return;
+
             const dreams = getDreams();
             dreams.push({ id: 'dream-' + Date.now(), text, done: false });
             saveDreams(dreams);
@@ -1796,13 +1476,14 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
         }
 
         /* ==========================================================================
-           5. TÍTULO EDITABLE EN PORTADA
+           TÍTULO EDITABLE EN HERO
            ========================================================================== */
         const heroTitleEl = document.getElementById('heroTitle');
         const savedTitle = localStorage.getItem(STORAGE_KEYS.TITLE);
         if (savedTitle && heroTitleEl) {
             heroTitleEl.textContent = savedTitle;
         }
+
         if (heroTitleEl) {
             heroTitleEl.addEventListener('blur', () => {
                 const cleanText = heroTitleEl.textContent.trim() || 'Feliz Cumpleaños, Eli';
@@ -1819,7 +1500,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
         }
 
         /* ==========================================================================
-           6. CONTADOR REGRESIVO AL 28 DE NOVIEMBRE DE 2026
+           CONTADOR REGRESIVO AL 28 DE NOVIEMBRE DE 2026 (00:00:00 HORA LOCAL)
            ========================================================================== */
         const TARGET_DATE = new Date(2026, 10, 28, 0, 0, 0).getTime();
 
@@ -1832,18 +1513,8 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
             const minutesEl = document.getElementById('minutes');
             const secondsEl = document.getElementById('seconds');
             const bannerEl = document.getElementById('celebrationBanner');
-            const lockedVault = document.getElementById('lockedVaultBanner');
-            const unlockedSections = document.getElementById('unlockedSectionsContainer');
 
-            const isBirthdayReached = distance <= 0;
-
-            // Control del candado (solo aplica cuando ENABLE_BIRTHDAY_LOCK = true)
-            if (ENABLE_BIRTHDAY_LOCK && lockedVault && unlockedSections) {
-                lockedVault.classList.toggle('hidden', isBirthdayReached);
-                unlockedSections.classList.toggle('hidden', !isBirthdayReached);
-            }
-
-            if (isBirthdayReached) {
+            if (distance <= 0) {
                 daysEl.textContent = '00';
                 hoursEl.textContent = '00';
                 minutesEl.textContent = '00';
@@ -1888,7 +1559,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
         }
 
         /* ==========================================================================
-           7. EDITOR Y VISOR DE CARTA DE FELICITACIÓN
+           EDITOR Y VISOR DE CARTA DE FELICITACIÓN
            ========================================================================== */
         function loadLetter() {
             const savedLetter = localStorage.getItem(STORAGE_KEYS.LETTER) || DEFAULT_LETTER;
@@ -1937,11 +1608,11 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
         function resetDefaultLetter() {
             localStorage.setItem(STORAGE_KEYS.LETTER, DEFAULT_LETTER);
             loadLetter();
-            showToast('Plantilla original restaurada');
+            showToast('Carta original restaurada');
         }
 
         /* ==========================================================================
-           8. ITINERARY // PLAN DE FESTEJO
+           ITINERARY // PLAN DE FESTEJO INTERACTIVO
            ========================================================================== */
         function getPlans() {
             try {
@@ -1962,7 +1633,6 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
             const plans = getPlans();
             const listEl = document.getElementById('planList');
             const badgeEl = document.getElementById('planCounterBadge');
-            if (!listEl || !badgeEl) return;
 
             badgeEl.textContent = `${plans.length} ${plans.length === 1 ? 'actividad lista' : 'actividades listas'}`;
 
@@ -1976,19 +1646,19 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
 
             listEl.innerHTML = plans.map((item) => `
                 <div class="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 sm:p-5 rounded-2xl bg-obsidian/80 border border-zinc-800/90 hover:border-pink-500/40 transition">
-                    <div class="flex items-start sm:items-center gap-3.5 sm:gap-4 min-w-0">
+                    <div class="flex items-start sm:items-center gap-3.5 sm:gap-4">
                         <span class="px-3 py-1.5 rounded-xl bg-neonPink/15 border border-neonPink/30 text-roseGold font-mono text-xs sm:text-sm font-bold shrink-0">
                             ${escapeHTML(item.time)}
                         </span>
-                        <div class="min-w-0">
-                            <h3 class="font-display text-sm sm:text-lg font-semibold text-white break-words">
+                        <div>
+                            <h3 class="font-display text-sm sm:text-lg font-semibold text-white">
                                 ${escapeHTML(item.title)}
                             </h3>
-                            ${item.note ? `<p class="text-zinc-400 text-xs sm:text-sm mt-0.5 break-words">${escapeHTML(item.note)}</p>` : ''}
+                            ${item.note ? `<p class="text-zinc-400 text-xs sm:text-sm mt-0.5">${escapeHTML(item.note)}</p>` : ''}
                         </div>
                     </div>
                     <button onclick="deletePlanItem('${item.id}')" title="Eliminar actividad"
-                        class="self-end sm:self-center px-3 py-1.5 rounded-lg font-mono text-xs text-zinc-500 hover:text-neonPink hover:bg-neonPink/10 transition cursor-pointer shrink-0">
+                        class="self-end sm:self-center px-3 py-1.5 rounded-lg font-mono text-xs text-zinc-500 hover:text-neonPink hover:bg-neonPink/10 transition cursor-pointer">
                         ✕ Quitar
                     </button>
                 </div>
@@ -2017,7 +1687,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
         }
 
         /* ==========================================================================
-           9. RESPALDO RÁPIDO AL PORTAPAPELES
+           RESPALDO RÁPIDO AL PORTAPAPELES (COMPATIBLE CON IFRAMES)
            ========================================================================== */
         function copySummaryToClipboard() {
             const title = document.getElementById('heroTitle').textContent.trim();
@@ -2041,12 +1711,217 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
         }
 
         /* ==========================================================================
-           10. CONFETI Y PARTÍCULAS AMBIENTALES
+           REPRODUCTOR INSTRUMENTAL EN VIVO (TONE.JS - BALADA PIANO TRANQUILA)
+           ========================================================================== */
+        let isMusicPlaying = false;
+        let currentTrack = 'ballad';
+        let pianoSynth = null;
+        let padSynth = null;
+        let musicReverb = null;
+        let masterGain = null;
+        let activeParts = [];
+
+        function initAudioEngine() {
+            if (pianoSynth || typeof Tone === 'undefined') return;
+
+            masterGain = new Tone.Gain(0.7).toDestination();
+            musicReverb = new Tone.Reverb({ decay: 4.2, wet: 0.38 }).connect(masterGain);
+
+            pianoSynth = new Tone.PolySynth(Tone.Synth, {
+                oscillator: { type: 'triangle' },
+                envelope: { attack: 0.02, decay: 1.4, sustain: 0.28, release: 2.2 }
+            }).connect(musicReverb);
+            pianoSynth.volume.value = -5;
+
+            padSynth = new Tone.PolySynth(Tone.Synth, {
+                oscillator: { type: 'sine' },
+                envelope: { attack: 1.2, decay: 1.0, sustain: 0.55, release: 2.8 }
+            }).connect(musicReverb);
+            padSynth.volume.value = -16;
+        }
+
+        function clearActiveParts() {
+            activeParts.forEach(part => {
+                try {
+                    part.stop();
+                    part.dispose();
+                } catch (e) {}
+            });
+            activeParts = [];
+            if (typeof Tone !== 'undefined') {
+                Tone.Transport.stop();
+                Tone.Transport.cancel();
+            }
+        }
+
+        function buildTrackSequence(trackName) {
+            clearActiveParts();
+            if (typeof Tone === 'undefined') return;
+
+            if (trackName === 'ballad') {
+                // Balada de piano tranquila en Mi bemol mayor inspirada en la atmósfera cálida de "You'll Be in My Heart"
+                Tone.Transport.bpm.value = 82;
+
+                const chords = [
+                    { time: '0:0:0', notes: ['Eb3', 'Bb3', 'Eb4', 'G4'], dur: '1m' },
+                    { time: '1:0:0', notes: ['Bb2', 'F3', 'Bb3', 'D4'], dur: '1m' },
+                    { time: '2:0:0', notes: ['C3', 'G3', 'C4', 'Eb4'], dur: '1m' },
+                    { time: '3:0:0', notes: ['Ab2', 'Eb3', 'Ab3', 'C4'], dur: '1m' },
+                    { time: '4:0:0', notes: ['Eb3', 'Bb3', 'Eb4', 'G4'], dur: '1m' },
+                    { time: '5:0:0', notes: ['Ab2', 'Eb3', 'Ab3', 'C4'], dur: '1m' },
+                    { time: '6:0:0', notes: ['F2', 'C3', 'F3', 'Ab3'], dur: '1m' },
+                    { time: '7:0:0', notes: ['Bb2', 'F3', 'Bb3', 'D4'], dur: '1m' }
+                ];
+
+                const melody = [
+                    { time: '0:0:0', note: 'G4', dur: '4n' },
+                    { time: '0:1:0', note: 'Bb4', dur: '4n' },
+                    { time: '0:2:0', note: 'Eb5', dur: '2n' },
+                    { time: '1:0:0', note: 'D5', dur: '4n.' },
+                    { time: '1:1:2', note: 'C5', dur: '8n' },
+                    { time: '1:2:0', note: 'Bb4', dur: '2n' },
+                    { time: '2:0:0', note: 'G4', dur: '4n' },
+                    { time: '2:1:0', note: 'C5', dur: '4n' },
+                    { time: '2:2:0', note: 'Eb5', dur: '4n.' },
+                    { time: '2:3:2', note: 'D5', dur: '8n' },
+                    { time: '3:0:0', note: 'C5', dur: '2n.' },
+                    { time: '4:0:0', note: 'Bb4', dur: '4n' },
+                    { time: '4:1:0', note: 'G4', dur: '4n' },
+                    { time: '4:2:0', note: 'Eb5', dur: '2n' },
+                    { time: '5:0:0', note: 'C5', dur: '4n' },
+                    { time: '5:1:0', note: 'Eb5', dur: '4n' },
+                    { time: '5:2:0', note: 'F5', dur: '2n' },
+                    { time: '6:0:0', note: 'Eb5', dur: '4n' },
+                    { time: '6:1:0', note: 'C5', dur: '4n' },
+                    { time: '6:2:0', note: 'Ab4', dur: '2n' },
+                    { time: '7:0:0', note: 'Bb4', dur: '1m' }
+                ];
+
+                const padPart = new Tone.Part((time, val) => {
+                    padSynth.triggerAttackRelease(val.notes, val.dur, time, 0.45);
+                }, chords);
+                padPart.loop = true;
+                padPart.loopEnd = '8m';
+
+                const melPart = new Tone.Part((time, val) => {
+                    pianoSynth.triggerAttackRelease(val.note, val.dur, time, 0.7);
+                }, melody);
+                melPart.loop = true;
+                melPart.loopEnd = '8m';
+
+                padPart.start(0);
+                melPart.start(0);
+                activeParts.push(padPart, melPart);
+            } else {
+                // Pista alternativa: Noche Suave (acordes cálidos lentos)
+                Tone.Transport.bpm.value = 72;
+
+                const lofiChords = [
+                    { time: '0:0:0', notes: ['F3', 'A3', 'C4', 'E4'], dur: '1m' },
+                    { time: '1:0:0', notes: ['D3', 'F3', 'A3', 'C4'], dur: '1m' },
+                    { time: '2:0:0', notes: ['G3', 'B3', 'D4', 'F4'], dur: '1m' },
+                    { time: '3:0:0', notes: ['C3', 'E3', 'G3', 'B3'], dur: '1m' }
+                ];
+
+                const lofiPart = new Tone.Part((time, val) => {
+                    pianoSynth.triggerAttackRelease(val.notes, val.dur, time, 0.5);
+                }, lofiChords);
+                lofiPart.loop = true;
+                lofiPart.loopEnd = '4m';
+                lofiPart.start(0);
+                activeParts.push(lofiPart);
+            }
+        }
+
+        async function toggleMusicPlayback() {
+            if (typeof Tone === 'undefined') {
+                showToast('Motor de audio cargando, intenta de nuevo');
+                return;
+            }
+            try {
+                await Tone.start();
+                initAudioEngine();
+
+                if (!isMusicPlaying) {
+                    buildTrackSequence(currentTrack);
+                    Tone.Transport.start();
+                    isMusicPlaying = true;
+                    showToast(currentTrack === 'ballad' ? '🎹 Reproduciendo Balada Piano' : '✨ Reproduciendo Noche Suave');
+                } else {
+                    Tone.Transport.pause();
+                    isMusicPlaying = false;
+                }
+                updateMusicUI();
+            } catch (err) {
+                console.error('Error al iniciar audio:', err);
+                showToast('Toca de nuevo para activar el sonido');
+            }
+        }
+
+        function selectMusicTrack(trackName) {
+            currentTrack = trackName;
+            const btnBallad = document.getElementById('trackBtn-ballad');
+            const btnLofi = document.getElementById('trackBtn-lofi');
+
+            if (trackName === 'ballad') {
+                btnBallad.className = 'px-2.5 py-2 rounded-xl font-mono text-[11px] bg-pink-500/20 text-white border border-neonPink transition cursor-pointer';
+                btnLofi.className = 'px-2.5 py-2 rounded-xl font-mono text-[11px] bg-obsidian/80 text-zinc-400 border border-zinc-800 hover:border-pink-500/40 transition cursor-pointer';
+            } else {
+                btnLofi.className = 'px-2.5 py-2 rounded-xl font-mono text-[11px] bg-pink-500/20 text-white border border-neonPink transition cursor-pointer';
+                btnBallad.className = 'px-2.5 py-2 rounded-xl font-mono text-[11px] bg-obsidian/80 text-zinc-400 border border-zinc-800 hover:border-pink-500/40 transition cursor-pointer';
+            }
+
+            if (isMusicPlaying) {
+                buildTrackSequence(currentTrack);
+                Tone.Transport.start();
+            }
+            updateMusicUI();
+        }
+
+        function updateMusicVolume(val) {
+            const pct = Number(val);
+            document.getElementById('volumeLabel').textContent = `${pct}%`;
+            if (masterGain) {
+                masterGain.gain.rampTo(pct / 100, 0.1);
+            }
+        }
+
+        function toggleMusicPanel() {
+            document.getElementById('musicExpandedPanel').classList.toggle('hidden');
+        }
+
+        function updateMusicUI() {
+            const playIcon = document.getElementById('compactPlayIcon');
+            const headerIcon = document.getElementById('headerMusicIcon');
+            const headerLabel = document.getElementById('headerMusicLabel');
+            const eq = document.getElementById('musicEq');
+            const titleEl = document.getElementById('compactTrackTitle');
+            const subEl = document.getElementById('compactTrackSub');
+
+            if (playIcon) playIcon.textContent = isMusicPlaying ? '⏸' : '▶';
+            if (headerIcon) headerIcon.textContent = isMusicPlaying ? '🔊' : '🎵';
+            if (headerLabel) headerLabel.textContent = isMusicPlaying ? 'Sonando' : 'Música';
+            if (eq) eq.classList.toggle('eq-playing', isMusicPlaying);
+            if (titleEl) {
+                titleEl.textContent = currentTrack === 'ballad'
+                    ? 'Balada Piano • En Mi Corazón'
+                    : 'Noche Suave • Piano Ambiente';
+            }
+            if (subEl) subEl.textContent = isMusicPlaying ? 'Reproduciendo...' : 'Toca ▶ para escuchar';
+        }
+
+        /* ==========================================================================
+           EFECTOS VISUALES: CONFETI Y PARTÍCULAS
            ========================================================================== */
         function launchPinkConfetti() {
             if (typeof confetti !== 'function') return;
             const colors = ['#f43f5e', '#fb7185', '#f9a8d4', '#f5d0c5', '#ffffff'];
-            confetti({ particleCount: 85, spread: 72, origin: { y: 0.65 }, colors });
+            confetti({
+                particleCount: 85,
+                spread: 72,
+                origin: { y: 0.65 },
+                colors
+            });
         }
 
         function launchMegaCelebration() {
@@ -2057,7 +1932,9 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
             (function frame() {
                 confetti({ particleCount: 6, angle: 60, spread: 55, origin: { x: 0 }, colors });
                 confetti({ particleCount: 6, angle: 120, spread: 55, origin: { x: 1 }, colors });
-                if (Date.now() < end) requestAnimationFrame(frame);
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
             }());
             showToast('🎉 ¡Feliz Nivel 30, Eli!');
         }
@@ -2074,7 +1951,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
                 height = canvas.height = window.innerHeight;
             });
 
-            const particleCount = Math.min(40, Math.floor(width / 30));
+            const particleCount = Math.min(45, Math.floor(width / 28));
             const particles = Array.from({ length: particleCount }, () => ({
                 x: Math.random() * width,
                 y: Math.random() * height,
@@ -2094,7 +1971,6 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
                     if (p.x > width) p.x = 0;
                     if (p.y < 0) p.y = height;
                     if (p.y > height) p.y = 0;
-
                     ctx.beginPath();
                     ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
                     ctx.fillStyle = `rgba(249, 168, 212, ${p.alpha})`;
@@ -2105,18 +1981,16 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si así lo permit
             animate();
         }
 
-        /* ==========================================================================
-           INICIALIZACIÓN AL CARGAR LA PÁGINA
-           ========================================================================== */
+        // Inicialización completa al cargar la página
         window.onload = function () {
             initParticles();
+            selectCharacter('stitch', false);
             loadTropicalSlides();
             initTropicalDragAndDrop();
             startCarouselLoop();
             loadLetter();
             renderPlans();
             renderDreams();
-            updateMusicUI();
             updateCountdown();
             countdownInterval = setInterval(updateCountdown, 1000);
         };
