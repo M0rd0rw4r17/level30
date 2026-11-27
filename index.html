@@ -131,6 +131,17 @@
         .animate-float-1 { animation: floatSlow 5.5s ease-in-out infinite; }
         .animate-float-2 { animation: floatSlowDelayed 6.2s ease-in-out infinite; }
 
+        /* Animación suave de flama parpadeante en el pastel */
+        @keyframes candleFlicker {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+            35% { transform: scale(1.08, 0.94) rotate(-2deg); opacity: 0.92; }
+            70% { transform: scale(0.95, 1.06) rotate(2deg); opacity: 0.98; }
+        }
+        .cake-flame-anim {
+            transform-origin: 32px 17px;
+            animation: candleFlicker 1.15s ease-in-out infinite;
+        }
+
         /* Barras ecualizador del reproductor */
         @keyframes eqBar {
             0%, 100% { height: 25%; }
@@ -681,18 +692,18 @@
                                 <span class="text-neonPink">✦</span> Wishlist // Sueños por Cumplir en tus 30s
                             </h3>
                             <p class="text-zinc-400 text-xs sm:text-sm">Metas, viajes y pequeños gustos que vamos a hacer realidad juntos.</p>
-                        </div>
-                        <span id="dreamsCounter" class="font-mono text-xs text-roseGold">0 cumplidos</span>
-                    </div>
-
-                    <!-- Pastel encendido con dinámica para soplar y revelar la lista de deseos -->
+                    <!-- Pastel encendido como botón interactivo para soplar y revelar la lista de deseos -->
                     <div id="cakeBlowStation" class="p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-obsidian via-charcoal to-obsidian border border-pink-500/30 flex flex-col sm:flex-row items-center justify-between gap-5">
-                        <div class="flex items-center gap-4">
-                            <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center shrink-0">
-                                <svg id="birthdayCakeSvg" class="w-12 h-12 sm:w-14 sm:h-14 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                                    <!-- Vela y flama -->
+                        <div class="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+                            <button type="button" id="cakeIconButton" onclick="handleCakeAction()" title="Soplar velita y pedir un deseo"
+                                class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-pink-500/15 border border-pink-500/40 hover:border-neonPink hover:bg-pink-500/25 shadow-lg flex flex-col items-center justify-center shrink-0 transition cursor-pointer group">
+                                <svg id="birthdayCakeSvg" class="w-14 h-14 sm:w-16 sm:h-16 svg-neon-glow group-hover:scale-105 transition-transform" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                                    <!-- Vela y flama animada -->
                                     <rect x="30" y="18" width="4" height="10" rx="1" />
-                                    <path id="cakeFlamePath" d="M32 8 C29 12, 29 15, 32 17 C35 15, 35 12, 32 8 Z" fill="#fb7185" />
+                                    <g id="cakeFlameGroup" class="cake-flame-anim">
+                                        <path d="M32 7 C28.5 11.5, 28.5 15, 32 17.5 C35.5 15, 35.5 11.5, 32 7 Z" fill="#fb7185" />
+                                        <circle cx="32" cy="13.5" r="1.4" fill="#fff1f2" stroke="none" />
+                                    </g>
                                     <!-- Cobertura ondulada -->
                                     <path d="M16 34 C16 29, 48 29, 48 34 C48 37, 45 38, 43 36 C41 39, 37 39, 35 36 C33 39, 31 39, 29 36 C27 39, 23 39, 21 36 C19 38, 16 37, 16 34 Z" />
                                     <!-- Cuerpo del pastel -->
@@ -700,10 +711,10 @@
                                     <!-- Plato base -->
                                     <path d="M10 51 L54 51" />
                                 </svg>
-                            </div>
-                            <div class="text-center sm:text-left space-y-1">
+                            </button>
+                            <div class="space-y-1">
                                 <div id="cakeStatusBadge" class="font-mono text-[10px] text-neonPink uppercase tracking-widest">
-                                    🕯️ VELA ENCENDIDA // PIDE UN DESEO
+                                    🕯️ VELA ENCENDIDA // TOCA EL PASTEL O EL BOTÓN
                                 </div>
                                 <h4 id="cakeTitleText" class="font-display text-base sm:text-lg font-bold text-white">
                                     ¡Tu pastel de 30 está listo para soplar!
@@ -716,7 +727,7 @@
 
                         <button type="button" id="blowCandleBtn" onclick="blowBirthdayCake()"
                             class="btn-pink-glow text-white font-mono text-xs font-bold px-5 py-3 rounded-xl shrink-0 cursor-pointer">
-                            💨 Soplar velita
+                            🎂 Soplar velita
                         </button>
                     </div>
 
@@ -1658,16 +1669,28 @@ Alex`;
         }
 
         // Dinámica del pastel encendido: al soplar se apaga la vela y se revela la lista de deseos
+        function handleCakeAction() {
+            if (isCakeBlown) {
+                relightBirthdayCake();
+            } else {
+                blowBirthdayCake();
+            }
+        }
+
         function blowBirthdayCake() {
             isCakeBlown = true;
-            const flamePath = document.getElementById('cakeFlamePath');
+            const flameGroup = document.getElementById('cakeFlameGroup');
             const statusBadge = document.getElementById('cakeStatusBadge');
             const titleText = document.getElementById('cakeTitleText');
             const descText = document.getElementById('cakeDescText');
             const blowBtn = document.getElementById('blowCandleBtn');
+            const cakeBtn = document.getElementById('cakeIconButton');
             const revealContainer = document.getElementById('dreamsRevealContainer');
 
-            if (flamePath) flamePath.classList.add('hidden');
+            if (flameGroup) {
+                flameGroup.classList.add('hidden');
+                flameGroup.classList.remove('cake-flame-anim');
+            }
             if (statusBadge) statusBadge.textContent = '✨ ¡DESEO PEDIDO! // LISTA DESBLOQUEADA';
             if (titleText) titleText.textContent = '¡Que se cumplan todos tus sueños en tus 30!';
             if (descText) descText.textContent = 'Aquí tienes tu Wishlist: puedes marcar los que ya van avanzando, agregar nuevos o quitar los que desees.';
@@ -1675,6 +1698,7 @@ Alex`;
                 blowBtn.textContent = '🕯️ Encender vela';
                 blowBtn.setAttribute('onclick', 'relightBirthdayCake()');
             }
+            if (cakeBtn) cakeBtn.title = 'Encender vela de nuevo';
             if (revealContainer) {
                 revealContainer.classList.remove('hidden');
                 revealContainer.style.display = '';
@@ -1687,21 +1711,26 @@ Alex`;
 
         function relightBirthdayCake() {
             isCakeBlown = false;
-            const flamePath = document.getElementById('cakeFlamePath');
+            const flameGroup = document.getElementById('cakeFlameGroup');
             const statusBadge = document.getElementById('cakeStatusBadge');
             const titleText = document.getElementById('cakeTitleText');
             const descText = document.getElementById('cakeDescText');
             const blowBtn = document.getElementById('blowCandleBtn');
+            const cakeBtn = document.getElementById('cakeIconButton');
             const revealContainer = document.getElementById('dreamsRevealContainer');
 
-            if (flamePath) flamePath.classList.remove('hidden');
-            if (statusBadge) statusBadge.textContent = '🕯️ VELA ENCENDIDA // PIDE UN DESEO';
+            if (flameGroup) {
+                flameGroup.classList.remove('hidden');
+                flameGroup.classList.add('cake-flame-anim');
+            }
+            if (statusBadge) statusBadge.textContent = '🕯️ VELA ENCENDIDA // TOCA EL PASTEL O EL BOTÓN';
             if (titleText) titleText.textContent = '¡Tu pastel de 30 está listo para soplar!';
             if (descText) descText.textContent = 'Sopla la velita para apagarla y revelar tus deseos de esta nueva etapa.';
             if (blowBtn) {
-                blowBtn.textContent = '💨 Soplar velita';
+                blowBtn.textContent = '🎂 Soplar velita';
                 blowBtn.setAttribute('onclick', 'blowBirthdayCake()');
             }
+            if (cakeBtn) cakeBtn.title = 'Soplar velita y pedir un deseo';
             if (revealContainer) {
                 revealContainer.classList.add('hidden');
                 revealContainer.style.display = 'none';
