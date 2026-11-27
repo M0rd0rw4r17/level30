@@ -173,11 +173,16 @@
                 font-size: 16px !important;
             }
         }
+
+        /* Garantizar ocultamiento inmediato del contenido sellado */
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body class="bg-obsidian bg-tech-grid min-h-screen font-sans antialiased selection:bg-neonPink selection:text-white pb-24">
 
-    <!-- Definición global de degradado SVG (visible en el DOM sin display:none para compatibilidad en Safari/Chrome/Edge) -->
+    <!-- Definición global de degradado SVG -->
     <svg aria-hidden="true" focusable="false" class="absolute w-0 h-0 overflow-hidden pointer-events-none">
         <defs>
             <linearGradient id="roseNeonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -198,8 +203,9 @@
     <!-- Barra Superior Minimalista y Responsiva -->
     <header class="relative z-20 border-b border-pink-500/15 bg-obsidian/80 backdrop-blur-md sticky top-0">
         <div class="max-w-5xl mx-auto px-3 sm:px-6 py-3 flex items-center justify-between gap-2">
-            <!-- Atajo secreto: 5 toques rápidos aquí activan/desactivan la vista previa del 28 de noviembre -->
-            <button id="secretBrandTrigger" onclick="handleSecretBrandTap()" class="flex items-center gap-2 shrink-0 cursor-pointer select-none">
+            <!-- Atajo secreto para previsualizar el desbloqueo: 5 toques rápidos -->
+            <button type="button" onclick="handleSecretUnlockTap()" title="CORE.ESSENCE_v3.0"
+                class="flex items-center gap-2 shrink-0 cursor-pointer text-left">
                 <span class="relative flex h-2.5 w-2.5 pulse-dot">
                     <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-neonPink"></span>
                 </span>
@@ -209,24 +215,24 @@
             </button>
 
             <div class="flex items-center gap-1.5 sm:gap-2.5">
-                <a href="#tropical-memories" id="navLinkTravesia" class="hidden px-2.5 py-1.5 rounded-full text-xs font-mono text-zinc-400 hover:text-roseGold transition">
+                <a id="navLinkTravesia" href="#tropical-memories" class="hidden md:inline-flex px-2.5 py-1.5 rounded-full text-xs font-mono text-zinc-400 hover:text-roseGold transition">
                     #Travesía
                 </a>
-                <a href="#suenos" id="navLinkSuenos" class="hidden px-2.5 py-1.5 rounded-full text-xs font-mono text-zinc-400 hover:text-roseGold transition">
+                <a id="navLinkSuenos" href="#suenos" class="hidden md:inline-flex px-2.5 py-1.5 rounded-full text-xs font-mono text-zinc-400 hover:text-roseGold transition">
                     #Sueñosv3.0
                 </a>
-                <button id="headerMusicBtn" onclick="toggleMusicPlayback()" title="Reproducir o pausar música de fondo"
+                <button type="button" id="headerMusicBtn" onclick="toggleMusicPlayback()" title="Reproducir o pausar música de fondo"
                     class="px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-mono bg-zinc-900/90 text-roseGold border border-pink-500/30 hover:border-neonPink transition flex items-center gap-1.5 cursor-pointer">
                     <span id="headerMusicIcon">🎵</span>
                     <span class="hidden sm:inline" id="headerMusicLabel">Música</span>
                 </button>
-                <button id="headerBackupBtn" onclick="copySummaryToClipboard()" title="Copiar texto de carta e itinerario"
+                <button type="button" id="headerBackupBtn" onclick="copySummaryToClipboard()" title="Copiar texto de carta e itinerario"
                     class="hidden px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-mono bg-zinc-900/90 text-zinc-300 border border-zinc-800 hover:border-softRose/50 hover:text-roseGold transition cursor-pointer">
                     📋 <span class="hidden sm:inline">Respaldar</span>
                 </button>
-                <button onclick="launchPinkConfetti()"
+                <button type="button" onclick="launchPinkConfetti()"
                     class="px-3 sm:px-3.5 py-1.5 rounded-full text-xs font-mono font-medium bg-pink-500/15 text-roseGold border border-pink-500/35 hover:bg-pink-500/25 hover:border-neonPink transition flex items-center gap-1 cursor-pointer">
-                    <span>✨</span> <span class="hidden sm:inline">Celebrar</span>
+                    <span>✨</span> <span class="hidden xs:inline">Celebrar</span>
                 </button>
             </div>
         </div>
@@ -238,7 +244,7 @@
         <!-- 1. HERO SECTION CON DETALLES LINE-ART Y DEDICATORIA -->
         <section class="relative text-center space-y-6 pt-2 pb-2">
             <!-- Detalle flotante izquierda: Stitch minimalista -->
-            <button onclick="handleHeroEmblemClick('stitch')" title="Stitch: Ohana & Aventura"
+            <button type="button" onclick="selectCharacter('stitch', true)" title="Stitch: Ohana & Aventura"
                 class="hidden lg:flex flex-col items-center gap-1 absolute left-2 top-4 opacity-70 hover:opacity-100 transition animate-float-1 cursor-pointer group">
                 <svg class="w-14 h-14 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 26 C11 16, 6 22, 9 32 C11 37, 17 37, 21 34" />
@@ -256,7 +262,7 @@
             </button>
 
             <!-- Detalle flotante derecha: Marie con moño rosa -->
-            <button onclick="handleHeroEmblemClick('marie')" title="Marie: Coqueta & Esencia"
+            <button type="button" onclick="selectCharacter('marie', true)" title="Marie: Coqueta & Esencia"
                 class="hidden lg:flex flex-col items-center gap-1 absolute right-2 top-4 opacity-70 hover:opacity-100 transition animate-float-2 cursor-pointer group">
                 <svg class="w-14 h-14 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 28 L19 16 L28 23" />
@@ -281,16 +287,14 @@
                 <span class="text-neonPink">◆</span>
             </div>
 
-            <!-- Título Principal + Dedicatoria -->
+            <!-- Título Principal (Cambia automáticamente a "Feliz Cumpleaños Amor" el 28 de noviembre) -->
             <div class="space-y-4 max-w-3xl mx-auto px-1">
-                <div class="relative inline-block max-w-full">
-                    <h1 id="heroTitle"
-                        class="font-display text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white glow-text rounded-2xl px-3 py-1 break-words">
-                        Welcome to 30´s
-                    </h1>
-                </div>
+                <h1 id="heroTitle"
+                    class="font-display text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white glow-text px-3 py-1 break-words">
+                    Welcome to 30´s
+                </h1>
 
-                <!-- Tus dos párrafos personalizados de portada -->
+                <!-- Dos párrafos personalizados de portada -->
                 <div class="space-y-3 max-w-2xl mx-auto">
                     <p class="text-zinc-200 text-sm sm:text-base md:text-lg font-light leading-relaxed">
                         Amor te dejo un pequeño adelanto de un detalle que puedas tener contigo y poder tenerlo a la mano las veces que quieras. Aunque aún no sea tu día, en este pequeño portal podrás encontrar apartados que solo se revelarán en el momento de tu cumpleaños, amor.
@@ -314,7 +318,7 @@
                     </span>
                 </div>
 
-                <span id="portalStatePill" class="self-start sm:self-auto px-3 py-1.5 rounded-xl font-mono text-[11px] bg-pink-500/10 text-roseGold border border-pink-500/30">
+                <span id="portalStatePill" class="self-start sm:self-auto px-3 py-1.5 rounded-xl font-mono text-[11px] bg-obsidian/90 text-roseGold border border-pink-500/25">
                     🔒 PORTAL SELLADO HASTA EL 28.11
                 </span>
             </div>
@@ -339,10 +343,42 @@
                 </div>
             </div>
 
-            <!-- Banner Especial de Celebración (visible al llegar el 28 de noviembre) -->
-            <div id="celebrationBanner" class="hidden mt-6 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-neonPink/20 via-pink-500/15 to-roseGold/20 border border-neonPink/50 text-center space-y-3">
+            <!-- Aviso de Cápsula Sellada (Visible mientras falte tiempo para el 28 de noviembre) -->
+            <div id="lockedVaultNotice" class="mt-6 p-5 sm:p-7 rounded-2xl bg-obsidian/85 border border-pink-500/25 text-center space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-500/15 border border-pink-500/35 font-mono text-[11px] text-roseGold">
+                    <span>🔒</span>
+                    <span>CÁPSULA ENCRIPTADA // SE ABRE EL 28 DE NOVIEMBRE A LAS 00:00</span>
+                </div>
+                <h2 class="font-display text-xl sm:text-2xl font-bold text-white">
+                    Aún falta poquito para abrir todo lo que preparé para ti, amor
+                </h2>
+                <p class="text-zinc-400 text-xs sm:text-sm max-w-xl mx-auto leading-relaxed">
+                    En cuanto el contador llegue a cero se desbloquearán automáticamente estos apartados especiales:
+                </p>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 max-w-3xl mx-auto pt-1 text-left">
+                    <div class="p-3 rounded-xl bg-charcoal/90 border border-zinc-800/90">
+                        <div class="font-mono text-[10px] text-neonPink">01 // GALERÍA</div>
+                        <div class="font-display text-xs sm:text-sm font-semibold text-zinc-200 mt-0.5">Travesía Tropical</div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-charcoal/90 border border-zinc-800/90">
+                        <div class="font-mono text-[10px] text-neonPink">02 // ESENCIA &amp; METAS</div>
+                        <div class="font-display text-xs sm:text-sm font-semibold text-zinc-200 mt-0.5">Tus 30s &amp; Wishlist</div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-charcoal/90 border border-zinc-800/90">
+                        <div class="font-mono text-[10px] text-neonPink">03 // MENSAJE</div>
+                        <div class="font-display text-xs sm:text-sm font-semibold text-zinc-200 mt-0.5">Carta para Amor</div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-charcoal/90 border border-zinc-800/90">
+                        <div class="font-mono text-[10px] text-neonPink">04 // FESTEJO</div>
+                        <div class="font-display text-xs sm:text-sm font-semibold text-zinc-200 mt-0.5">Itinerary 28.11</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Banner Especial de Celebración (Visible al llegar el 28 de noviembre) -->
+            <div id="celebrationBanner" style="display: none;" class="hidden mt-6 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-neonPink/20 via-pink-500/15 to-roseGold/20 border border-neonPink/50 text-center space-y-3">
                 <div class="inline-block px-3 py-1 rounded-full bg-neonPink text-white font-mono text-xs font-bold tracking-wider">
-                    STATUS: 200 OK // ¡HOY COMIENZA TU NIVEL 30, AMOR!
+                    STATUS: 200 OK // ¡HOY COMIENZAN TUS 30, AMOR!
                 </div>
                 <h2 class="font-display text-2xl sm:text-4xl font-bold text-white">
                     🎉 ¡Feliz Cumpleaños #30, Mi Amor! 🎉
@@ -351,67 +387,18 @@
                     Que nunca falten las risas, la ternura, tus gestos coquetos y las ganas de seguir viviendo cada capítulo juntos.
                 </p>
                 <div class="pt-1">
-                    <button onclick="launchPinkConfetti()" class="btn-pink-glow text-white font-medium text-sm px-6 py-2.5 rounded-full cursor-pointer">
+                    <button type="button" onclick="launchPinkConfetti()" class="btn-pink-glow text-white font-medium text-sm px-6 py-2.5 rounded-full cursor-pointer">
                         ✨ Lanzar más confeti
                     </button>
                 </div>
             </div>
         </section>
 
-        <!-- CÁPSULA SELLADA (VISIBLE MIENTRAS EL CONTADOR SIGUE CORRIENDO) -->
-        <section id="lockedVaultNotice" class="glass-card rounded-3xl p-6 sm:p-10 text-center space-y-6 border border-pink-500/30">
-            <div class="w-16 h-16 mx-auto rounded-2xl bg-pink-500/15 border border-neonPink/40 flex items-center justify-center text-3xl shadow-lg">
-                🔐
-            </div>
-
-            <div class="space-y-2 max-w-xl mx-auto">
-                <span class="font-mono text-xs text-neonPink uppercase tracking-widest">// ACCESS_LOCKED // 28.11.2026</span>
-                <h2 class="font-display text-2xl sm:text-3xl font-bold text-white">
-                    Sorpresas esperando tu medianoche
-                </h2>
-                <p class="text-zinc-300 text-sm sm:text-base font-light leading-relaxed">
-                    En cuanto el contador llegue a cero, este portal se abrirá automáticamente para revelarte todo lo que preparé para tus 30 años, Amor.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl mx-auto text-left pt-2">
-                <div class="p-4 rounded-2xl bg-obsidian/75 border border-zinc-800/90 flex items-center gap-3">
-                    <span class="text-xl">🌴</span>
-                    <div>
-                        <div class="font-mono text-[10px] text-roseGold">BLOQUEADO • 01</div>
-                        <div class="font-display text-sm font-semibold text-white">Memories de una travesía tropical</div>
-                    </div>
-                </div>
-                <div class="p-4 rounded-2xl bg-obsidian/75 border border-zinc-800/90 flex items-center gap-3">
-                    <span class="text-xl">✨</span>
-                    <div>
-                        <div class="font-mono text-[10px] text-roseGold">BLOQUEADO • 02</div>
-                        <div class="font-display text-sm font-semibold text-white">Tus 30s, 6 Guardianes & Wishlist</div>
-                    </div>
-                </div>
-                <div class="p-4 rounded-2xl bg-obsidian/75 border border-zinc-800/90 flex items-center gap-3">
-                    <span class="text-xl">💌</span>
-                    <div>
-                        <div class="font-mono text-[10px] text-roseGold">BLOQUEADO • 03</div>
-                        <div class="font-display text-sm font-semibold text-white">Una carta para tus 30 años</div>
-                    </div>
-                </div>
-                <div class="p-4 rounded-2xl bg-obsidian/75 border border-zinc-800/90 flex items-center gap-3">
-                    <span class="text-xl">🗓️</span>
-                    <div>
-                        <div class="font-mono text-[10px] text-roseGold">BLOQUEADO • 04</div>
-                        <div class="font-display text-sm font-semibold text-white">Itinerary // Plan de Festejo</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- CONTENEDOR DE SECCIONES SELLADAS (SE REVELA AL CUMPLIRSE EL 28 DE NOVIEMBRE) -->
-        <div id="lockedContentWrapper" class="hidden space-y-10 sm:space-y-14">
+        <div id="lockedContentWrapper" style="display: none;" class="hidden space-y-10 sm:space-y-14">
 
-            <!-- 3. MEMORIES DE UNA TRAVESÍA TROPICAL (CARRUSEL CON TUS 28 FOTOS DE GITHUB) -->
+            <!-- 3. MEMORIES DE UNA TRAVESÍA TROPICAL -->
             <section id="tropical-memories" class="glass-card rounded-3xl p-5 sm:p-8 md:p-10 relative overflow-hidden space-y-6">
-                <!-- Hoja de Monstera / Palmera en line-art rosa neón -->
                 <svg class="hidden sm:block absolute -top-6 -right-6 w-44 h-44 opacity-20 pointer-events-none svg-neon-glow" viewBox="0 0 120 120" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M18 102 C35 72, 62 45, 102 18" />
                     <path d="M45 72 C32 62, 24 46, 32 32 C42 36, 52 46, 58 58" />
@@ -421,7 +408,6 @@
                     <path d="M65 59 C80 68, 96 68, 106 58 C98 49, 86 44, 75 47" />
                 </svg>
 
-                <!-- Encabezado -->
                 <div class="relative z-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-800/80 pb-5">
                     <div>
                         <div class="inline-flex items-center gap-2 font-mono text-xs text-neonPink uppercase tracking-wider">
@@ -438,26 +424,23 @@
 
                     <div class="flex flex-wrap items-center gap-2">
                         <input type="file" id="tropicalPhotoInput" accept="image/*" multiple class="hidden" onchange="handleTropicalFileSelect(event)">
-                        <button onclick="document.getElementById('tropicalPhotoInput').click()"
+                        <button type="button" onclick="document.getElementById('tropicalPhotoInput').click()"
                             class="btn-pink-glow text-white font-mono text-xs font-bold px-3.5 py-2.5 rounded-xl inline-flex items-center gap-1.5 cursor-pointer">
                             <span>📸</span>
                             <span>Subir Fotos</span>
                         </button>
-                        <button id="carouselPlayPauseBtn" onclick="toggleCarouselAutoplay()"
+                        <button type="button" id="carouselPlayPauseBtn" onclick="toggleCarouselAutoplay()"
                             class="px-3.5 py-2.5 rounded-xl font-mono text-xs bg-obsidian/90 text-roseGold border border-pink-500/30 hover:border-neonPink transition cursor-pointer">
                             ⏸ Pausar
                         </button>
                     </div>
                 </div>
 
-                <!-- Visor Principal con Drag & Drop y Swipe Táctil -->
                 <div id="tropicalDropZone" class="relative rounded-2xl bg-obsidian/90 border border-pink-500/25 overflow-hidden group transition-all">
-                    <!-- Barra de progreso Auto-play -->
                     <div class="w-full h-1 bg-zinc-900 overflow-hidden">
                         <div id="carouselProgressBar" class="h-full bg-gradient-to-r from-neonPink via-softRose to-roseGold transition-all duration-100 ease-linear" style="width: 0%;"></div>
                     </div>
 
-                    <!-- Contenedor Adaptable -->
                     <div id="carouselTouchArea" class="relative h-[340px] sm:h-[440px] md:h-[500px] w-full flex items-center justify-center bg-obsidian overflow-hidden select-none">
                         <img id="carouselBackdropImage" src="" alt="" aria-hidden="true"
                             class="absolute inset-0 w-full h-full object-cover blur-2xl opacity-30 scale-110 pointer-events-none">
@@ -465,41 +448,37 @@
                         <img id="carouselActiveImage" src="" alt="Recuerdo de nuestra travesía" onclick="openLightbox()"
                             class="relative z-10 max-w-full max-h-full object-contain cursor-zoom-in transition-opacity duration-500 select-none">
 
-                        <!-- Indicador de carga para fotos .HEIC -->
                         <div id="carouselLoadingBadge" class="hidden absolute inset-0 z-20 bg-obsidian/75 backdrop-blur-sm flex flex-col items-center justify-center gap-2 pointer-events-none">
                             <span class="w-8 h-8 rounded-full border-2 border-neonPink border-t-transparent animate-spin"></span>
                             <span class="font-mono text-xs text-roseGold">Revelando recuerdo...</span>
                         </div>
 
-                        <!-- Barra superior del visor -->
                         <div class="absolute top-3 left-3 right-3 z-20 flex items-center justify-between gap-2 pointer-events-none">
                             <span id="carouselSlideBadge" class="px-3 py-1 rounded-full bg-obsidian/85 backdrop-blur-md border border-pink-500/30 font-mono text-[10px] sm:text-[11px] text-roseGold">
                                 01 / 28 • TRAVESÍA TROPICAL
                             </span>
 
                             <div class="flex items-center gap-2 pointer-events-auto">
-                                <button onclick="openLightbox()" title="Ver en pantalla completa"
+                                <button type="button" onclick="openLightbox()" title="Ver en pantalla completa"
                                     class="w-9 h-9 rounded-full bg-obsidian/85 backdrop-blur-md border border-zinc-700/80 text-zinc-200 hover:border-neonPink hover:text-roseGold flex items-center justify-center text-xs transition cursor-pointer">
                                     🔍
                                 </button>
-                                <button onclick="deleteCurrentTropicalPhoto()" title="Quitar esta foto del carrusel"
+                                <button type="button" onclick="deleteCurrentTropicalPhoto()" title="Quitar esta foto del carrusel"
                                     class="w-9 h-9 rounded-full bg-obsidian/85 backdrop-blur-md border border-zinc-700/80 text-zinc-300 hover:border-neonPink hover:text-neonPink flex items-center justify-center text-xs transition cursor-pointer">
                                     🗑️
                                 </button>
                             </div>
                         </div>
 
-                        <!-- Flechas Anterior / Siguiente -->
-                        <button onclick="prevTropicalSlide()" aria-label="Foto anterior"
+                        <button type="button" onclick="prevTropicalSlide()" aria-label="Foto anterior"
                             class="absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-obsidian/85 backdrop-blur-md border border-pink-500/40 text-white text-xl hover:bg-neonPink hover:border-neonPink flex items-center justify-center transition cursor-pointer">
                             ‹
                         </button>
-                        <button onclick="nextTropicalSlide()" aria-label="Siguiente foto"
+                        <button type="button" onclick="nextTropicalSlide()" aria-label="Siguiente foto"
                             class="absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-obsidian/85 backdrop-blur-md border border-pink-500/40 text-white text-xl hover:bg-neonPink hover:border-neonPink flex items-center justify-center transition cursor-pointer">
                             ›
                         </button>
 
-                        <!-- Pie de foto editable -->
                         <div class="absolute bottom-0 inset-x-0 z-20 bg-gradient-to-t from-obsidian via-obsidian/90 to-transparent pt-10 pb-3.5 px-3.5 sm:px-6">
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                                 <div class="flex-1 min-w-0">
@@ -517,7 +496,6 @@
                         </div>
                     </div>
 
-                    <!-- Overlay Drag & Drop -->
                     <div id="dropOverlay" class="hidden absolute inset-0 z-30 bg-obsidian/90 backdrop-blur-md border-2 border-dashed border-neonPink flex flex-col items-center justify-center gap-2 text-center p-6 pointer-events-none">
                         <span class="text-4xl">🌺</span>
                         <p class="font-display text-lg font-bold text-white">Suelta tus fotos aquí</p>
@@ -525,25 +503,23 @@
                     </div>
                 </div>
 
-                <!-- Tira de Miniaturas + Restaurar -->
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
                     <div id="tropicalThumbnails" class="flex items-center gap-2 overflow-x-auto pb-1.5 w-full sm:w-auto"></div>
-
                     <div class="flex items-center justify-between sm:justify-end gap-3 shrink-0 text-[11px] font-mono text-zinc-500">
                         <span>Desliza las miniaturas</span>
-                        <button onclick="restoreDefaultTropicalSlides()" class="text-roseGold hover:underline cursor-pointer">
+                        <button type="button" onclick="restoreDefaultTropicalSlides()" class="text-roseGold hover:underline cursor-pointer">
                             ↺ Restaurar 28 fotos
                         </button>
                     </div>
                 </div>
             </section>
 
-            <!-- 4. TUS 30s & SUEÑOS POR CUMPLIR (6 GUARDIANES DE ESENCIA + WISHLIST v3.0) -->
+            <!-- 4. TUS 30s & SUEÑOS POR CUMPLIR -->
             <section id="suenos" class="glass-card rounded-3xl p-5 sm:p-8 md:p-10 space-y-7">
                 <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-800/80 pb-5">
                     <div>
-                        <span class="font-mono text-xs text-neonPink uppercase tracking-wider">// CORE_VALUES & DREAMS_v3.0</span>
-                        <h2 class="font-display text-2xl sm:text-3xl font-bold text-white mt-1">Tus 30s & Sueños por Cumplir</h2>
+                        <span class="font-mono text-xs text-neonPink uppercase tracking-wider">// CORE_VALUES &amp; DREAMS_v3.0</span>
+                        <h2 class="font-display text-2xl sm:text-3xl font-bold text-white mt-1">Tus 30s &amp; Sueños por Cumplir</h2>
                         <p class="text-zinc-400 text-xs sm:text-sm mt-1">
                             Crecer no es dejar de ser tú: cada emblema va relacionado a tus personajes y gustos favoritos. Toca cada uno para descubrir lo que simboliza en esta nueva etapa.
                         </p>
@@ -553,10 +529,8 @@
                     </span>
                 </div>
 
-                <!-- Grid de los 6 Personajes en Siluetas SVG Neón -->
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                    <!-- 1. STITCH -->
-                    <button id="card-stitch" onclick="selectCharacter('stitch', false)"
+                    <button type="button" id="card-stitch" onclick="selectCharacter('stitch', false)"
                         class="character-card active-char p-3.5 sm:p-4 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-2.5 cursor-pointer">
                         <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center">
                             <svg class="w-11 h-11 sm:w-12 sm:h-12 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -574,12 +548,11 @@
                         </div>
                         <div>
                             <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">01 // STITCH</div>
-                            <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Ohana & Aventura</h3>
+                            <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Ohana &amp; Aventura</h3>
                         </div>
                     </button>
 
-                    <!-- 2. MARIE -->
-                    <button id="card-marie" onclick="selectCharacter('marie', false)"
+                    <button type="button" id="card-marie" onclick="selectCharacter('marie', false)"
                         class="character-card p-3.5 sm:p-4 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-2.5 cursor-pointer">
                         <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center">
                             <svg class="w-11 h-11 sm:w-12 sm:h-12 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -598,12 +571,11 @@
                         </div>
                         <div>
                             <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">02 // MARIE</div>
-                            <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Coqueta & Esencia</h3>
+                            <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Coqueta &amp; Esencia</h3>
                         </div>
                     </button>
 
-                    <!-- 3. WINNIE POOH -->
-                    <button id="card-pooh" onclick="selectCharacter('pooh', false)"
+                    <button type="button" id="card-pooh" onclick="selectCharacter('pooh', false)"
                         class="character-card p-3.5 sm:p-4 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-2.5 cursor-pointer">
                         <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center">
                             <svg class="w-11 h-11 sm:w-12 sm:h-12 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -620,12 +592,11 @@
                         </div>
                         <div>
                             <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">03 // POOH</div>
-                            <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Dulzura & Antojitos</h3>
+                            <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Dulzura &amp; Antojitos</h3>
                         </div>
                     </button>
 
-                    <!-- 4. COCODRILO -->
-                    <button id="card-croc" onclick="selectCharacter('croc', false)"
+                    <button type="button" id="card-croc" onclick="selectCharacter('croc', false)"
                         class="character-card p-3.5 sm:p-4 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-2.5 cursor-pointer">
                         <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center">
                             <svg class="w-11 h-11 sm:w-12 sm:h-12 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -643,12 +614,11 @@
                         </div>
                         <div>
                             <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">04 // COCODRILO</div>
-                            <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Valentía & Fuerza</h3>
+                            <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Valentía &amp; Fuerza</h3>
                         </div>
                     </button>
 
-                    <!-- 5. LUCIFER -->
-                    <button id="card-lucifer" onclick="selectCharacter('lucifer', false)"
+                    <button type="button" id="card-lucifer" onclick="selectCharacter('lucifer', false)"
                         class="character-card p-3.5 sm:p-4 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-2.5 cursor-pointer">
                         <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center">
                             <svg class="w-11 h-11 sm:w-12 sm:h-12 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -669,12 +639,11 @@
                         </div>
                         <div>
                             <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">05 // LUCIFER</div>
-                            <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Mirada & Carácter</h3>
+                            <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Mirada &amp; Carácter</h3>
                         </div>
                     </button>
 
-                    <!-- 6. TAMBOR -->
-                    <button id="card-tambor" onclick="selectCharacter('tambor', false)"
+                    <button type="button" id="card-tambor" onclick="selectCharacter('tambor', false)"
                         class="character-card p-3.5 sm:p-4 rounded-2xl bg-obsidian/75 border border-zinc-800 hover:border-pink-500/45 transition flex flex-col items-center text-center gap-2.5 cursor-pointer">
                         <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center">
                             <svg class="w-11 h-11 sm:w-12 sm:h-12 svg-neon-glow" viewBox="0 0 64 64" fill="none" stroke="url(#roseNeonGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -690,28 +659,26 @@
                         </div>
                         <div>
                             <div class="font-mono text-[10px] text-neonPink uppercase tracking-widest">06 // TAMBOR</div>
-                            <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Alegría & Chispa</h3>
+                            <h3 class="font-display text-xs sm:text-sm font-bold text-white mt-0.5">Alegría &amp; Chispa</h3>
                         </div>
                     </button>
                 </div>
 
-                <!-- Cápsula Dinámica de Reflexión -->
                 <div id="characterQuoteBox" class="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-obsidian via-charcoal to-obsidian border border-pink-500/30 transition-all">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
                         <span id="charBadge" class="font-mono text-xs text-neonPink font-semibold tracking-wider">
-                            ◆ STITCH // OHANA & AVENTURA
+                            ◆ STITCH // OHANA &amp; AVENTURA
                         </span>
                         <span class="font-mono text-[11px] text-zinc-500">FILOSOFÍA NIVEL 30 • AMOR</span>
                     </div>
                     <p id="charQuoteText" class="text-zinc-200 text-sm sm:text-base leading-relaxed font-light"></p>
                 </div>
 
-                <!-- Wishlist / Sueños por Cumplir v3.0 -->
                 <div class="pt-4 border-t border-zinc-800/80 space-y-4">
                     <div class="flex flex-wrap items-center justify-between gap-2">
                         <div>
                             <h3 class="font-display text-lg sm:text-xl font-bold text-white flex items-center gap-2">
-                                <span class="text-neonPink">✦</span> Wishlist // Sueños por Cumplir en los 30s
+                                <span class="text-neonPink">✦</span> Wishlist // Sueños por Cumplir en tus 30s
                             </h3>
                             <p class="text-zinc-400 text-xs sm:text-sm">Metas, viajes y pequeños gustos que vamos a hacer realidad juntos.</p>
                         </div>
@@ -739,18 +706,17 @@
                     </div>
 
                     <div class="flex items-center gap-2">
-                        <button id="toggleEditLetterBtn" onclick="toggleLetterMode()"
+                        <button type="button" id="toggleEditLetterBtn" onclick="toggleLetterMode()"
                             class="px-4 py-2 rounded-xl font-mono text-xs bg-pink-500/15 text-roseGold border border-pink-500/30 hover:bg-pink-500/25 transition cursor-pointer">
                             ✏️ Editar mensaje
                         </button>
-                        <button id="saveLetterBtn" onclick="saveLetter()"
+                        <button type="button" id="saveLetterBtn" onclick="saveLetter()"
                             class="hidden px-4 py-2 rounded-xl font-mono text-xs btn-pink-glow text-white font-medium cursor-pointer">
                             💾 Guardar carta
                         </button>
                     </div>
                 </div>
 
-                <!-- Modo Lectura -->
                 <div id="letterViewMode" class="space-y-4">
                     <div class="relative p-5 sm:p-8 rounded-2xl bg-obsidian/70 border border-pink-500/15">
                         <span class="absolute top-3 right-5 font-serif text-5xl text-neonPink/20 select-none">”</span>
@@ -758,11 +724,10 @@
                     </div>
                     <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-zinc-500 px-1">
                         <span>Guardado automáticamente en este navegador</span>
-                        <button onclick="resetDefaultLetter()" class="hover:text-roseGold underline transition cursor-pointer">Restaurar carta original</button>
+                        <button type="button" onclick="resetDefaultLetter()" class="hover:text-roseGold underline transition cursor-pointer">Restaurar carta original</button>
                     </div>
                 </div>
 
-                <!-- Modo Edición -->
                 <div id="letterEditMode" class="hidden space-y-4">
                     <label for="letterTextarea" class="block font-mono text-xs text-zinc-400">
                         Escribe o personaliza tu felicitación:
@@ -771,10 +736,10 @@
                         class="w-full rounded-2xl bg-obsidian border border-pink-500/40 focus:border-neonPink focus:ring-2 focus:ring-neonPink/30 text-zinc-100 p-4 sm:p-5 text-sm sm:text-base leading-relaxed outline-none transition resize-y"
                         placeholder="Escribe aquí tu mensaje especial..."></textarea>
                     <div class="flex justify-end gap-3">
-                        <button onclick="cancelLetterEdit()" class="px-4 py-2 rounded-xl font-mono text-xs text-zinc-400 hover:text-white transition cursor-pointer">
+                        <button type="button" onclick="cancelLetterEdit()" class="px-4 py-2 rounded-xl font-mono text-xs text-zinc-400 hover:text-white transition cursor-pointer">
                             Cancelar
                         </button>
-                        <button onclick="saveLetter()" class="px-5 py-2 rounded-xl font-mono text-xs btn-pink-glow text-white font-medium cursor-pointer">
+                        <button type="button" onclick="saveLetter()" class="px-5 py-2 rounded-xl font-mono text-xs btn-pink-glow text-white font-medium cursor-pointer">
                             💾 Guardar cambios
                         </button>
                     </div>
@@ -822,74 +787,77 @@
 
             <!-- 7. ACCIÓN FINAL DE CELEBRACIÓN -->
             <section class="text-center py-6 space-y-4">
-                <button onclick="launchMegaCelebration()"
+                <button type="button" onclick="launchMegaCelebration()"
                     class="btn-pink-glow px-7 sm:px-8 py-3.5 sm:py-4 rounded-full font-display text-sm sm:text-lg font-bold text-white tracking-wide inline-flex items-center gap-2.5 cursor-pointer">
                     <span>🚀</span>
                     <span>Lanzar Sorpresa // Celebrar Nivel 30</span>
                 </button>
                 <p class="font-mono text-[11px] sm:text-xs text-zinc-500">
-                    Hecho con código, mucho cariño y tu esencia favorita • Para ti, Amor • 28.11.2026
+                    Hecho con código, mucho cariño y tu esencia favorita • Para Amor • 28.11.2026
                 </p>
             </section>
 
         </div>
-
     </main>
 
-    <!-- Elemento de Audio HTML5 para tus 2 pistas en cola -->
-    <audio id="bgAudioPlayer" preload="auto" autoplay playsinline></audio>
-
-    <!-- Reproductor de Música Flotante (Cola continua + inicio automático) -->
+    <!-- Reproductor de Música Flotante en Cola -->
     <div id="musicPlayerWidget" class="fixed bottom-4 left-4 z-40 max-w-[calc(100vw-2rem)]">
-        <!-- Vista Compacta -->
-        <div id="musicCompactBar" class="glass-card border border-pink-500/40 rounded-full px-3 py-2 flex items-center gap-2 shadow-2xl">
-            <button onclick="toggleMusicPlayback()" aria-label="Reproducir o pausar música"
+        <audio id="playlistAudioElement" preload="auto"></audio>
+        <input type="file" id="localAudioFilesInput" accept="audio/*" multiple class="hidden" onchange="handleLocalAudioUpload(event)">
+
+        <div id="musicCompactBar" class="glass-card border border-pink-500/40 rounded-full px-3 py-2 flex items-center gap-2.5 shadow-2xl">
+            <button type="button" onclick="toggleMusicPlayback()" aria-label="Reproducir o pausar música"
                 class="w-8 h-8 rounded-full btn-pink-glow text-white flex items-center justify-center text-xs shrink-0 cursor-pointer">
                 <span id="compactPlayIcon">▶</span>
             </button>
 
-            <button onclick="toggleMusicPanel()" class="flex items-center gap-2 text-left pr-1 cursor-pointer">
+            <button type="button" onclick="toggleMusicPanel()" class="flex items-center gap-2 text-left pr-1 cursor-pointer">
                 <div id="musicEq" class="flex items-end gap-0.5 h-3.5">
                     <span class="eq-bar eq-bar-1"></span>
                     <span class="eq-bar eq-bar-2"></span>
                     <span class="eq-bar eq-bar-3"></span>
                 </div>
                 <div class="leading-tight">
-                    <div id="compactTrackTitle" class="font-mono text-[11px] text-white font-medium truncate max-w-[125px] sm:max-w-[170px]">
-                        Where Hearts Remain
+                    <div id="compactTrackTitle" class="font-mono text-[11px] text-white font-medium truncate max-w-[135px] sm:max-w-[180px]">
+                        01. Where Hearts Remain
                     </div>
                     <div id="compactTrackSub" class="font-mono text-[9px] text-roseGold/80">
-                        Cola automática (1 de 2)
+                        Cola automática activa
                     </div>
                 </div>
             </button>
-
-            <button onclick="playNextTrack()" title="Siguiente canción" aria-label="Siguiente canción"
-                class="w-7 h-7 rounded-full bg-obsidian/80 border border-zinc-700/80 text-roseGold hover:border-neonPink hover:text-white flex items-center justify-center text-[11px] shrink-0 transition cursor-pointer">
-                ⏭
-            </button>
         </div>
 
-        <!-- Panel Expandido -->
         <div id="musicExpandedPanel" class="hidden mt-2 glass-card border border-pink-500/40 rounded-2xl p-4 w-72 sm:w-80 space-y-3.5 shadow-2xl">
             <div class="flex items-center justify-between border-b border-zinc-800 pb-2.5">
-                <span class="font-mono text-xs text-roseGold font-semibold">🎵 SOUNDTRACK // AMOR v3.0</span>
-                <button onclick="toggleMusicPanel()" class="text-zinc-400 hover:text-white font-mono text-xs px-1.5 cursor-pointer">✕</button>
+                <span class="font-mono text-xs text-roseGold font-semibold">🎧 COLA DE MÚSICA // AMOR</span>
+                <button type="button" onclick="toggleMusicPanel()" class="text-zinc-400 hover:text-white font-mono text-xs px-1.5 cursor-pointer">✕</button>
             </div>
 
-            <!-- Selector de cola (2 pistas) -->
-            <div class="grid grid-cols-2 gap-2">
-                <button id="trackBtn-0" onclick="selectTrackByIndex(0, true)"
-                    class="px-2.5 py-2 rounded-xl font-mono text-[10px] sm:text-[11px] bg-pink-500/20 text-white border border-neonPink transition cursor-pointer truncate">
-                    🎹 Where Hearts...
+            <div class="space-y-1.5">
+                <button type="button" id="queueItem-0" onclick="playTrackAtIndex(0)"
+                    class="w-full text-left px-3 py-2 rounded-xl font-mono text-[11px] bg-pink-500/20 text-white border border-neonPink transition flex items-center justify-between cursor-pointer">
+                    <span class="truncate">01. Where Hearts Remain</span>
+                    <span class="text-[10px] text-roseGold">PISTA 1</span>
                 </button>
-                <button id="trackBtn-1" onclick="selectTrackByIndex(1, true)"
-                    class="px-2.5 py-2 rounded-xl font-mono text-[10px] sm:text-[11px] bg-obsidian/80 text-zinc-400 border border-zinc-800 hover:border-pink-500/40 transition cursor-pointer truncate">
-                    🎻 Letters to an...
+                <button type="button" id="queueItem-1" onclick="playTrackAtIndex(1)"
+                    class="w-full text-left px-3 py-2 rounded-xl font-mono text-[11px] bg-obsidian/80 text-zinc-400 border border-zinc-800 hover:border-pink-500/40 transition flex items-center justify-between cursor-pointer">
+                    <span class="truncate">02. Letters to an Open Window</span>
+                    <span class="text-[10px] text-zinc-500">SIGUIENTE</span>
                 </button>
             </div>
 
-            <!-- Volumen -->
+            <div class="flex items-center justify-between gap-2">
+                <button type="button" onclick="playNextInQueue()"
+                    class="flex-1 px-2.5 py-1.5 rounded-xl font-mono text-[11px] bg-zinc-900 text-zinc-200 border border-zinc-700/80 hover:border-neonPink transition cursor-pointer">
+                    ⏭ Siguiente en cola
+                </button>
+                <button type="button" onclick="document.getElementById('localAudioFilesInput').click()"
+                    class="px-2.5 py-1.5 rounded-xl font-mono text-[11px] bg-pink-500/15 text-roseGold border border-pink-500/30 hover:bg-pink-500/25 transition cursor-pointer">
+                    📁 MP3 local
+                </button>
+            </div>
+
             <div class="space-y-1">
                 <div class="flex justify-between font-mono text-[10px] text-zinc-400">
                     <span>Volumen</span>
@@ -898,20 +866,10 @@
                 <input id="musicVolumeSlider" type="range" min="0" max="100" value="75" oninput="updateMusicVolume(this.value)"
                     class="w-full accent-rose-500 cursor-pointer">
             </div>
-
-            <!-- Botón opcional para probar tus MP3 locales desde Vista Previa -->
-            <div class="pt-1 border-t border-zinc-800/80 flex items-center justify-between gap-2">
-                <span class="font-mono text-[10px] text-zinc-500">Cola continua activa</span>
-                <input type="file" id="localAudioPicker" accept="audio/*" multiple class="hidden" onchange="loadLocalAudioFiles(event)">
-                <button onclick="document.getElementById('localAudioPicker').click()"
-                    class="font-mono text-[10px] text-roseGold hover:underline cursor-pointer">
-                    📁 Cargar MP3 local
-                </button>
-            </div>
         </div>
     </div>
 
-    <!-- Notificación Toast Flotante (Sin alert()) -->
+    <!-- Notificación Toast Flotante -->
     <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
         <div class="glass-card border border-neonPink/60 px-4 py-3 rounded-2xl flex items-center gap-2.5 shadow-2xl">
             <span class="text-neonPink text-sm">◆</span>
@@ -921,7 +879,7 @@
 
     <!-- Modal Lightbox para pantalla completa -->
     <div id="tropicalLightbox" onclick="closeLightbox(event)" class="hidden fixed inset-0 z-50 bg-obsidian/95 backdrop-blur-xl flex flex-col items-center justify-center p-4 sm:p-8">
-        <button onclick="closeLightbox()" class="absolute top-4 right-4 sm:top-5 sm:right-5 w-10 h-10 rounded-full bg-zinc-900 border border-pink-500/40 text-white hover:bg-neonPink flex items-center justify-center font-mono text-sm cursor-pointer">
+        <button type="button" onclick="closeLightbox()" class="absolute top-4 right-4 sm:top-5 sm:right-5 w-10 h-10 rounded-full bg-zinc-900 border border-pink-500/40 text-white hover:bg-neonPink flex items-center justify-center font-mono text-sm cursor-pointer">
             ✕
         </button>
         <img id="lightboxImage" src="" alt="Vista ampliada" class="max-h-[78vh] max-w-[92vw] rounded-2xl border border-pink-500/30 shadow-2xl object-contain">
@@ -930,20 +888,22 @@
 
     <script>
         /* ==========================================================================
-           CONFIGURACIÓN E INICIALIZACIÓN DE DATOS (LOCALSTORAGE)
+           CONFIGURACIÓN E INICIALIZACIÓN DE DATOS
            ========================================================================== */
         const STORAGE_KEYS = {
-            LETTER: 'bday30_love_letter_v5',
-            PLANS: 'bday30_itinerary_plans_v3',
-            DREAMS: 'bday30_wishlist_dreams_v2',
-            TROPICAL_PHOTOS: 'bday30_travesia_photos_v6'
+            LETTER: 'bday30_love_letter_amor_v1',
+            PLANS: 'bday30_itinerary_plans_amor_v1',
+            DREAMS: 'bday30_wishlist_dreams_amor_v1',
+            TROPICAL_PHOTOS: 'bday30_travesia_photos_amor_v1'
         };
 
-        // 6 Guardianes de Esencia personalizados para Amor
+        const PRE_BIRTHDAY_TITLE = 'Welcome to 30´s';
+        const BIRTHDAY_TITLE = 'Feliz Cumpleaños Amor';
+
         const CHARACTER_DATA = {
             stitch: {
                 badge: '◆ STITCH // OHANA & AVENTURA',
-                quote: '"Contigo he aprendido que Ohana es elegirnos todos los días. Gracias por ser tan aventurera, por sacarme de mi zona de confort y por enseñarme a vivir el mundo con curiosidad. Los 30 apenas son el inicio de todas las aventuras que nos faltan juntos."'
+                quote: '"Contigo he aprendido que Ohana es elegirnos todos los días. Gracias por ser tan aventurera, por sacarme de mi zona de confort y por enseñarme a vivir el mundo con curiosidad. Tus 30 apenas son el inicio de todas las aventuras que nos faltan juntos, amor."'
             },
             marie: {
                 badge: '◆ MARIE // COQUETA, LINDA & ESENCIA PROPIA',
@@ -951,7 +911,7 @@
             },
             pooh: {
                 badge: '◆ WINNIE POOH // DULZURA, CALMA & ANTOJITOS',
-                quote: '"Porque sabes disfrutar lo mejor de la vida sin complicaciones: desde una tarde tranquila en casa o caminando en el parque, hasta el placer simple de comer algo delicioso juntos. Que tus 30 estén llenos de paz y momentos tan dulces como tú."'
+                quote: '"Porque sabes disfrutar lo mejor de la vida sin complicaciones: desde una tarde tranquila en casa o caminando en el parque, hasta el placer simple de comer algo delicioso juntos. Que tus 30 estén llenos de paz y momentos tan dulces como tú, amor."'
             },
             croc: {
                 badge: '◆ COCODRILO // VALENTÍA & FUERZA DE CORAZÓN',
@@ -974,7 +934,7 @@
             { id: 'dream-4', text: 'Seguir construyendo nuestra historia de la mano de Dios ❤️🙏', done: false }
         ];
 
-        const DEFAULT_LETTER = `Feliz cumpleaños número 30, mi Amor.
+        const DEFAULT_LETTER = `Feliz cumpleaños número 30, mi amor.
 
 Quise hacerte este pequeño portal combinando un poco de lo que sé hacer con los personajes y recuerdos que tanto significan para ti, porque alguien con un corazón tan grande como el tuyo merece un detalle único, hecho con paciencia y con muchísimo amor.
 
@@ -982,7 +942,7 @@ Gracias por ser esa mujer tan tierna, coqueta, aventurera y apasionada que lleg�
 
 Sé que pasar a los 30 a veces puede generar nervios o incertidumbre, pero quiero que hoy sueltes cualquier angustia. No tienes que apresurar nada; disfruta cada día como vaya llegando, con la certeza de que eres una mujer increíble, hermosa y llena de luz.
 
-Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo permite, de todos los capítulos que todavía nos faltan por escribir juntos. ¡Te quiero muchísimo, Amor!`;
+Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo permite, de todos los capítulos que todavía nos faltan por escribir juntos. ¡Te quiero muchísimo, amor!`;
 
         const DEFAULT_PLANS = [
             {
@@ -1001,11 +961,10 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
                 id: 'plan-3',
                 time: '20:30',
                 title: 'Cena de Gala // Level 30 Celebration',
-                note: 'Brindis por tus 30 años, Amor, y por todo lo que viene.'
+                note: 'Brindis por tus 30 años, amor, y por todo lo que viene.'
             }
         ];
 
-        // Tus 28 fotos exactas de GitHub (14 .JPG + 14 .HEIC/.heic con decodificación automática)
         const DEFAULT_TROPICAL_SLIDES = [
             { id: 'travesia-01', src: 'e09ab3db-8787-43fa-bdee-331980bdde2c.JPG', caption: 'Nuestro festejo tropical de tus 30: así de feliz quiero cargarte toda la vida 🌴🌺' },
             { id: 'travesia-02', src: 'a782e7f5-b70c-42a2-9510-8502e164248b.JPG', caption: 'Aventuras con gorritas y paletitas de huella: contigo cualquier plan es el mejor 🦒🐾' },
@@ -1013,7 +972,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
             { id: 'travesia-04', src: 'eca896c5-27cf-40b8-bac6-071cff55c3f5.JPG', caption: 'Risas sin parar en nuestra salida especial con nuestros vasitos verdes 🥤✨' },
             { id: 'travesia-05', src: 'cd5910fe-23c7-4310-b8d5-2769c644ced5.JPG', caption: 'Noche de fiesta, luces rosas y tú viéndote espectacular como siempre 🎸💕' },
             { id: 'travesia-06', src: '0601af77-ec59-40f5-9300-6481fd0383d6.JPG', caption: 'Pedacitos de nuestra historia que guardo en el corazón 💖' },
-            { id: 'travesia-07', src: '48042756-af9f-49f8-b8b3-5319a8554542.JPG', caption: 'Cada momento a tu lado vale oro, Amor ✨' },
+            { id: 'travesia-07', src: '48042756-af9f-49f8-b8b3-5319a8554542.JPG', caption: 'Cada momento a tu lado vale oro, amor ✨' },
             { id: 'travesia-08', src: '4ffd5bd1-8c21-4ae1-95f4-af90035005ad.JPG', caption: 'Sonrisas que iluminan cualquiera de mis días 🌺' },
             { id: 'travesia-09', src: '65c13c3c-ccd7-49a2-8188-c7cb0c3c99b5.JPG', caption: 'Nuestra travesía tropical y todo lo bonito que hemos vivido 🌴' },
             { id: 'travesia-10', src: '7d672d39-11a6-4fde-9ff7-7dea3c8a6881.JPG', caption: 'Contigo aprendo a disfrutar cada instante sin prisa 💕' },
@@ -1034,11 +993,12 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
             { id: 'travesia-25', src: 'IMG_2988.heic', caption: 'Paz, cariño y el mejor equipo del mundo ✨' },
             { id: 'travesia-26', src: 'IMG_3035.HEIC', caption: 'Más capítulos juntos en esta nueva etapa de los 30 🎉' },
             { id: 'travesia-27', src: 'IMG_3879_SnapseedCopy.heic', caption: 'Un recuerdo especial que merece estar en tu portal 💫' },
-            { id: 'travesia-28', src: 'IMG_9203.HEIC', caption: 'Por todos los recuerdos que ya tenemos y los que faltan, Amor ❤️' }
+            { id: 'travesia-28', src: 'IMG_9203.HEIC', caption: 'Por todos los recuerdos que ya tenemos y los que faltan, amor ❤️' }
         ];
 
         let isSimulating = false;
         let isPortalUnlocked = false;
+        let tropicalSlidesLoaded = false;
         let countdownInterval = null;
         let celebrationTriggered = false;
         let secretTapCount = 0;
@@ -1066,32 +1026,75 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
         }
 
         /* ==========================================================================
-           ATAJO SECRETO DE PRUEBA (5 TOQUES RÁPIDOS SOBRE CORE.ESSENCE_v3.0)
+           CONTROL DEL CANDADO DEL 28 DE NOVIEMBRE
            ========================================================================== */
-        function handleSecretBrandTap() {
+        function applyPortalLockState(unlocked) {
+            isPortalUnlocked = unlocked;
+            const heroTitleEl = document.getElementById('heroTitle');
+            const vaultNotice = document.getElementById('lockedVaultNotice');
+            const lockedContent = document.getElementById('lockedContentWrapper');
+            const bannerEl = document.getElementById('celebrationBanner');
+            const pillEl = document.getElementById('portalStatePill');
+            const statusLabel = document.getElementById('countdownStatusLabel');
+            const navTravesia = document.getElementById('navLinkTravesia');
+            const navSuenos = document.getElementById('navLinkSuenos');
+            const backupBtn = document.getElementById('headerBackupBtn');
+
+            if (heroTitleEl) {
+                heroTitleEl.textContent = unlocked ? BIRTHDAY_TITLE : PRE_BIRTHDAY_TITLE;
+            }
+            if (vaultNotice) {
+                vaultNotice.classList.toggle('hidden', unlocked);
+                vaultNotice.style.display = unlocked ? 'none' : '';
+            }
+            if (lockedContent) {
+                lockedContent.classList.toggle('hidden', !unlocked);
+                lockedContent.style.display = unlocked ? '' : 'none';
+            }
+            if (bannerEl) {
+                bannerEl.classList.toggle('hidden', !unlocked);
+                bannerEl.style.display = unlocked ? '' : 'none';
+            }
+
+            if (unlocked && !tropicalSlidesLoaded) {
+                tropicalSlidesLoaded = true;
+                loadTropicalSlides();
+            }
+
+            if (navTravesia) navTravesia.className = unlocked ? 'hidden md:inline-flex px-2.5 py-1.5 rounded-full text-xs font-mono text-zinc-400 hover:text-roseGold transition' : 'hidden';
+            if (navSuenos) navSuenos.className = unlocked ? 'hidden md:inline-flex px-2.5 py-1.5 rounded-full text-xs font-mono text-zinc-400 hover:text-roseGold transition' : 'hidden';
+            if (backupBtn) backupBtn.classList.toggle('hidden', !unlocked);
+
+            if (pillEl) {
+                pillEl.textContent = unlocked
+                    ? '🔓 PORTAL DESBLOQUEADO // NIVEL 30'
+                    : '🔒 PORTAL SELLADO HASTA EL 28.11';
+            }
+            if (statusLabel) {
+                statusLabel.innerHTML = unlocked
+                    ? 'STATUS: <span class="text-neonPink font-bold">28 NOV 2026 // DESBLOQUEADO</span>'
+                    : 'TARGET_RELEASE: <span class="text-roseGold">28 NOV 2026 // 00:00:00</span>';
+            }
+        }
+
+        function handleSecretUnlockTap() {
             secretTapCount++;
-            clearTimeout(secretTapTimer);
-            secretTapTimer = setTimeout(() => { secretTapCount = 0; }, 1600);
+            if (secretTapTimer) clearTimeout(secretTapTimer);
+            secretTapTimer = setTimeout(() => {
+                secretTapCount = 0;
+            }, 1500);
 
             if (secretTapCount >= 5) {
                 secretTapCount = 0;
                 isSimulating = !isSimulating;
                 celebrationTriggered = false;
                 updateCountdown();
-                showToast(isSimulating ? '🔓 Vista previa del 28 de Noviembre activada' : '🔒 Candado real restaurado');
+                showToast(isSimulating ? '🔓 Vista previa del 28 de Noviembre activada' : '🔒 Portal sellado nuevamente');
             }
-        }
-
-        function handleHeroEmblemClick(key) {
-            if (!isPortalUnlocked) {
-                showToast('🔒 Se revelará el 28 de Noviembre a las 00:00');
-                return;
-            }
-            selectCharacter(key, true);
         }
 
         /* ==========================================================================
-           MEMORIES DE UNA TRAVESÍA TROPICAL (CARRUSEL + SOPORTE .HEIC + SWIPE)
+           MEMORIES DE UNA TRAVESÍA TROPICAL
            ========================================================================== */
         let tropicalSlides = [];
         let currentSlideIndex = 0;
@@ -1158,7 +1161,9 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
                                 type: 'image/jpeg',
                                 quality: 0.82
                             });
-                        } catch (e) {}
+                        } catch (e) {
+                            console.warn('HeicTo no pudo convertir, probando alternativa:', e);
+                        }
                     }
 
                     if (!finalBlob && typeof heic2any === 'function') {
@@ -1246,6 +1251,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
         }
 
         async function renderTropicalCarousel() {
+            if (!isPortalUnlocked) return;
             if (tropicalSlides.length === 0) {
                 tropicalSlides = [...DEFAULT_TROPICAL_SLIDES];
             }
@@ -1270,7 +1276,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
 
             if (dotsEl) {
                 dotsEl.innerHTML = tropicalSlides.map((s, idx) => `
-                    <button onclick="goToTropicalSlide(${idx})" aria-label="Ir a foto ${idx + 1}"
+                    <button type="button" onclick="goToTropicalSlide(${idx})" aria-label="Ir a foto ${idx + 1}"
                         class="h-1.5 rounded-full transition-all cursor-pointer ${idx === currentSlideIndex ? 'w-4 bg-neonPink' : 'w-1.5 bg-zinc-600 hover:bg-roseGold'}">
                     </button>
                 `).join('');
@@ -1282,7 +1288,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
                     const cachedUrl = isHeic ? heicBlobCache[s.src] : s.src;
                     const thumbSrc = cachedUrl || `https://placehold.co/160x120/121216/f9a8d4?text=${padZero(idx + 1)}`;
                     return `
-                        <button onclick="goToTropicalSlide(${idx})"
+                        <button type="button" onclick="goToTropicalSlide(${idx})"
                             class="relative w-16 h-12 rounded-xl overflow-hidden border-2 shrink-0 transition cursor-pointer bg-obsidian ${idx === currentSlideIndex ? 'border-neonPink scale-105 shadow-lg' : 'border-zinc-800 opacity-65 hover:opacity-100'}">
                             <img src="${thumbSrc}" ${isHeic ? `data-heic-src="${s.src}"` : ''} data-retry-index="0" onerror="handlePhotoError(this, tropicalSlides[${idx}] ? tropicalSlides[${idx}].src : '')" alt="Miniatura ${idx + 1}" class="w-full h-full object-cover">
                         </button>
@@ -1437,7 +1443,9 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
                         caption: `Travesía Tropical • ${baseName || 'Recuerdo especial'} 🌺`
                     });
                     addedCount++;
-                } catch (err) {}
+                } catch (err) {
+                    console.error('Error al procesar imagen:', err);
+                }
             }
 
             if (addedCount > 0) {
@@ -1529,14 +1537,11 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
             const activeCard = document.getElementById(`card-${key}`);
             if (activeCard) activeCard.classList.add('active-char');
 
-            const badgeEl = document.getElementById('charBadge');
-            const quoteEl = document.getElementById('charQuoteText');
-            if (badgeEl) badgeEl.textContent = data.badge;
-            if (quoteEl) quoteEl.textContent = data.quote;
+            document.getElementById('charBadge').textContent = data.badge;
+            document.getElementById('charQuoteText').textContent = data.quote;
 
             if (shouldScroll) {
-                const section = document.getElementById('suenos');
-                if (section) section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                document.getElementById('suenos').scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         }
 
@@ -1565,7 +1570,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
             if (listEl) {
                 listEl.innerHTML = dreams.map(dream => `
                     <div class="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-obsidian/75 border ${dream.done ? 'border-neonPink/40' : 'border-zinc-800/90'} transition">
-                        <button onclick="toggleDream('${dream.id}')" class="flex items-center gap-3 text-left flex-1 cursor-pointer group">
+                        <button type="button" onclick="toggleDream('${dream.id}')" class="flex items-center gap-3 text-left flex-1 cursor-pointer group">
                             <span class="w-5 h-5 rounded-md flex items-center justify-center border ${dream.done ? 'bg-neonPink border-neonPink text-white' : 'border-zinc-600 group-hover:border-softRose'} text-xs transition shrink-0">
                                 ${dream.done ? '✓' : ''}
                             </span>
@@ -1573,7 +1578,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
                                 ${escapeHTML(dream.text)}
                             </span>
                         </button>
-                        <button onclick="deleteDream('${dream.id}')" title="Quitar sueño" class="text-zinc-600 hover:text-neonPink text-xs font-mono px-1.5 cursor-pointer">
+                        <button type="button" onclick="deleteDream('${dream.id}')" title="Quitar sueño" class="text-zinc-600 hover:text-neonPink text-xs font-mono px-1.5 cursor-pointer">
                             ✕
                         </button>
                     </div>
@@ -1605,46 +1610,9 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
         }
 
         /* ==========================================================================
-           CONTADOR REGRESIVO Y CANDADO AUTOMÁTICO AL 28 DE NOVIEMBRE DE 2026
+           CONTADOR REGRESIVO AL 28 DE NOVIEMBRE DE 2026 (00:00:00 HORA LOCAL)
            ========================================================================== */
-        const PRE_BIRTHDAY_TITLE = 'Welcome to 30´s';
-        const BIRTHDAY_TITLE = 'Feliz Cumpleaños Amor';
         const TARGET_DATE = new Date(2026, 10, 28, 0, 0, 0).getTime();
-
-        function applyPortalLockState(unlocked) {
-            isPortalUnlocked = unlocked;
-            const heroTitleEl = document.getElementById('heroTitle');
-            const vaultNotice = document.getElementById('lockedVaultNotice');
-            const lockedContent = document.getElementById('lockedContentWrapper');
-            const bannerEl = document.getElementById('celebrationBanner');
-            const pillEl = document.getElementById('portalStatePill');
-            const statusLabel = document.getElementById('countdownStatusLabel');
-            const navTravesia = document.getElementById('navLinkTravesia');
-            const navSuenos = document.getElementById('navLinkSuenos');
-            const backupBtn = document.getElementById('headerBackupBtn');
-
-            if (heroTitleEl) {
-                heroTitleEl.textContent = unlocked ? BIRTHDAY_TITLE : PRE_BIRTHDAY_TITLE;
-            }
-            if (vaultNotice) vaultNotice.classList.toggle('hidden', unlocked);
-            if (lockedContent) lockedContent.classList.toggle('hidden', !unlocked);
-            if (bannerEl) bannerEl.classList.toggle('hidden', !unlocked);
-
-            if (navTravesia) navTravesia.className = unlocked ? 'hidden md:inline-flex px-2.5 py-1.5 rounded-full text-xs font-mono text-zinc-400 hover:text-roseGold transition' : 'hidden';
-            if (navSuenos) navSuenos.className = unlocked ? 'hidden md:inline-flex px-2.5 py-1.5 rounded-full text-xs font-mono text-zinc-400 hover:text-roseGold transition' : 'hidden';
-            if (backupBtn) backupBtn.classList.toggle('hidden', !unlocked);
-
-            if (pillEl) {
-                pillEl.textContent = unlocked
-                    ? '🔓 PORTAL DESBLOQUEADO // NIVEL 30'
-                    : '🔒 PORTAL SELLADO HASTA EL 28.11';
-            }
-            if (statusLabel) {
-                statusLabel.innerHTML = unlocked
-                    ? 'STATUS: <span class="text-neonPink font-bold">28 NOV 2026 // DESBLOQUEADO</span>'
-                    : 'TARGET_RELEASE: <span class="text-roseGold">28 NOV 2026 // 00:00:00</span>';
-            }
-        }
 
         function updateCountdown() {
             const now = Date.now();
@@ -1656,11 +1624,12 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
             const secondsEl = document.getElementById('seconds');
 
             if (distance <= 0) {
+                if (daysEl) daysEl.textContent = '00';
+                if (hoursEl) hoursEl.textContent = '00';
+                if (minutesEl) minutesEl.textContent = '00';
+                if (secondsEl) secondsEl.textContent = '00';
+
                 applyPortalLockState(true);
-                daysEl.textContent = '00';
-                hoursEl.textContent = '00';
-                minutesEl.textContent = '00';
-                secondsEl.textContent = '00';
 
                 if (!celebrationTriggered) {
                     celebrationTriggered = true;
@@ -1670,15 +1639,16 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
             }
 
             applyPortalLockState(false);
+
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            daysEl.textContent = padZero(days);
-            hoursEl.textContent = padZero(hours);
-            minutesEl.textContent = padZero(minutes);
-            secondsEl.textContent = padZero(seconds);
+            if (daysEl) daysEl.textContent = padZero(days);
+            if (hoursEl) hoursEl.textContent = padZero(hours);
+            if (minutesEl) minutesEl.textContent = padZero(minutes);
+            if (secondsEl) secondsEl.textContent = padZero(seconds);
         }
 
         /* ==========================================================================
@@ -1757,7 +1727,11 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
             const listEl = document.getElementById('planList');
             const badgeEl = document.getElementById('planCounterBadge');
 
-            badgeEl.textContent = `${plans.length} ${plans.length === 1 ? 'actividad lista' : 'actividades listas'}`;
+            if (badgeEl) {
+                badgeEl.textContent = `${plans.length} ${plans.length === 1 ? 'actividad lista' : 'actividades listas'}`;
+            }
+
+            if (!listEl) return;
 
             if (plans.length === 0) {
                 listEl.innerHTML = `
@@ -1780,7 +1754,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
                             ${item.note ? `<p class="text-zinc-400 text-xs sm:text-sm mt-0.5">${escapeHTML(item.note)}</p>` : ''}
                         </div>
                     </div>
-                    <button onclick="deletePlanItem('${item.id}')" title="Eliminar actividad"
+                    <button type="button" onclick="deletePlanItem('${item.id}')" title="Eliminar actividad"
                         class="self-end sm:self-center px-3 py-1.5 rounded-lg font-mono text-xs text-zinc-500 hover:text-neonPink hover:bg-neonPink/10 transition cursor-pointer">
                         ✕ Quitar
                     </button>
@@ -1810,7 +1784,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
         }
 
         /* ==========================================================================
-           RESPALDO RÁPIDO AL PORTAPAPELES (COMPATIBLE CON IFRAMES)
+           RESPALDO RÁPIDO AL PORTAPAPELES
            ========================================================================== */
         function copySummaryToClipboard() {
             const title = document.getElementById('heroTitle').textContent.trim();
@@ -1834,192 +1808,167 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
         }
 
         /* ==========================================================================
-           REPRODUCTOR DE AUDIO EN COLA CON INICIO AUTOMÁTICO
+           REPRODUCTOR DE MÚSICA EN COLA CON INICIO AUTOMÁTICO
            ========================================================================== */
-        const AUDIO_PLAYLIST = [
-            { title: 'Where Hearts Remain', src: 'Where_Hearts_Remain.mp3', fallback: 'cancion1.mp3', triedFallback: false },
-            { title: 'Letters to an Open Window', src: 'Letters_to_an_Open_Window.mp3', fallback: 'cancion2.mp3', triedFallback: false }
+        const audioQueue = [
+            { title: '01. Where Hearts Remain', sources: ['Where_Hearts_Remain.mp3', 'cancion1.mp3'] },
+            { title: '02. Letters to an Open Window', sources: ['Letters_to_an_Open_Window.mp3', 'cancion2.mp3'] }
         ];
 
-        let currentTrackIndex = 0;
-        let isMusicPlaying = false;
-        let userPausedManually = false;
-        let audioPlayer = null;
+        let currentTrackIdx = 0;
+        let isAudioPlaying = false;
+        let autoplayAttempted = false;
 
-        function tryAutoStartAudio() {
-            if (!audioPlayer || isMusicPlaying || userPausedManually) return;
-            const playPromise = audioPlayer.play();
-            if (playPromise && typeof playPromise.then === 'function') {
-                playPromise.then(() => {
-                    isMusicPlaying = true;
-                    updateMusicUI();
-                    detachAutoplayUnlockListeners();
-                }).catch(() => {
-                    // Si el navegador bloquea el autoplay inicial, arrancará al primer toque
-                    attachAutoplayUnlockListeners();
-                });
-            }
+        function getAudioElement() {
+            return document.getElementById('playlistAudioElement');
         }
 
-        function handleFirstInteractionUnlock() {
-            if (userPausedManually || isMusicPlaying) {
-                detachAutoplayUnlockListeners();
-                return;
-            }
-            tryAutoStartAudio();
-        }
+        function setTrackSourceWithFallback(audioEl, trackObj, sourceIndex) {
+            if (!audioEl || !trackObj) return;
+            const list = trackObj.sources || [];
+            if (sourceIndex >= list.length) return;
 
-        function attachAutoplayUnlockListeners() {
-            document.addEventListener('click', handleFirstInteractionUnlock, { passive: true });
-            document.addEventListener('touchstart', handleFirstInteractionUnlock, { passive: true });
-            document.addEventListener('keydown', handleFirstInteractionUnlock, { passive: true });
-        }
-
-        function detachAutoplayUnlockListeners() {
-            document.removeEventListener('click', handleFirstInteractionUnlock);
-            document.removeEventListener('touchstart', handleFirstInteractionUnlock);
-            document.removeEventListener('keydown', handleFirstInteractionUnlock);
+            audioEl.dataset.fallbackIdx = String(sourceIndex);
+            audioEl.src = list[sourceIndex];
+            audioEl.load();
         }
 
         function initAudioPlaylist() {
-            audioPlayer = document.getElementById('bgAudioPlayer');
-            if (!audioPlayer) return;
+            const audioEl = getAudioElement();
+            if (!audioEl) return;
 
-            audioPlayer.volume = 0.75;
-            audioPlayer.src = AUDIO_PLAYLIST[currentTrackIndex].src;
+            audioEl.volume = 0.75;
+            setTrackSourceWithFallback(audioEl, audioQueue[currentTrackIdx], 0);
 
-            // Al terminar una pista, arranca automáticamente la siguiente en cola
-            audioPlayer.addEventListener('ended', () => {
-                currentTrackIndex = (currentTrackIndex + 1) % AUDIO_PLAYLIST.length;
-                loadAndPlayCurrentTrack();
-            });
-
-            audioPlayer.addEventListener('play', () => {
-                isMusicPlaying = true;
-                updateMusicUI();
-            });
-
-            audioPlayer.addEventListener('pause', () => {
-                isMusicPlaying = false;
-                updateMusicUI();
-            });
-
-            audioPlayer.addEventListener('error', () => {
-                const track = AUDIO_PLAYLIST[currentTrackIndex];
-                if (track && track.fallback && !track.triedFallback) {
-                    track.triedFallback = true;
-                    audioPlayer.src = track.fallback;
-                    audioPlayer.load();
-                    if (!userPausedManually) {
-                        audioPlayer.play().catch(() => {});
+            audioEl.addEventListener('error', () => {
+                const trackObj = audioQueue[currentTrackIdx];
+                const nextFallback = Number(audioEl.dataset.fallbackIdx || 0) + 1;
+                if (trackObj && nextFallback < trackObj.sources.length) {
+                    setTrackSourceWithFallback(audioEl, trackObj, nextFallback);
+                    if (isAudioPlaying) {
+                        audioEl.play().catch(() => {});
                     }
-                    return;
                 }
-                isMusicPlaying = false;
-                updateMusicUI();
             });
 
-            updateMusicUI();
-            tryAutoStartAudio();
+            audioEl.addEventListener('ended', () => {
+                const nextIdx = (currentTrackIdx + 1) % audioQueue.length;
+                playTrackAtIndex(nextIdx, true);
+            });
+
+            audioEl.addEventListener('play', () => {
+                isAudioPlaying = true;
+                updateMusicQueueUI();
+            });
+
+            audioEl.addEventListener('pause', () => {
+                isAudioPlaying = false;
+                updateMusicQueueUI();
+            });
+
+            updateMusicQueueUI();
+            attemptAutoplayMusic();
+
+            const unlockAudioOnFirstGesture = () => {
+                if (!isAudioPlaying) {
+                    attemptAutoplayMusic();
+                }
+                document.removeEventListener('click', unlockAudioOnFirstGesture);
+                document.removeEventListener('touchstart', unlockAudioOnFirstGesture);
+            };
+            document.addEventListener('click', unlockAudioOnFirstGesture, { passive: true });
+            document.addEventListener('touchstart', unlockAudioOnFirstGesture, { passive: true });
         }
 
-        function loadAndPlayCurrentTrack() {
-            if (!audioPlayer) return;
-            const track = AUDIO_PLAYLIST[currentTrackIndex];
-            track.triedFallback = false;
-            userPausedManually = false;
-            audioPlayer.src = track.src;
-            audioPlayer.load();
-            audioPlayer.play().then(() => {
-                isMusicPlaying = true;
-                updateMusicUI();
+        function attemptAutoplayMusic() {
+            const audioEl = getAudioElement();
+            if (!audioEl || !audioEl.src) return;
+            autoplayAttempted = true;
+            audioEl.play().then(() => {
+                isAudioPlaying = true;
+                updateMusicQueueUI();
             }).catch(() => {
-                isMusicPlaying = false;
-                updateMusicUI();
+                isAudioPlaying = false;
+                updateMusicQueueUI();
             });
         }
 
         function toggleMusicPlayback() {
-            if (!audioPlayer) initAudioPlaylist();
-            if (!audioPlayer) return;
+            const audioEl = getAudioElement();
+            if (!audioEl) return;
 
-            if (audioPlayer.paused) {
-                userPausedManually = false;
-                if (!audioPlayer.getAttribute('src')) {
-                    audioPlayer.src = AUDIO_PLAYLIST[currentTrackIndex].src;
-                }
-                audioPlayer.play().then(() => {
-                    isMusicPlaying = true;
-                    updateMusicUI();
-                    showToast(`🎵 Reproduciendo: ${AUDIO_PLAYLIST[currentTrackIndex].title}`);
+            if (!audioEl.src) {
+                setTrackSourceWithFallback(audioEl, audioQueue[currentTrackIdx], 0);
+            }
+
+            if (audioEl.paused) {
+                audioEl.play().then(() => {
+                    isAudioPlaying = true;
+                    updateMusicQueueUI();
+                    showToast(`🎧 Reproduciendo: ${audioQueue[currentTrackIdx].title}`);
                 }).catch(() => {
-                    isMusicPlaying = false;
-                    updateMusicUI();
-                    showToast('Sube los 2 MP3 a GitHub (o usa "📁 Cargar MP3 local")');
+                    showToast('Sube los archivos .mp3 a GitHub o usa "MP3 local"');
                 });
             } else {
-                userPausedManually = true;
-                detachAutoplayUnlockListeners();
-                audioPlayer.pause();
-                isMusicPlaying = false;
-                updateMusicUI();
+                audioEl.pause();
+                isAudioPlaying = false;
+                updateMusicQueueUI();
             }
         }
 
-        function selectTrackByIndex(index, autoPlay = true) {
-            if (index < 0 || index >= AUDIO_PLAYLIST.length) return;
-            currentTrackIndex = index;
-            if (!audioPlayer) initAudioPlaylist();
+        function playTrackAtIndex(idx, shouldAutoplay = true) {
+            const audioEl = getAudioElement();
+            if (!audioEl || idx < 0 || idx >= audioQueue.length) return;
 
-            if (autoPlay || isMusicPlaying) {
-                loadAndPlayCurrentTrack();
-            } else {
-                AUDIO_PLAYLIST[currentTrackIndex].triedFallback = false;
-                audioPlayer.src = AUDIO_PLAYLIST[currentTrackIndex].src;
-                updateMusicUI();
+            currentTrackIdx = idx;
+            setTrackSourceWithFallback(audioEl, audioQueue[currentTrackIdx], 0);
+            updateMusicQueueUI();
+
+            if (shouldAutoplay) {
+                audioEl.play().then(() => {
+                    isAudioPlaying = true;
+                    updateMusicQueueUI();
+                }).catch(() => {});
             }
         }
 
-        function playNextTrack() {
-            currentTrackIndex = (currentTrackIndex + 1) % AUDIO_PLAYLIST.length;
-            loadAndPlayCurrentTrack();
+        function playNextInQueue() {
+            const nextIdx = (currentTrackIdx + 1) % audioQueue.length;
+            playTrackAtIndex(nextIdx, true);
+            showToast(`⏭ Siguiente: ${audioQueue[nextIdx].title}`);
         }
 
-        function loadLocalAudioFiles(event) {
-            const files = Array.from(event.target.files || []).filter(f => f.type.startsWith('audio/'));
+        function handleLocalAudioUpload(event) {
+            const files = event.target.files ? Array.from(event.target.files).filter(f => f.type.startsWith('audio/')) : [];
             if (files.length === 0) return;
 
-            files.slice(0, 2).forEach((file, idx) => {
-                const cleanName = file.name.replace(/\.[^/.]+$/, '').replace(/[_-]+/g, ' ');
-                AUDIO_PLAYLIST[idx] = {
-                    title: cleanName || `Pista 0${idx + 1}`,
-                    src: URL.createObjectURL(file),
-                    fallback: null,
-                    triedFallback: true
+            files.slice(0, 2).forEach((file, i) => {
+                const cleanTitle = file.name.replace(/\.[^/.]+$/, '').replace(/[_-]+/g, ' ');
+                audioQueue[i] = {
+                    title: `${padZero(i + 1)}. ${cleanTitle}`,
+                    sources: [URL.createObjectURL(file)]
                 };
             });
 
-            currentTrackIndex = 0;
-            loadAndPlayCurrentTrack();
-            showToast(`${Math.min(files.length, 2)} ${files.length === 1 ? 'audio cargado' : 'audios cargados en cola'} 🎵`);
+            currentTrackIdx = 0;
+            playTrackAtIndex(0, true);
+            showToast('🎵 Canciones cargadas en cola');
             event.target.value = '';
         }
 
         function updateMusicVolume(val) {
             const pct = Number(val);
-            const label = document.getElementById('volumeLabel');
-            if (label) label.textContent = `${pct}%`;
-            if (audioPlayer) {
-                audioPlayer.volume = Math.max(0, Math.min(1, pct / 100));
-            }
+            const volLabel = document.getElementById('volumeLabel');
+            if (volLabel) volLabel.textContent = `${pct}%`;
+            const audioEl = getAudioElement();
+            if (audioEl) audioEl.volume = pct / 100;
         }
 
         function toggleMusicPanel() {
-            const panel = document.getElementById('musicExpandedPanel');
-            if (panel) panel.classList.toggle('hidden');
+            document.getElementById('musicExpandedPanel').classList.toggle('hidden');
         }
 
-        function updateMusicUI() {
+        function updateMusicQueueUI() {
             const playIcon = document.getElementById('compactPlayIcon');
             const headerIcon = document.getElementById('headerMusicIcon');
             const headerLabel = document.getElementById('headerMusicLabel');
@@ -2027,26 +1976,30 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
             const titleEl = document.getElementById('compactTrackTitle');
             const subEl = document.getElementById('compactTrackSub');
 
-            const track = AUDIO_PLAYLIST[currentTrackIndex];
+            const activeTrack = audioQueue[currentTrackIdx] || audioQueue[0];
 
-            if (playIcon) playIcon.textContent = isMusicPlaying ? '⏸' : '▶';
-            if (headerIcon) headerIcon.textContent = isMusicPlaying ? '🔊' : '🎵';
-            if (headerLabel) headerLabel.textContent = isMusicPlaying ? 'Sonando' : 'Música';
-            if (eq) eq.classList.toggle('eq-playing', isMusicPlaying);
-            if (titleEl && track) titleEl.textContent = track.title;
+            if (playIcon) playIcon.textContent = isAudioPlaying ? '⏸' : '▶';
+            if (headerIcon) headerIcon.textContent = isAudioPlaying ? '🔊' : '🎵';
+            if (headerLabel) headerLabel.textContent = isAudioPlaying ? 'Sonando' : 'Música';
+            if (eq) eq.classList.toggle('eq-playing', isAudioPlaying);
+            if (titleEl) titleEl.textContent = activeTrack.title;
             if (subEl) {
-                subEl.textContent = isMusicPlaying
-                    ? `Reproduciendo (${currentTrackIndex + 1} de ${AUDIO_PLAYLIST.length}) • En cola`
-                    : `Autoplay listo (${currentTrackIndex + 1} de ${AUDIO_PLAYLIST.length})`;
+                subEl.textContent = isAudioPlaying
+                    ? 'En cola • Sonando'
+                    : (autoplayAttempted ? 'Toca ▶ para sonar' : 'Cola automática activa');
             }
 
-            AUDIO_PLAYLIST.forEach((_, idx) => {
-                const btn = document.getElementById(`trackBtn-${idx}`);
+            audioQueue.forEach((t, idx) => {
+                const btn = document.getElementById(`queueItem-${idx}`);
                 if (!btn) return;
-                if (idx === currentTrackIndex) {
-                    btn.className = 'px-2.5 py-2 rounded-xl font-mono text-[10px] sm:text-[11px] bg-pink-500/20 text-white border border-neonPink transition cursor-pointer truncate';
-                } else {
-                    btn.className = 'px-2.5 py-2 rounded-xl font-mono text-[10px] sm:text-[11px] bg-obsidian/80 text-zinc-400 border border-zinc-800 hover:border-pink-500/40 transition cursor-pointer truncate';
+                const isSelected = idx === currentTrackIdx;
+                btn.className = isSelected
+                    ? 'w-full text-left px-3 py-2 rounded-xl font-mono text-[11px] bg-pink-500/20 text-white border border-neonPink transition flex items-center justify-between cursor-pointer'
+                    : 'w-full text-left px-3 py-2 rounded-xl font-mono text-[11px] bg-obsidian/80 text-zinc-400 border border-zinc-800 hover:border-pink-500/40 transition flex items-center justify-between cursor-pointer';
+                const badgeSpan = btn.querySelector('span:last-child');
+                if (badgeSpan) {
+                    badgeSpan.textContent = isSelected ? (isAudioPlaying ? 'SONANDO' : 'PISTA 1') : 'EN COLA';
+                    badgeSpan.className = isSelected ? 'text-[10px] text-roseGold' : 'text-[10px] text-zinc-500';
                 }
             });
         }
@@ -2122,20 +2075,24 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
             animate();
         }
 
-        // Inicialización completa al cargar la página
-        window.onload = function () {
+        function initPortalApp() {
+            updateCountdown();
+            countdownInterval = setInterval(updateCountdown, 1000);
             initParticles();
             initAudioPlaylist();
             selectCharacter('stitch', false);
-            loadTropicalSlides();
             initTropicalDragAndDrop();
             startCarouselLoop();
             loadLetter();
             renderPlans();
             renderDreams();
-            updateCountdown();
-            countdownInterval = setInterval(updateCountdown, 1000);
-        };
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initPortalApp);
+        } else {
+            initPortalApp();
+        }
     </script>
 </body>
 </html>
