@@ -16,9 +16,6 @@
     <!-- Canvas Confetti para celebraciones -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 
-    <!-- Tone.js para música instrumental de piano en vivo -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
-
     <!-- Conversores de fotos .HEIC (iPhone recientes) a JPEG en el navegador -->
     <script src="https://cdn.jsdelivr.net/npm/heic-to@1.1.14/dist/iife/heic-to.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
@@ -288,7 +285,7 @@
                 <div class="group relative inline-block max-w-full">
                     <h1 id="heroTitle" contenteditable="true" spellcheck="false" title="Haz clic para editar el nombre o título"
                         class="font-display text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white glow-text outline-none focus:ring-2 focus:ring-neonPink/50 rounded-2xl px-3 py-1 transition cursor-text break-words">
-                        Feliz Cumpleaños, Eli
+                        Welcome to 30´s
                     </h1>
                     <p class="text-[11px] font-mono text-zinc-500 mt-1 opacity-80 group-hover:opacity-100 transition">
                         [ Haz clic sobre el título superior para personalizarlo ]
@@ -348,7 +345,7 @@
             <!-- Banner Especial de Celebración -->
             <div id="celebrationBanner" class="hidden mt-6 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-neonPink/20 via-pink-500/15 to-roseGold/20 border border-neonPink/50 text-center space-y-3">
                 <div class="inline-block px-3 py-1 rounded-full bg-neonPink text-white font-mono text-xs font-bold tracking-wider">
-                    STATUS: 200 OK // ¡HOY COMIENZA TU NIVEL 30, ELI!
+                    STATUS: 200 OK // ¡HOY COMIENZA TU NIVEL 30, AMOR!
                 </div>
                 <h2 class="font-display text-2xl sm:text-4xl font-bold text-white">
                     🎉 ¡Feliz Cumpleaños #30, Mi Amor! 🎉
@@ -497,12 +494,12 @@
             </div>
         </section>
 
-        <!-- 4. NUESTROS 30s & SUEÑOS POR CUMPLIR (6 GUARDIANES DE ESENCIA + WISHLIST v3.0) -->
+        <!-- 4. TUS 30s & SUEÑOS POR CUMPLIR (6 GUARDIANES DE ESENCIA + WISHLIST v3.0) -->
         <section id="suenos" class="glass-card rounded-3xl p-5 sm:p-8 md:p-10 space-y-7">
             <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-800/80 pb-5">
                 <div>
                     <span class="font-mono text-xs text-neonPink uppercase tracking-wider">// CORE_VALUES & DREAMS_v3.0</span>
-                    <h2 class="font-display text-2xl sm:text-3xl font-bold text-white mt-1">Nuestros 30s & Sueños por Cumplir</h2>
+                    <h2 class="font-display text-2xl sm:text-3xl font-bold text-white mt-1">Tus 30s & Sueños por Cumplir</h2>
                     <p class="text-zinc-400 text-xs sm:text-sm mt-1">
                         Crecer no es dejar de ser tú: cada emblema va relacionado a tus personajes y gustos favoritos. Toca cada uno para descubrir lo que simboliza en esta nueva etapa.
                     </p>
@@ -669,7 +666,7 @@
                     <span id="charBadge" class="font-mono text-xs text-neonPink font-semibold tracking-wider">
                         ◆ STITCH // OHANA & AVENTURA
                     </span>
-                    <span class="font-mono text-[11px] text-zinc-500">FILOSOFÍA NIVEL 30 • ELI</span>
+                    <span class="font-mono text-[11px] text-zinc-500">FILOSOFÍA NIVEL 30 • AMOR</span>
                 </div>
                 <p id="charQuoteText" class="text-zinc-200 text-sm sm:text-base leading-relaxed font-light"></p>
             </div>
@@ -703,7 +700,7 @@
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800/80 pb-5">
                 <div>
                     <span class="font-mono text-xs text-neonPink uppercase tracking-wider">// DECRYPTED_MESSAGE.TXT</span>
-                    <h2 class="font-display text-2xl sm:text-3xl font-bold text-white mt-1">Una carta para tus 30 años, Eli</h2>
+                    <h2 class="font-display text-2xl sm:text-3xl font-bold text-white mt-1">Una carta para tus 30 años, Amor</h2>
                 </div>
 
                 <div class="flex items-center gap-2">
@@ -796,16 +793,19 @@
                 <span>Lanzar Sorpresa // Celebrar Nivel 30</span>
             </button>
             <p class="font-mono text-[11px] sm:text-xs text-zinc-500">
-                Hecho con código, mucho cariño y tu esencia favorita • Para Eli • 28.11.2026
+                Hecho con código, mucho cariño y tu esencia favorita • Para ti, Amor • 28.11.2026
             </p>
         </section>
 
     </main>
 
-    <!-- Reproductor de Música Flotante (Balada Piano estilo Phil Collins) -->
+    <!-- Elemento de Audio HTML5 para tus 2 pistas en cola -->
+    <audio id="bgAudioPlayer" preload="auto"></audio>
+
+    <!-- Reproductor de Música Flotante (Cola continua de tus 2 audios) -->
     <div id="musicPlayerWidget" class="fixed bottom-4 left-4 z-40 max-w-[calc(100vw-2rem)]">
         <!-- Vista Compacta -->
-        <div id="musicCompactBar" class="glass-card border border-pink-500/40 rounded-full px-3 py-2 flex items-center gap-2.5 shadow-2xl">
+        <div id="musicCompactBar" class="glass-card border border-pink-500/40 rounded-full px-3 py-2 flex items-center gap-2 shadow-2xl">
             <button onclick="toggleMusicPlayback()" aria-label="Reproducir o pausar música"
                 class="w-8 h-8 rounded-full btn-pink-glow text-white flex items-center justify-center text-xs shrink-0 cursor-pointer">
                 <span id="compactPlayIcon">▶</span>
@@ -818,32 +818,37 @@
                     <span class="eq-bar eq-bar-3"></span>
                 </div>
                 <div class="leading-tight">
-                    <div id="compactTrackTitle" class="font-mono text-[11px] text-white font-medium truncate max-w-[130px] sm:max-w-[170px]">
-                        Balada Piano • En Mi Corazón
+                    <div id="compactTrackTitle" class="font-mono text-[11px] text-white font-medium truncate max-w-[125px] sm:max-w-[170px]">
+                        Pista 01 • Instrumental
                     </div>
                     <div id="compactTrackSub" class="font-mono text-[9px] text-roseGold/80">
-                        Toca ▶ para escuchar
+                        Cola automática (1 de 2)
                     </div>
                 </div>
+            </button>
+
+            <button onclick="playNextTrack()" title="Siguiente canción" aria-label="Siguiente canción"
+                class="w-7 h-7 rounded-full bg-obsidian/80 border border-zinc-700/80 text-roseGold hover:border-neonPink hover:text-white flex items-center justify-center text-[11px] shrink-0 transition cursor-pointer">
+                ⏭
             </button>
         </div>
 
         <!-- Panel Expandido -->
         <div id="musicExpandedPanel" class="hidden mt-2 glass-card border border-pink-500/40 rounded-2xl p-4 w-72 sm:w-80 space-y-3.5 shadow-2xl">
             <div class="flex items-center justify-between border-b border-zinc-800 pb-2.5">
-                <span class="font-mono text-xs text-roseGold font-semibold">🎹 SOUNDTRACK // ELI v3.0</span>
+                <span class="font-mono text-xs text-roseGold font-semibold">🎵 SOUNDTRACK // AMOR v3.0</span>
                 <button onclick="toggleMusicPanel()" class="text-zinc-400 hover:text-white font-mono text-xs px-1.5 cursor-pointer">✕</button>
             </div>
 
-            <!-- Selector de pista -->
+            <!-- Selector de cola (2 pistas) -->
             <div class="grid grid-cols-2 gap-2">
-                <button id="trackBtn-ballad" onclick="selectMusicTrack('ballad')"
-                    class="px-2.5 py-2 rounded-xl font-mono text-[11px] bg-pink-500/20 text-white border border-neonPink transition cursor-pointer">
-                    🎹 Balada Piano
+                <button id="trackBtn-0" onclick="selectTrackByIndex(0, true)"
+                    class="px-2.5 py-2 rounded-xl font-mono text-[10px] sm:text-[11px] bg-pink-500/20 text-white border border-neonPink transition cursor-pointer truncate">
+                    🎹 Where Hearts...
                 </button>
-                <button id="trackBtn-lofi" onclick="selectMusicTrack('lofi')"
-                    class="px-2.5 py-2 rounded-xl font-mono text-[11px] bg-obsidian/80 text-zinc-400 border border-zinc-800 hover:border-pink-500/40 transition cursor-pointer">
-                    ✨ Noche Suave
+                <button id="trackBtn-1" onclick="selectTrackByIndex(1, true)"
+                    class="px-2.5 py-2 rounded-xl font-mono text-[10px] sm:text-[11px] bg-obsidian/80 text-zinc-400 border border-zinc-800 hover:border-pink-500/40 transition cursor-pointer truncate">
+                    🎻 Letters to an...
                 </button>
             </div>
 
@@ -851,10 +856,20 @@
             <div class="space-y-1">
                 <div class="flex justify-between font-mono text-[10px] text-zinc-400">
                     <span>Volumen</span>
-                    <span id="volumeLabel">70%</span>
+                    <span id="volumeLabel">75%</span>
                 </div>
-                <input id="musicVolumeSlider" type="range" min="0" max="100" value="70" oninput="updateMusicVolume(this.value)"
+                <input id="musicVolumeSlider" type="range" min="0" max="100" value="75" oninput="updateMusicVolume(this.value)"
                     class="w-full accent-rose-500 cursor-pointer">
+            </div>
+
+            <!-- Botón opcional para probar tus MP3 locales desde Vista Previa -->
+            <div class="pt-1 border-t border-zinc-800/80 flex items-center justify-between gap-2">
+                <span class="font-mono text-[10px] text-zinc-500">Cola continua activa</span>
+                <input type="file" id="localAudioPicker" accept="audio/*" multiple class="hidden" onchange="loadLocalAudioFiles(event)">
+                <button onclick="document.getElementById('localAudioPicker').click()"
+                    class="font-mono text-[10px] text-roseGold hover:underline cursor-pointer">
+                    📁 Cargar MP3 local
+                </button>
             </div>
         </div>
     </div>
@@ -881,14 +896,14 @@
            CONFIGURACIÓN E INICIALIZACIÓN DE DATOS (LOCALSTORAGE)
            ========================================================================== */
         const STORAGE_KEYS = {
-            TITLE: 'bday30_hero_title_v4',
-            LETTER: 'bday30_love_letter_v4',
-            PLANS: 'bday30_itinerary_plans_v2',
+            TITLE: 'bday30_hero_title_v5',
+            LETTER: 'bday30_love_letter_v5',
+            PLANS: 'bday30_itinerary_plans_v3',
             DREAMS: 'bday30_wishlist_dreams_v2',
-            TROPICAL_PHOTOS: 'bday30_travesia_photos_v5'
+            TROPICAL_PHOTOS: 'bday30_travesia_photos_v6'
         };
 
-        // 6 Guardianes de Esencia personalizados para Eli
+        // 6 Guardianes de Esencia personalizados para Amor
         const CHARACTER_DATA = {
             stitch: {
                 badge: '◆ STITCH // OHANA & AVENTURA',
@@ -923,7 +938,7 @@
             { id: 'dream-4', text: 'Seguir construyendo nuestra historia de la mano de Dios ❤️🙏', done: false }
         ];
 
-        const DEFAULT_LETTER = `Feliz cumpleaños número 30, Eli, mi amor.
+        const DEFAULT_LETTER = `Feliz cumpleaños número 30, mi Amor.
 
 Quise hacerte este pequeño portal combinando un poco de lo que sé hacer con los personajes y recuerdos que tanto significan para ti, porque alguien con un corazón tan grande como el tuyo merece un detalle único, hecho con paciencia y con muchísimo amor.
 
@@ -931,7 +946,7 @@ Gracias por ser esa mujer tan tierna, coqueta, aventurera y apasionada que lleg�
 
 Sé que pasar a los 30 a veces puede generar nervios o incertidumbre, pero quiero que hoy sueltes cualquier angustia. No tienes que apresurar nada; disfruta cada día como vaya llegando, con la certeza de que eres una mujer increíble, hermosa y llena de luz.
 
-Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo permite, de todos los capítulos que todavía nos faltan por escribir juntos. ¡Te quiero muchísimo, Eli!`;
+Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo permite, de todos los capítulos que todavía nos faltan por escribir juntos. ¡Te quiero muchísimo, Amor!`;
 
         const DEFAULT_PLANS = [
             {
@@ -950,7 +965,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
                 id: 'plan-3',
                 time: '20:30',
                 title: 'Cena de Gala // Level 30 Celebration',
-                note: 'Brindis por tus 30 años, Eli, y por todo lo que viene.'
+                note: 'Brindis por tus 30 años, Amor, y por todo lo que viene.'
             }
         ];
 
@@ -962,7 +977,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
             { id: 'travesia-04', src: 'eca896c5-27cf-40b8-bac6-071cff55c3f5.JPG', caption: 'Risas sin parar en nuestra salida especial con nuestros vasitos verdes 🥤✨' },
             { id: 'travesia-05', src: 'cd5910fe-23c7-4310-b8d5-2769c644ced5.JPG', caption: 'Noche de fiesta, luces rosas y tú viéndote espectacular como siempre 🎸💕' },
             { id: 'travesia-06', src: '0601af77-ec59-40f5-9300-6481fd0383d6.JPG', caption: 'Pedacitos de nuestra historia que guardo en el corazón 💖' },
-            { id: 'travesia-07', src: '48042756-af9f-49f8-b8b3-5319a8554542.JPG', caption: 'Cada momento a tu lado vale oro, Eli ✨' },
+            { id: 'travesia-07', src: '48042756-af9f-49f8-b8b3-5319a8554542.JPG', caption: 'Cada momento a tu lado vale oro, Amor ✨' },
             { id: 'travesia-08', src: '4ffd5bd1-8c21-4ae1-95f4-af90035005ad.JPG', caption: 'Sonrisas que iluminan cualquiera de mis días 🌺' },
             { id: 'travesia-09', src: '65c13c3c-ccd7-49a2-8188-c7cb0c3c99b5.JPG', caption: 'Nuestra travesía tropical y todo lo bonito que hemos vivido 🌴' },
             { id: 'travesia-10', src: '7d672d39-11a6-4fde-9ff7-7dea3c8a6881.JPG', caption: 'Contigo aprendo a disfrutar cada instante sin prisa 💕' },
@@ -983,7 +998,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
             { id: 'travesia-25', src: 'IMG_2988.heic', caption: 'Paz, cariño y el mejor equipo del mundo ✨' },
             { id: 'travesia-26', src: 'IMG_3035.HEIC', caption: 'Más capítulos juntos en esta nueva etapa de los 30 🎉' },
             { id: 'travesia-27', src: 'IMG_3879_SnapseedCopy.heic', caption: 'Un recuerdo especial que merece estar en tu portal 💫' },
-            { id: 'travesia-28', src: 'IMG_9203.HEIC', caption: 'Por todos los recuerdos que ya tenemos y los que faltan, Eli ❤️' }
+            { id: 'travesia-28', src: 'IMG_9203.HEIC', caption: 'Por todos los recuerdos que ya tenemos y los que faltan, Amor ❤️' }
         ];
 
         let isSimulating = false;
@@ -1459,11 +1474,14 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
             const activeCard = document.getElementById(`card-${key}`);
             if (activeCard) activeCard.classList.add('active-char');
 
-            document.getElementById('charBadge').textContent = data.badge;
-            document.getElementById('charQuoteText').textContent = data.quote;
+            const badgeEl = document.getElementById('charBadge');
+            const quoteEl = document.getElementById('charQuoteText');
+            if (badgeEl) badgeEl.textContent = data.badge;
+            if (quoteEl) quoteEl.textContent = data.quote;
 
             if (shouldScroll) {
-                document.getElementById('suenos').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                const section = document.getElementById('suenos');
+                if (section) section.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         }
 
@@ -1532,19 +1550,39 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
         }
 
         /* ==========================================================================
-           TÍTULO EDITABLE EN HERO
+           TÍTULO EDITABLE EN HERO (CAMBIO AUTOMÁTICO EL 28 DE NOVIEMBRE)
            ========================================================================== */
+        const PRE_BIRTHDAY_TITLE = 'Welcome to 30´s';
+        const BIRTHDAY_TITLE = 'Feliz Cumpleaños Amor';
+        let lastBirthdayState = null;
+
         const heroTitleEl = document.getElementById('heroTitle');
         const savedTitle = localStorage.getItem(STORAGE_KEYS.TITLE);
         if (savedTitle && heroTitleEl) {
             heroTitleEl.textContent = savedTitle;
         }
 
+        function syncHeroTitleForDate(isBirthdayNow) {
+            if (!heroTitleEl || lastBirthdayState === isBirthdayNow) return;
+            lastBirthdayState = isBirthdayNow;
+
+            if (isBirthdayNow) {
+                heroTitleEl.textContent = BIRTHDAY_TITLE;
+            } else {
+                const customPreTitle = localStorage.getItem(STORAGE_KEYS.TITLE);
+                heroTitleEl.textContent = customPreTitle || PRE_BIRTHDAY_TITLE;
+            }
+        }
+
         if (heroTitleEl) {
             heroTitleEl.addEventListener('blur', () => {
-                const cleanText = heroTitleEl.textContent.trim() || 'Feliz Cumpleaños, Eli';
+                const isBirthdayNow = isSimulating || (TARGET_DATE - Date.now() <= 0);
+                const fallbackTitle = isBirthdayNow ? BIRTHDAY_TITLE : PRE_BIRTHDAY_TITLE;
+                const cleanText = heroTitleEl.textContent.trim() || fallbackTitle;
                 heroTitleEl.textContent = cleanText;
-                localStorage.setItem(STORAGE_KEYS.TITLE, cleanText);
+                if (!isBirthdayNow) {
+                    localStorage.setItem(STORAGE_KEYS.TITLE, cleanText);
+                }
                 showToast('Título actualizado y guardado');
             });
             heroTitleEl.addEventListener('keydown', (e) => {
@@ -1571,6 +1609,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
             const bannerEl = document.getElementById('celebrationBanner');
 
             if (distance <= 0) {
+                syncHeroTitleForDate(true);
                 daysEl.textContent = '00';
                 hoursEl.textContent = '00';
                 minutesEl.textContent = '00';
@@ -1584,6 +1623,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
                 return;
             }
 
+            syncHeroTitleForDate(false);
             bannerEl.classList.add('hidden');
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -1767,183 +1807,153 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
         }
 
         /* ==========================================================================
-           REPRODUCTOR INSTRUMENTAL EN VIVO (TONE.JS - BALADA PIANO TRANQUILA)
+           REPRODUCTOR DE AUDIO EN COLA (2 PISTAS REALES EN MP3)
            ========================================================================== */
+        const AUDIO_PLAYLIST = [
+            { title: 'Where Hearts Remain', src: 'Where_Hearts_Remain.mp3', fallback: 'cancion1.mp3', triedFallback: false },
+            { title: 'Letters to an Open Window', src: 'Letters_to_an_Open_Window.mp3', fallback: 'cancion2.mp3', triedFallback: false }
+        ];
+
+        let currentTrackIndex = 0;
         let isMusicPlaying = false;
-        let currentTrack = 'ballad';
-        let pianoSynth = null;
-        let padSynth = null;
-        let musicReverb = null;
-        let masterGain = null;
-        let activeParts = [];
+        let audioPlayer = null;
 
-        function initAudioEngine() {
-            if (pianoSynth || typeof Tone === 'undefined') return;
+        function initAudioPlaylist() {
+            audioPlayer = document.getElementById('bgAudioPlayer');
+            if (!audioPlayer) return;
 
-            masterGain = new Tone.Gain(0.7).toDestination();
-            musicReverb = new Tone.Reverb({ decay: 4.2, wet: 0.38 }).connect(masterGain);
+            audioPlayer.volume = 0.75;
+            audioPlayer.src = AUDIO_PLAYLIST[currentTrackIndex].src;
 
-            pianoSynth = new Tone.PolySynth(Tone.Synth, {
-                oscillator: { type: 'triangle' },
-                envelope: { attack: 0.02, decay: 1.4, sustain: 0.28, release: 2.2 }
-            }).connect(musicReverb);
-            pianoSynth.volume.value = -5;
-
-            padSynth = new Tone.PolySynth(Tone.Synth, {
-                oscillator: { type: 'sine' },
-                envelope: { attack: 1.2, decay: 1.0, sustain: 0.55, release: 2.8 }
-            }).connect(musicReverb);
-            padSynth.volume.value = -16;
-        }
-
-        function clearActiveParts() {
-            activeParts.forEach(part => {
-                try {
-                    part.stop();
-                    part.dispose();
-                } catch (e) {}
+            // Al terminar una pista, iniciar automáticamente la siguiente en cola
+            audioPlayer.addEventListener('ended', () => {
+                currentTrackIndex = (currentTrackIndex + 1) % AUDIO_PLAYLIST.length;
+                loadAndPlayCurrentTrack();
             });
-            activeParts = [];
-            if (typeof Tone !== 'undefined') {
-                Tone.Transport.stop();
-                Tone.Transport.cancel();
-            }
-        }
 
-        function buildTrackSequence(trackName) {
-            clearActiveParts();
-            if (typeof Tone === 'undefined') return;
-
-            if (trackName === 'ballad') {
-                // Balada de piano tranquila en Mi bemol mayor inspirada en la atmósfera cálida de "You'll Be in My Heart"
-                Tone.Transport.bpm.value = 82;
-
-                const chords = [
-                    { time: '0:0:0', notes: ['Eb3', 'Bb3', 'Eb4', 'G4'], dur: '1m' },
-                    { time: '1:0:0', notes: ['Bb2', 'F3', 'Bb3', 'D4'], dur: '1m' },
-                    { time: '2:0:0', notes: ['C3', 'G3', 'C4', 'Eb4'], dur: '1m' },
-                    { time: '3:0:0', notes: ['Ab2', 'Eb3', 'Ab3', 'C4'], dur: '1m' },
-                    { time: '4:0:0', notes: ['Eb3', 'Bb3', 'Eb4', 'G4'], dur: '1m' },
-                    { time: '5:0:0', notes: ['Ab2', 'Eb3', 'Ab3', 'C4'], dur: '1m' },
-                    { time: '6:0:0', notes: ['F2', 'C3', 'F3', 'Ab3'], dur: '1m' },
-                    { time: '7:0:0', notes: ['Bb2', 'F3', 'Bb3', 'D4'], dur: '1m' }
-                ];
-
-                const melody = [
-                    { time: '0:0:0', note: 'G4', dur: '4n' },
-                    { time: '0:1:0', note: 'Bb4', dur: '4n' },
-                    { time: '0:2:0', note: 'Eb5', dur: '2n' },
-                    { time: '1:0:0', note: 'D5', dur: '4n.' },
-                    { time: '1:1:2', note: 'C5', dur: '8n' },
-                    { time: '1:2:0', note: 'Bb4', dur: '2n' },
-                    { time: '2:0:0', note: 'G4', dur: '4n' },
-                    { time: '2:1:0', note: 'C5', dur: '4n' },
-                    { time: '2:2:0', note: 'Eb5', dur: '4n.' },
-                    { time: '2:3:2', note: 'D5', dur: '8n' },
-                    { time: '3:0:0', note: 'C5', dur: '2n.' },
-                    { time: '4:0:0', note: 'Bb4', dur: '4n' },
-                    { time: '4:1:0', note: 'G4', dur: '4n' },
-                    { time: '4:2:0', note: 'Eb5', dur: '2n' },
-                    { time: '5:0:0', note: 'C5', dur: '4n' },
-                    { time: '5:1:0', note: 'Eb5', dur: '4n' },
-                    { time: '5:2:0', note: 'F5', dur: '2n' },
-                    { time: '6:0:0', note: 'Eb5', dur: '4n' },
-                    { time: '6:1:0', note: 'C5', dur: '4n' },
-                    { time: '6:2:0', note: 'Ab4', dur: '2n' },
-                    { time: '7:0:0', note: 'Bb4', dur: '1m' }
-                ];
-
-                const padPart = new Tone.Part((time, val) => {
-                    padSynth.triggerAttackRelease(val.notes, val.dur, time, 0.45);
-                }, chords);
-                padPart.loop = true;
-                padPart.loopEnd = '8m';
-
-                const melPart = new Tone.Part((time, val) => {
-                    pianoSynth.triggerAttackRelease(val.note, val.dur, time, 0.7);
-                }, melody);
-                melPart.loop = true;
-                melPart.loopEnd = '8m';
-
-                padPart.start(0);
-                melPart.start(0);
-                activeParts.push(padPart, melPart);
-            } else {
-                // Pista alternativa: Noche Suave (acordes cálidos lentos)
-                Tone.Transport.bpm.value = 72;
-
-                const lofiChords = [
-                    { time: '0:0:0', notes: ['F3', 'A3', 'C4', 'E4'], dur: '1m' },
-                    { time: '1:0:0', notes: ['D3', 'F3', 'A3', 'C4'], dur: '1m' },
-                    { time: '2:0:0', notes: ['G3', 'B3', 'D4', 'F4'], dur: '1m' },
-                    { time: '3:0:0', notes: ['C3', 'E3', 'G3', 'B3'], dur: '1m' }
-                ];
-
-                const lofiPart = new Tone.Part((time, val) => {
-                    pianoSynth.triggerAttackRelease(val.notes, val.dur, time, 0.5);
-                }, lofiChords);
-                lofiPart.loop = true;
-                lofiPart.loopEnd = '4m';
-                lofiPart.start(0);
-                activeParts.push(lofiPart);
-            }
-        }
-
-        async function toggleMusicPlayback() {
-            if (typeof Tone === 'undefined') {
-                showToast('Motor de audio cargando, intenta de nuevo');
-                return;
-            }
-            try {
-                await Tone.start();
-                initAudioEngine();
-
-                if (!isMusicPlaying) {
-                    buildTrackSequence(currentTrack);
-                    Tone.Transport.start();
-                    isMusicPlaying = true;
-                    showToast(currentTrack === 'ballad' ? '🎹 Reproduciendo Balada Piano' : '✨ Reproduciendo Noche Suave');
-                } else {
-                    Tone.Transport.pause();
-                    isMusicPlaying = false;
-                }
+            audioPlayer.addEventListener('play', () => {
+                isMusicPlaying = true;
                 updateMusicUI();
-            } catch (err) {
-                console.error('Error al iniciar audio:', err);
-                showToast('Toca de nuevo para activar el sonido');
+            });
+
+            audioPlayer.addEventListener('pause', () => {
+                isMusicPlaying = false;
+                updateMusicUI();
+            });
+
+            audioPlayer.addEventListener('error', () => {
+                const track = AUDIO_PLAYLIST[currentTrackIndex];
+                if (track && track.fallback && !track.triedFallback) {
+                    track.triedFallback = true;
+                    audioPlayer.src = track.fallback;
+                    audioPlayer.load();
+                    if (isMusicPlaying) {
+                        audioPlayer.play().catch(() => {});
+                    }
+                    return;
+                }
+                isMusicPlaying = false;
+                updateMusicUI();
+                showToast('Sube los 2 MP3 a GitHub (o usa "📁 Cargar MP3 local" aquí)');
+            });
+
+            updateMusicUI();
+        }
+
+        function loadAndPlayCurrentTrack() {
+            if (!audioPlayer) return;
+            const track = AUDIO_PLAYLIST[currentTrackIndex];
+            track.triedFallback = false;
+            audioPlayer.src = track.src;
+            audioPlayer.load();
+            isMusicPlaying = true;
+            audioPlayer.play().then(() => {
+                isMusicPlaying = true;
+                updateMusicUI();
+                showToast(`🎵 Reproduciendo: ${track.title}`);
+            }).catch(() => {
+                isMusicPlaying = false;
+                updateMusicUI();
+                showToast('Toca ▶ de nuevo o sube tus 2 MP3 a GitHub');
+            });
+        }
+
+        function toggleMusicPlayback() {
+            if (!audioPlayer) initAudioPlaylist();
+            if (!audioPlayer) return;
+
+            if (audioPlayer.paused) {
+                if (!audioPlayer.getAttribute('src')) {
+                    audioPlayer.src = AUDIO_PLAYLIST[currentTrackIndex].src;
+                }
+                isMusicPlaying = true;
+                audioPlayer.play().then(() => {
+                    isMusicPlaying = true;
+                    updateMusicUI();
+                    showToast(`🎵 Reproduciendo: ${AUDIO_PLAYLIST[currentTrackIndex].title}`);
+                }).catch(() => {
+                    isMusicPlaying = false;
+                    updateMusicUI();
+                    showToast('Sube los 2 MP3 a GitHub (o usa "📁 Cargar MP3 local")');
+                });
+            } else {
+                audioPlayer.pause();
+                isMusicPlaying = false;
+                updateMusicUI();
             }
         }
 
-        function selectMusicTrack(trackName) {
-            currentTrack = trackName;
-            const btnBallad = document.getElementById('trackBtn-ballad');
-            const btnLofi = document.getElementById('trackBtn-lofi');
+        function selectTrackByIndex(index, autoPlay = true) {
+            if (index < 0 || index >= AUDIO_PLAYLIST.length) return;
+            currentTrackIndex = index;
+            if (!audioPlayer) initAudioPlaylist();
 
-            if (trackName === 'ballad') {
-                btnBallad.className = 'px-2.5 py-2 rounded-xl font-mono text-[11px] bg-pink-500/20 text-white border border-neonPink transition cursor-pointer';
-                btnLofi.className = 'px-2.5 py-2 rounded-xl font-mono text-[11px] bg-obsidian/80 text-zinc-400 border border-zinc-800 hover:border-pink-500/40 transition cursor-pointer';
+            if (autoPlay || isMusicPlaying) {
+                loadAndPlayCurrentTrack();
             } else {
-                btnLofi.className = 'px-2.5 py-2 rounded-xl font-mono text-[11px] bg-pink-500/20 text-white border border-neonPink transition cursor-pointer';
-                btnBallad.className = 'px-2.5 py-2 rounded-xl font-mono text-[11px] bg-obsidian/80 text-zinc-400 border border-zinc-800 hover:border-pink-500/40 transition cursor-pointer';
+                AUDIO_PLAYLIST[currentTrackIndex].triedFallback = false;
+                audioPlayer.src = AUDIO_PLAYLIST[currentTrackIndex].src;
+                updateMusicUI();
             }
+        }
 
-            if (isMusicPlaying) {
-                buildTrackSequence(currentTrack);
-                Tone.Transport.start();
-            }
-            updateMusicUI();
+        function playNextTrack() {
+            currentTrackIndex = (currentTrackIndex + 1) % AUDIO_PLAYLIST.length;
+            loadAndPlayCurrentTrack();
+        }
+
+        function loadLocalAudioFiles(event) {
+            const files = Array.from(event.target.files || []).filter(f => f.type.startsWith('audio/'));
+            if (files.length === 0) return;
+
+            files.slice(0, 2).forEach((file, idx) => {
+                const cleanName = file.name.replace(/\.[^/.]+$/, '').replace(/[_-]+/g, ' ');
+                AUDIO_PLAYLIST[idx] = {
+                    title: cleanName || `Pista 0${idx + 1}`,
+                    src: URL.createObjectURL(file),
+                    fallback: null,
+                    triedFallback: true
+                };
+            });
+
+            currentTrackIndex = 0;
+            loadAndPlayCurrentTrack();
+            showToast(`${Math.min(files.length, 2)} ${files.length === 1 ? 'audio cargado' : 'audios cargados en cola'} 🎵`);
+            event.target.value = '';
         }
 
         function updateMusicVolume(val) {
             const pct = Number(val);
-            document.getElementById('volumeLabel').textContent = `${pct}%`;
-            if (masterGain) {
-                masterGain.gain.rampTo(pct / 100, 0.1);
+            const label = document.getElementById('volumeLabel');
+            if (label) label.textContent = `${pct}%`;
+            if (audioPlayer) {
+                audioPlayer.volume = Math.max(0, Math.min(1, pct / 100));
             }
         }
 
         function toggleMusicPanel() {
-            document.getElementById('musicExpandedPanel').classList.toggle('hidden');
+            const panel = document.getElementById('musicExpandedPanel');
+            if (panel) panel.classList.toggle('hidden');
         }
 
         function updateMusicUI() {
@@ -1954,16 +1964,28 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
             const titleEl = document.getElementById('compactTrackTitle');
             const subEl = document.getElementById('compactTrackSub');
 
+            const track = AUDIO_PLAYLIST[currentTrackIndex];
+
             if (playIcon) playIcon.textContent = isMusicPlaying ? '⏸' : '▶';
             if (headerIcon) headerIcon.textContent = isMusicPlaying ? '🔊' : '🎵';
             if (headerLabel) headerLabel.textContent = isMusicPlaying ? 'Sonando' : 'Música';
             if (eq) eq.classList.toggle('eq-playing', isMusicPlaying);
-            if (titleEl) {
-                titleEl.textContent = currentTrack === 'ballad'
-                    ? 'Balada Piano • En Mi Corazón'
-                    : 'Noche Suave • Piano Ambiente';
+            if (titleEl && track) titleEl.textContent = track.title;
+            if (subEl) {
+                subEl.textContent = isMusicPlaying
+                    ? `Reproduciendo (${currentTrackIndex + 1} de ${AUDIO_PLAYLIST.length}) • En cola`
+                    : `En espera (${currentTrackIndex + 1} de ${AUDIO_PLAYLIST.length})`;
             }
-            if (subEl) subEl.textContent = isMusicPlaying ? 'Reproduciendo...' : 'Toca ▶ para escuchar';
+
+            AUDIO_PLAYLIST.forEach((_, idx) => {
+                const btn = document.getElementById(`trackBtn-${idx}`);
+                if (!btn) return;
+                if (idx === currentTrackIndex) {
+                    btn.className = 'px-2.5 py-2 rounded-xl font-mono text-[10px] sm:text-[11px] bg-pink-500/20 text-white border border-neonPink transition cursor-pointer truncate';
+                } else {
+                    btn.className = 'px-2.5 py-2 rounded-xl font-mono text-[10px] sm:text-[11px] bg-obsidian/80 text-zinc-400 border border-zinc-800 hover:border-pink-500/40 transition cursor-pointer truncate';
+                }
+            });
         }
 
         /* ==========================================================================
@@ -1992,7 +2014,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
                     requestAnimationFrame(frame);
                 }
             }());
-            showToast('🎉 ¡Feliz Nivel 30, Eli!');
+            showToast('🎉 ¡Feliz Nivel 30, Amor!');
         }
 
         function initParticles() {
@@ -2040,6 +2062,7 @@ Gracias por dejarme ser parte de estos pedacitos de tu vida y, si Dios nos lo pe
         // Inicialización completa al cargar la página
         window.onload = function () {
             initParticles();
+            initAudioPlaylist();
             selectCharacter('stitch', false);
             loadTropicalSlides();
             initTropicalDragAndDrop();
